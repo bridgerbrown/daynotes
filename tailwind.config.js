@@ -9,7 +9,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        'day': 'calc(100% / 7)'
+      }
+    },
   },
   plugins: [],
 }

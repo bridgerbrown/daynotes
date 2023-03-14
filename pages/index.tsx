@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
+import Calendar from '@/components/calendar/calendar'
 
 export default function Home() {
   return (
@@ -13,8 +14,8 @@ export default function Home() {
       </Head>
       <main className="bg-slate-900 relative min-h-screen w-screen">
         <Navbar />
-        <section>
-
+        <section className='flex justify-center items-center'>
+          <Calendar />
         </section>
         <Footer />
       </main>
