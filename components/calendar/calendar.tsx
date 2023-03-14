@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 export default function Calendar(){
+    let date = new Date()
     let [days, setDays] = useState<any>()
     let [currentDate, setCurrentDate] = useState<any>()
-    // const prevNextIcon = document.querySelectorAll(".prevNextIcon")
-
-    let date = new Date()
-    let currentYear = date.getFullYear()
-    let currentMonth = date.getMonth()
+    let [currentYear, setCurrentYear] = useState<any>(date.getFullYear())
+    let [currentMonth, setCurrentMonth] = useState<any>(date.getMonth())
 
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -32,27 +30,24 @@ export default function Calendar(){
         }
         setCurrentDate(`${months[currentMonth]} ${currentYear}`)
         setDays(liTag)
-        console.log(currentDate)
-        console.log(days)
     }
 
-    useEffect(() => {renderCalendar()}, [])
+    const prevNextIcons = (id: string) => {
+        id === "prev" ? setCurrentMonth(currentMonth - 1) : setCurrentMonth(currentMonth + 1)
 
-    // prevNextIcon.forEach((icon) => {
-    //     icon.addEventListener("click", () => {
-    //         currentMonth = icon.id === "prev" ? currentMonth - 1 : currentMonth + 1
+        if(currentMonth < 0 || currentMonth > 11) {
+            date = new Date(currentYear, currentMonth, new Date().getDate())
+            currentYear = date.getFullYear()
+            currentMonth = date.getMonth()
+        } else { 
+            date = new Date()
+        }
+        renderCalendar()
+        console.log(currentMonth)
+    }
 
-    //         if(currentMonth < 0 || currentMonth > 11) {
-    //             date = new Date(currentYear, currentMonth, new Date().getDate())
-    //             currentYear = date.getFullYear()
-    //             currentMonth = date.getMonth()
-    //         } else { 
-    //             date = new Date()
-    //         }
-    //         renderCalendar()
-    //     })
-    // })
-
+    useEffect(() => {renderCalendar()}, [prevNextIcons])
+        
     return(
         <div className="rounded-md bg-slate-100 w-1/2">
             <header className="px-6 py-6 flex justify-between">
@@ -62,8 +57,14 @@ export default function Calendar(){
                     {currentDate}
                 </h1>
                 <div className="space-x-6 flex">
-                    <span id="prev" className="prevNextIcon cursor-pointer">prev</span>
-                    <span id="next" className="prevNextIcon cursor-pointer">next</span>
+                    <button id="prev" className="prevNextIcon cursor-pointer" 
+                    onClick={() => prevNextIcons("prev")}>
+                        prev
+                    </button>
+                    <button id="next" className="prevNextIcon cursor-pointer"
+                    onClick={() => prevNextIcons("next")}>
+                        next
+                    </button>
                 </div>
             </header>
             <div id="calendar">
