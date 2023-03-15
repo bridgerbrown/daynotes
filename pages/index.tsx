@@ -22,6 +22,9 @@ export default function Home() {
           <section className='flex flex-col justify-center items-center'>
             <GameCard />
           </section>
+          <section className='bg-white'>
+            <Calendar />
+          </section>
         <Footer />
       </main>
     </>
