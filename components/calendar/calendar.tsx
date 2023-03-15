@@ -39,16 +39,16 @@ export default function Calendar(){
 
         if(currentMonth < 0 || currentMonth > 11) {
             date = new Date(currentYear, currentMonth, new Date().getDate())
-            currentYear = date.getFullYear()
-            currentMonth = date.getMonth()
+            setCurrentYear(date.getFullYear())
+            setCurrentMonth(date.getMonth())
+            console.log(currentMonth)
         } else { 
             date = new Date()
         }
         renderCalendar()
-        console.log(currentMonth)
     }
 
-    useEffect(() => {renderCalendar()}, [prevNextIcons])
+    useEffect(() => {renderCalendar()}, [])
         
     return(
         <div className="rounded-md bg-slate-100 w-1/2">

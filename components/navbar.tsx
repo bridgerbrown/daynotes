@@ -11,10 +11,10 @@ export default function Navbar(){
                     Home
                 </li>
                 <li>
-                    Daily
+                    Today
                 </li>
                 <li>
-                    Monthly
+                    Calendar
                 </li>
                 <li>
                     User

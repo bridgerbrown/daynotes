@@ -11,7 +11,8 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        'day': 'calc(100% / 7)'
+        'day': 'calc(100% / 7)',
+        'gameCard': '40rem'
       }
     },
   },
