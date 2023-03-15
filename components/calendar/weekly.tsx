@@ -9,6 +9,8 @@ import {
   endOfWeek,
   format,
   getDay,
+  getWeek,
+  getWeekOfMonth,
   isEqual,
   isSameDay,
   isSameMonth,
@@ -67,16 +69,30 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Calendar() {
+export default function Weekly() {
   let today = startOfToday()
   let [selectedDay, setSelectedDay] = useState(today)
   let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
 
+  let [currentWeek, setCurrentWeek] = useState(format(today, 'w'))
+  let firstDayCurrentWeek = parse(currentWeek, 'w', new Date())
+
+
   let days = eachDayOfInterval({
     start: startOfWeek(firstDayCurrentMonth),
     end: endOfWeek(endOfMonth(firstDayCurrentMonth)),
   })
+
+  console.log(currentWeek)
+  console.log(firstDayCurrentWeek)
+
+  let week = eachDayOfInterval({
+    start: startOfWeek(firstDayCurrentWeek),
+    end: endOfWeek(endOfWeek(firstDayCurrentWeek)),
+  })
+
+  console.log(week)
 
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
@@ -128,7 +144,7 @@ export default function Calendar() {
               <div>S</div>
             </div>
             <div className="grid grid-cols-7 mt-2 text-sm">
-              {days.map((day, dayIdx) => (
+              {week.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
                   className={classNames(
@@ -146,11 +162,11 @@ export default function Calendar() {
                         'text-red-500',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentMonth) &&
+                        isSameMonth(day, firstDayCurrentWeek) &&
                         'text-gray-200',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
+                        !isSameMonth(day, firstDayCurrentWeek) &&
                         'text-gray-400',
                       isEqual(day, selectedDay) && isToday(day) && 'bg-red-500',
                       isEqual(day, selectedDay) &&
