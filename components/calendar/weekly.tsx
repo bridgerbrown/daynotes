@@ -69,9 +69,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Weekly() {
+export default function Weekly(props: any) {
   let today = startOfToday()
-  let [selectedDay, setSelectedDay] = useState(today)
+  const { selectedDay, setSelectedDay } = props
   let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
 
@@ -110,12 +110,12 @@ export default function Weekly() {
 
   return (
     <div className="pt-16">
-      <div className="border-2 py-12 rounded-lg max-w-md px-4 mx-auto sm:px-7 md:max-w-6xl md:px-6">
+      <div className="border-4 border-slate-400 py-6 rounded-lg max-w-md px-4 mx-auto sm:px-7 md:max-w-6xl md:px-6">
         <div className="smd:grid md:divide-x md:divide-gray-200">
-          <div className="mb-16 md:pr-14">
+          <div className="mb-6 md:pr-14">
             <div className="flex items-center">
               <h2 className="flex-auto text-2xl font-semibold text-gray-100">
-                {format(selectedDay, 'MMMM d, yyyy')}
+                {format(selectedDay, 'MMMM yyyy')}
               </h2>
               <button
                 type="button"
@@ -156,7 +156,7 @@ export default function Weekly() {
                     type="button"
                     onClick={() => setSelectedDay(day)}
                     className={classNames(
-                      isEqual(day, selectedDay) && 'text-slate-900 bg-white w-12 h-12',
+                      isEqual(day, selectedDay) && 'text-slate-900 w-12 h-12',
                       !isEqual(day, selectedDay) &&
                         isToday(day) &&
                         'text-red-500 w-12 h-12',
@@ -168,10 +168,10 @@ export default function Weekly() {
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentWeek) &&
                         'text-gray-400 w-12 h-12',
-                      isEqual(day, selectedDay) && isToday(day) && 'flex justify-center items-center text-center w-12 h-12 bg-red-500',
+                      isEqual(day, selectedDay) && isToday(day) && 'w-12 h-12 text-white bg-red-500',
                       isEqual(day, selectedDay) &&
                         !isToday(day) &&
-                        'bg-gray-900 w-12 h-12',
+                        'bg-white w-12 h-12',
                       !isEqual(day, selectedDay) && 'hover:bg-gray-200 hover:text-slate-900 w-12 h-12',
                       (isEqual(day, selectedDay) || isToday(day)) &&
                         'font-semibold w-12 h-12',
@@ -194,7 +194,7 @@ export default function Weekly() {
               ))}
             </div>
           </div>
-          <section className="mt-12 md:mt-0 md:pl-14">
+          {/* <section className="mt-12 md:mt-0 md:pl-14">
             <h2 className="font-semibold text-gray-200">
               <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
                 {format(selectedDay, 'MMM dd, yyy')}
@@ -210,7 +210,7 @@ export default function Weekly() {
                 <p>No meetings for today.</p>
               )}
             </ol>
-          </section>
+          </section> */}
         </div>
       </div>
     </div>

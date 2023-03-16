@@ -13,6 +13,10 @@ module.exports = {
       width: {
         'day': 'calc(100% / 7)',
         'gameCard': '40rem'
+      },
+      colors: {
+        'gameWin': '#222a5c',
+        'gameWin-hover': '#1c2249'
       }
     },
   },

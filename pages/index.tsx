@@ -5,8 +5,13 @@ import Footer from '@/components/footer'
 import Calendar from '@/components/calendar/calendar'
 import GameCard from '@/components/game/game-card'
 import Weekly from '@/components/calendar/weekly'
+import React, {useState} from 'react'
+import { format, startOfToday } from 'date-fns'
 
 export default function Home() {
+  let today = startOfToday()
+  const [selectedDay, setSelectedDay] = useState(today)
+
   return (
     <>
       <Head>
@@ -17,11 +22,39 @@ export default function Home() {
       <main className="bg-slate-900 relative min-h-screen w-screen">
         <Navbar />
           <section className=''>
-            <Weekly />
+            <Weekly selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
           </section>
-          <section className='pt-4 px-16 flex flex-col justify-center items-start'>
-            <h1 className='pb-6 text-white font-semibold text-3xl'>Tue, March 14</h1>
-            <h2 className='text-white text-2xl'>Games</h2>
+          <section className='pb-60 mt-6 pt-4 px-20 flex flex-col justify-center items-start'>
+            <h1 className='pb-4 text-white font-semibold text-3xl'>
+              {format(selectedDay, '	E, MMMM d')}
+            </h1>
+            <h2 className='text-white text-2xl mb-4 '>Games</h2>
+            <div>
+              <div className='flex justify-center items-center'>
+                  <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
+                    <h1 className='text-white text-2xl'>
+                      1
+                    </h1>
+                  </div>
+                  <GameCard />
+                </div>
+                <div className='flex justify-center items-center'>
+                  <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
+                    <h1 className='text-white text-2xl'>
+                      2
+                    </h1>
+                  </div>
+                  <GameCard />
+                </div>
+                <div className='flex justify-center items-center'>
+                  <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
+                    <h1 className='text-white text-2xl'>
+                      3
+                    </h1>
+                  </div>
+                  <GameCard />
+                </div>
+            </div>
           </section>
           {/* <section className='flex flex-col justify-center items-center'>
             <GameCard />
