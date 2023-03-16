@@ -7,6 +7,7 @@ import GameCard from '@/components/game/game-card'
 import Weekly from '@/components/calendar/weekly'
 import React, {useState} from 'react'
 import { format, startOfToday } from 'date-fns'
+import Quill from '@/components/text-editor/quill'
 
 export default function Home() {
   let today = startOfToday()
@@ -55,6 +56,7 @@ export default function Home() {
                   <GameCard />
                 </div>
             </div>
+              <Quill />
           </section>
           {/* <section className='flex flex-col justify-center items-center'>
             <GameCard />
