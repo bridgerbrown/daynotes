@@ -1,24 +1,20 @@
-import React, {useState} from "react";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
-
+import React, {useState, useEffect, useRef, useCallback} from "react";
+import Quill from "quill"
+import "quill/dist/quill.snow.css"
 
 export default function TextEditor(){
-    const [text, setText] = useState<string>("")
+    const wrapperRef: any = useCallback((wrapper: any) => {
+        if (wrapper == null) return
+
+        wrapper.innerHTML = ''
+        const editor = document.createElement('div')
+        wrapper.append(editor)
+        new Quill(editor, { theme: "snow" })
+    }, [])
 
     return (
-        <div className="flex justify-center ">
-            <div className="flex justify-center">
-                <CKEditor
-                    editor={BalloonEditor}
-                    data={text}
-                    onChange={(e: any, editor: any) => {
-                        const data = editor.getData()
-                        setText(data)
-                    }}
-                />
-            </div>
+        <div id="container" ref={wrapperRef}
+        className="bg-white w-full h-96">
         </div>
     )
 }

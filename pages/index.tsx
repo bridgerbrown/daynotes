@@ -31,7 +31,7 @@ export default function Home() {
             <h1 className='pb-4 text-white font-semibold text-3xl'>
               {format(selectedDay, '	E, MMMM d')}
             </h1>
-            <h2 className='text-white text-2xl mb-4 '>Games</h2>
+            {/* <h2 className='text-white text-2xl mb-4 '>Games</h2>
             <div>
               <div className='flex justify-center items-center'>
                   <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
@@ -57,8 +57,15 @@ export default function Home() {
                   </div>
                   <GameCard />
                 </div>
+            </div> */}
+            <header className='max-width-mb-4 text-white'>
+              <h2 className='text-2xl'>
+                Daily Notes
+              </h2>
+            </header>
+            <div className='bg-white flex flex-col justify-center items-center w-full h-96'>
+              <TextEditor />
             </div>
-            <TextEditor />
           </section>
           {/* <section className='flex flex-col justify-center items-center'>
             <GameCard />
