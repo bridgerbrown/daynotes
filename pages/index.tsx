@@ -23,31 +23,41 @@ export default function Home() {
         <meta name="description" content="gNotes" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="bg-slate-900 relative min-h-screen w-screen">
+      <main className="bg-stone-200 relative min-h-screen w-screen">
         <Navbar />
           {/* <section className='mb-16'>
             <Weekly selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
           </section> */}
           <div className='flex flex-col justify-center items-center'>
-            <div className='w-11/12 rounded-lg py-6'>
-              <section className='mb-16 mt-6 pt-4 flex flex-col justify-center items-center'>
+            <div className='mt-12 shadow-xl bg-white w-9/12 rounded-lg py-6'>
+              <section className='mb-16 mt-8 pt-4 flex flex-col justify-center items-center'>
                 <div className='w-10/12'>
-                  <h1 className='pb-1 text-blue-200 font-semibold text-4xl'>
-                    {format(selectedDay, '	E, MMMM d')}
-                  </h1>
-                  <h2 className='pb-10 text-white/90 font-light tracking-wide text-lg'>Today</h2>
+                  <header className='pb-10'>
+                    <h1 className='pb-2 text-slate-700 font-semibold text-4xl'>
+                      {format(selectedDay, '	E, MMMM d')}
+                    </h1>
+                    <div className='flex items-center'>
+                      <h2 className=' text-slate-800 font-base tracking-wide text-sm'>
+                        Today
+                      </h2>
+                      <div className='w-1 h-1 bg-slate-800 rounded-full mx-2 mt-0.5'></div>
+                      <p className='text-sm text-slate-600 font-base'>
+                        4 games
+                      </p>
+                    </div>
+                  </header>
                   <div className='mb-12'>
                     <LearningObjectives />
                   </div>
-                  <header className='pl-6 mb-6 text-white'>
-                    <h2 className='font-semibold text-slate-200 text-2xl'>
-                      Daily Notes
+                  <header className='pl-6 mb-6'>
+                    <h2 className='font-semibold text-sky-800 text-2xl'>
+                      Notes
                     </h2>
                   </header>
                   {/* <div className='editorContainer'>
                     <TextEditor />
                   </div> */}
-                  <div className='px-12 w-full'>
+                  <div className='px-6 w-full'>
                     <TextEditor />
                   </div>
                 </div>

@@ -14,6 +14,11 @@ const TOOLBAR_OPTIONS = [
 ]
 
 export default function TextEditor(){
+
+    const showToolbar = () => {
+        document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"
+    }
+
     const wrapperRef: any = useCallback((wrapper: any) => {
         if (wrapper == null) return
 
@@ -21,10 +26,13 @@ export default function TextEditor(){
         const editor = document.createElement('div')
         wrapper.append(editor)
         new Quill(editor, { theme: "snow", modules: { toolbar: TOOLBAR_OPTIONS } })
+        
+        document.getElementById("editor")?.addEventListener("mouseover", showToolbar)
     }, [])
 
     return (
         <div ref={wrapperRef}
+        id="editor"
         className="container bg-white w-full h-96">
         </div>
     )
