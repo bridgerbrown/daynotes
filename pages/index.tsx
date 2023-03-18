@@ -9,6 +9,7 @@ import React, {useState} from 'react'
 import { format, startOfToday } from 'date-fns'
 import Quill from '@/components/text-editor/text-editor'
 import dynamic from 'next/dynamic'
+import LearningObjectives from '@/components/learning-objectives'
 const TextEditor = dynamic(() => import("../components/text-editor/text-editor"), { ssr: false })
 
 export default function Home() {
@@ -24,54 +25,67 @@ export default function Home() {
       </Head>
       <main className="bg-slate-900 relative min-h-screen w-screen">
         <Navbar />
-          <section className=''>
+          {/* <section className='mb-16'>
             <Weekly selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
-          </section>
-          <section className='pb-60 mt-6 pt-4 px-20 flex flex-col justify-center items-start'>
-            <h1 className='pb-4 text-white font-semibold text-3xl'>
-              {format(selectedDay, '	E, MMMM d')}
-            </h1>
-            {/* <h2 className='text-white text-2xl mb-4 '>Games</h2>
-            <div>
-              <div className='flex justify-center items-center'>
-                  <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
-                    <h1 className='text-white text-2xl'>
-                      1
-                    </h1>
-                  </div>
-                  <GameCard />
-                </div>
-                <div className='flex justify-center items-center'>
-                  <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
-                    <h1 className='text-white text-2xl'>
-                      2
-                    </h1>
-                  </div>
-                  <GameCard />
-                </div>
-                <div className='flex justify-center items-center'>
-                  <div className='flex justify-center items-center mx-6 h-12 w-12 bg-slate-800 rounded-full'>
-                    <h1 className='text-white text-2xl'>
-                      3
-                    </h1>
-                  </div>
-                  <GameCard />
-                </div>
-            </div> */}
-            <header className='max-width-mb-4 text-white'>
-              <h2 className='text-2xl'>
-                Daily Notes
-              </h2>
-            </header>
-            <div className='bg-white flex flex-col justify-center items-center w-full h-96'>
-              <TextEditor />
-            </div>
-          </section>
-          {/* <section className='flex flex-col justify-center items-center'>
-            <GameCard />
           </section> */}
+          <div className='flex flex-col justify-center items-center'>
+            <div className='w-11/12 rounded-lg py-6'>
+              <section className='mb-16 mt-6 pt-4 flex flex-col justify-center items-center'>
+                <div className='w-10/12'>
+                  <h1 className='pb-1 text-blue-200 font-semibold text-4xl'>
+                    {format(selectedDay, '	E, MMMM d')}
+                  </h1>
+                  <h2 className='pb-10 text-white/90 font-light tracking-wide text-lg'>Today</h2>
+                  <div className='mb-12'>
+                    <LearningObjectives />
+                  </div>
+                  <header className='pl-6 mb-6 text-white'>
+                    <h2 className='font-semibold text-slate-200 text-2xl'>
+                      Daily Notes
+                    </h2>
+                  </header>
+                  {/* <div className='editorContainer'>
+                    <TextEditor />
+                  </div> */}
+                  <div className='px-12 w-full'>
+                    <TextEditor />
+                  </div>
+                </div>
+              </section>
+              {/* <section className='pl-6 pb-60 flex flex-col justify-center items-center'>
+                <div className='w-10/12'>
+                  <h2 className='text-slate-200 text-2xl pb-6'>Games</h2>
+                      <div className='flex justify-left items-center'>
+                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-slate-600 rounded-full'>
+                          <h1 className='text-white text-2xl'>
+                            1
+                          </h1>
+                        </div>
+                        <GameCard />
+                      </div>
+                      <div className='flex justify-left items-center'>
+                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-slate-600 rounded-full'>
+                          <h1 className='text-white text-2xl'>
+                            2
+                          </h1>
+                        </div>
+                        <GameCard />
+                      </div>
+                      <div className='flex justify-left items-center'>
+                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-slate-600 rounded-full'>
+                          <h1 className='text-white text-2xl'>
+                            3
+                          </h1>
+                        </div>
+                        <GameCard />
+                      </div>
+                </div>
+              </section> */}
+            </div>
+          </div>
         <Footer />
       </main>
     </>
   )
 }
+
