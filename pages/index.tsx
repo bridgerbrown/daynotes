@@ -36,13 +36,13 @@ export default function Home() {
         <meta name="description" content="gNotes" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="bg-[#141234] relative min-h-screen w-screen">
+      <main className="font-SansPro bg-[#141234] relative min-h-screen w-screen">
         <Navbar />
 
           <div className='absolute left-8 top-60'>
             <div className='flex flex-col justify-center items-center'>
               <button onClick={prevDay}
-                className="mb-2 bg-[#2c2650] font-light text-white w-24 py-2 rounded-md text-lg"
+                className="mb-2 bg-[#2c2650] font-light text-white w-24 py-3 rounded-md text-base"
               >
                 Prev
                 </button>
@@ -54,7 +54,7 @@ export default function Home() {
           <div className='absolute right-8 top-60'>
             <div className='flex flex-col justify-center items-center'>
               <button onClick={nextDay}
-                className="mb-2 bg-[#2c2650] font-light text-white w-24 py-2 rounded-md text-lg"
+                className="mb-2 bg-[#2c2650] font-light text-white w-24 py-3 rounded-md text-base"
               >
                 Next
                 </button>
@@ -65,8 +65,8 @@ export default function Home() {
           </div>
 
           <div className='flex flex-col justify-center items-center'>
-            <div className='min-h-[100vh] mt-12 mb-32 w-8/12 rounded-lg py-6'>
-              <div className='mb-16 mt-8 pt-4 flex flex-col justify-center items-center'>
+            <div className='min-h-[100vh] mt-0 mb-32 w-8/12 rounded-lg py-6'>
+              <div className='mb-16 pt-4 flex flex-col justify-center items-center'>
                 <DayHeader selectedDay={selectedDay} />
                 <LearningObjectives />
                 <Notes />

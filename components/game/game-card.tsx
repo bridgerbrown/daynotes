@@ -5,13 +5,13 @@ export default function GameCard(props: any){
     const kdaDeathStyle: string = `px-1 text-red-500`
 
     return(
-        <div className="flex justify-center items-center pr-4">
-            <div className='flex justify-center items-center mr-6 h-10 w-10 bg-sky-600 rounded-full'>
+        <div className="flex justify-center items-center">
+            {/* <div className='flex justify-center items-center mr-6 h-10 w-10 bg-sky-600 rounded-full'>
                 <h1 className='text-white text-base'>
                 1
                 </h1>
-            </div>
-            <div className="mb-2 flex justify-center items-center w-gameCard h-28 bg-[#222a5c] rounded-lg">
+            </div> */}
+            <div className="mb-2 border-[#2e2d4e] border flex justify-center items-center w-11/12 h-28 bg-[#222a5c] rounded-lg">
                 <div className="text-center h-32 flex flex-col justify-center pl-4">
                     <h3 className="text-white text-xs font-semibold">
                         Ranked Solo

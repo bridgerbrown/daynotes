@@ -17,6 +17,9 @@ module.exports = {
       colors: {
         'gameWin': '#222a5c',
         'gameWin-hover': '#1c2249'
+      },
+      fontFamily: {
+        SansPro: ['Source_Sans_Pro', 'sans-serif']
       }
     },
   },
