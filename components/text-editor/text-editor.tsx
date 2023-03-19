@@ -22,9 +22,9 @@ export default function TextEditor(){
 
     const hideToolbar = () => {
         document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "none"
-        document.querySelector<HTMLElement>(".ql-editor")!.style.marginTop = "40px"
+        document.querySelector<HTMLElement>(".ql-editor")!.style.paddingTop = "40px"
     }
-
+    
     const wrapperRef: any = useCallback((wrapper: any) => {
         if (wrapper == null) return
 
