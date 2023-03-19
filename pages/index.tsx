@@ -6,7 +6,7 @@ import Calendar from '@/components/calendar/calendar'
 import GameCard from '@/components/game/game-card'
 import Weekly from '@/components/calendar/weekly'
 import React, {useState} from 'react'
-import { format, startOfToday } from 'date-fns'
+import { format, startOfToday, startOfYesterday, add } from 'date-fns'
 import Quill from '@/components/text-editor/text-editor'
 import dynamic from 'next/dynamic'
 import LearningObjectives from '@/components/learning-objectives'
@@ -15,6 +15,16 @@ const TextEditor = dynamic(() => import("../components/text-editor/text-editor")
 export default function Home() {
   let today = startOfToday()
   const [selectedDay, setSelectedDay] = useState(today)
+  const yesterday = add(selectedDay, { days: -1})
+  const tomorrow = add(selectedDay, { days: 1})
+
+  const prevDay = () => {
+    setSelectedDay(yesterday)
+  }
+
+  const nextDay = () => {
+    setSelectedDay(tomorrow)
+  }
 
   return (
     <>
@@ -28,8 +38,32 @@ export default function Home() {
           {/* <section className='mb-16'>
             <Weekly selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
           </section> */}
+          <div className='absolute left-8 top-60'>
+            <div className='flex flex-col justify-center items-center'>
+              <button onClick={prevDay}
+                className="mb-2 bg-sky-700/60 font-light text-white w-24 py-2 rounded-md text-lg"
+              >
+                Prev
+                </button>
+              <h3 className='text-slate-900/60 text-sm'>
+                {format(yesterday, 'E, MMMM d')}
+              </h3>
+            </div>
+          </div>
+          <div className='absolute right-8 top-60'>
+            <div className='flex flex-col justify-center items-center'>
+              <button onClick={nextDay}
+                className="mb-2 bg-sky-700/60 font-light text-white w-24 py-2 rounded-md text-lg"
+              >
+                Next
+                </button>
+              <h3 className='text-slate-900/60 text-sm'>
+                {format(tomorrow, 'E, MMMM d')}
+              </h3>
+            </div>
+          </div>
           <div className='flex flex-col justify-center items-center'>
-            <div className='mt-12 shadow-xl bg-white w-9/12 rounded-lg py-6'>
+            <div className='min-h-[100vh] mt-12 mb-32 shadow-xl bg-white w-9/12 rounded-lg py-6'>
               <section className='mb-16 mt-8 pt-4 flex flex-col justify-center items-center'>
                 <div className='w-10/12'>
                   <header className='pb-10'>
@@ -62,11 +96,11 @@ export default function Home() {
                   </div>
                 </div>
               </section>
-              {/* <section className='pl-6 pb-60 flex flex-col justify-center items-center'>
-                <div className='w-10/12'>
-                  <h2 className='text-slate-200 text-2xl pb-6'>Games</h2>
+              <section className='pl-6 py-20 flex flex-col justify-center items-center'>
+                <div className='mt-12 w-10/12'>
+                  <h2 className='text-sky-800 font-semibold text-2xl pb-6'>Games</h2>
                       <div className='flex justify-left items-center'>
-                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-slate-600 rounded-full'>
+                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-sky-600 rounded-full'>
                           <h1 className='text-white text-2xl'>
                             1
                           </h1>
@@ -74,7 +108,7 @@ export default function Home() {
                         <GameCard />
                       </div>
                       <div className='flex justify-left items-center'>
-                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-slate-600 rounded-full'>
+                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-sky-600 rounded-full'>
                           <h1 className='text-white text-2xl'>
                             2
                           </h1>
@@ -82,7 +116,7 @@ export default function Home() {
                         <GameCard />
                       </div>
                       <div className='flex justify-left items-center'>
-                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-slate-600 rounded-full'>
+                        <div className='flex justify-center items-center mr-6 h-12 w-12 bg-sky-600 rounded-full'>
                           <h1 className='text-white text-2xl'>
                             3
                           </h1>
@@ -90,7 +124,7 @@ export default function Home() {
                         <GameCard />
                       </div>
                 </div>
-              </section> */}
+              </section>
             </div>
           </div>
         <Footer />

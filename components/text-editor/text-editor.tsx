@@ -17,6 +17,12 @@ export default function TextEditor(){
 
     const showToolbar = () => {
         document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"
+        document.querySelector<HTMLElement>(".ql-editor")!.style.marginTop = "0px"
+    }
+
+    const hideToolbar = () => {
+        document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "none"
+        document.querySelector<HTMLElement>(".ql-editor")!.style.marginTop = "40px"
     }
 
     const wrapperRef: any = useCallback((wrapper: any) => {
@@ -28,6 +34,7 @@ export default function TextEditor(){
         new Quill(editor, { theme: "snow", modules: { toolbar: TOOLBAR_OPTIONS } })
         
         document.getElementById("editor")?.addEventListener("mouseover", showToolbar)
+        document.getElementById("editor")?.addEventListener("mouseleave", hideToolbar)
     }, [])
 
     return (
