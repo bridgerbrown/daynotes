@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef, useCallback} from "react";
 import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import dynamic from "next/dynamic";
-import { io, Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 const TOOLBAR_OPTIONS = [
     [{ header: [1, 2, 3, 4, false] }],
@@ -20,13 +20,27 @@ export default function TextEditor(){
     const [quill, setQuill] = useState<any>()
 
     useEffect(() => {
-        const s: any = io("http://localhost:3002")
+        const s = io("http://localhost:3001")
         setSocket(s)
 
         return () => {
             s.disconnect()
         }
     }, [])
+
+    useEffect(() => {
+        if (socket == null || quill == null) return
+
+        const handler = (delta: any) => {
+            quill.updateContents(delta)
+        }
+        socket.on('receive-changes', handler)
+
+        return () => {
+            socket.off('receive-changes', handler)
+        }
+    }, [socket, quill])
+
 
     useEffect(() => {
         if (socket == null || quill == null) return
