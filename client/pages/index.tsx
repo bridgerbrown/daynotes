@@ -36,13 +36,13 @@ export default function Home() {
         <meta name="description" content="gNotes" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main className="font-SansPro bg-[#141234] relative min-h-screen w-screen">
+      <main className="font-SansPro bg-gray-200 relative min-h-screen w-screen">
         <Navbar />
 
           <div className='absolute left-8 top-60'>
             <div className='flex flex-col justify-center items-center'>
               <button onClick={prevDay}
-                className="mb-2 bg-[#2c2650] font-light text-white w-24 py-3 rounded-md text-base"
+                className="mb-2 bg-gray-400 font-light text-white w-24 py-3 rounded-md text-base"
               >
                 Prev
                 </button>

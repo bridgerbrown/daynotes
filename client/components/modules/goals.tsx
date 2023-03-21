@@ -4,7 +4,7 @@ export default function Goals(props: any){
     
 
     return(
-        <section className="shadow-lg w-full min-h-32 bg-[#252146] pt-4 mt-2 border border-[#383163] rounded-md">
+        <section className="shadow-lg w-full min-h-32 bg-moduleHeaderBg pt-4 mt-2 border border-[#383163] rounded-md">
             <header className="pb-4 flex items-center px-6 border-b border-[#2e2d4e]">
                 <h2 className="text-white font-semibold tracking-wider text-base uppercase">
                     Goals

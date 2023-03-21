@@ -16,7 +16,16 @@ module.exports = {
       },
       colors: {
         'gameWin': '#222a5c',
-        'gameWin-hover': '#1c2249'
+        'gameWin-hover': '#1c2249',
+        'main-bg': 'white',
+        'button': '',
+        'moduleHeaderBg': '',
+        'moduleContentBg': '',
+        'pageHeader': '',
+        'moduleHeader': '',
+        'moduleBorder': '',
+        'moduleHeaderBorder': '',
+        'moduleSubheader': ''
       },
       fontFamily: {
         SansPro: ['Source_Sans_Pro', 'sans-serif']

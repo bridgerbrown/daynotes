@@ -9,7 +9,7 @@ export default function DayHeader(props: any) {
     <section className='w-full h-40 flex flex-col'>
         <div className='w-10/12 pt-4'>
             <header className='pb-4'>
-            <h1 className='pb-2 text-white font-semibold text-3xl'>
+            <h1 className='pb-2 text-gray-700 font-semibold text-3xl'>
                 {format(props.selectedDay, '	E, MMMM d')}
             </h1>
             <div className='flex items-center'>
