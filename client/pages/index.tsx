@@ -42,11 +42,11 @@ export default function Home() {
           <div className='absolute left-8 top-60'>
             <div className='flex flex-col justify-center items-center'>
               <button onClick={prevDay}
-                className="mb-2 bg-gray-400 font-light text-white w-24 py-3 rounded-md text-base"
+                className="mb-2 bg-button/30 font-light text-white w-24 py-3 rounded-md text-base"
               >
                 Prev
                 </button>
-              <h3 className='text-[#6b6888] text-sm'>
+              <h3 className='text-black/40 text-sm'>
                 {format(yesterday, 'E, MMMM d')}
               </h3>
             </div>
@@ -54,11 +54,11 @@ export default function Home() {
           <div className='absolute right-8 top-60'>
             <div className='flex flex-col justify-center items-center'>
               <button onClick={nextDay}
-                className="mb-2 bg-[#2c2650] font-light text-white w-24 py-3 rounded-md text-base"
+                className="mb-2 bg-button/30 font-light text-white w-24 py-3 rounded-md text-base"
               >
                 Next
                 </button>
-              <h3 className='text-[#6b6888] text-sm'>
+              <h3 className='text-black/40 text-sm'>
                 {format(tomorrow, 'E, MMMM d')}
               </h3>
             </div>

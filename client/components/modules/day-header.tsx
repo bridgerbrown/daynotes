@@ -9,15 +9,15 @@ export default function DayHeader(props: any) {
     <section className='w-full h-40 flex flex-col'>
         <div className='w-10/12 pt-4'>
             <header className='pb-4'>
-            <h1 className='pb-2 text-gray-700 font-semibold text-3xl'>
+            <h1 className='pb-2 text-moduleHeader/70 font-semibold text-3xl'>
                 {format(props.selectedDay, '	E, MMMM d')}
             </h1>
             <div className='flex items-center'>
-                <h2 className='text-[#b3b4ce] font-base tracking-wide text-sm'>
+                <h2 className='text-moduleHeader/50 font-base tracking-wide text-sm'>
                 Today
                 </h2>
                 <div className='w-1 h-1 bg-[#b3b4ce] rounded-full mx-2 mt-0.5'></div>
-                <p className='text-sm text-[#6b6888] font-base'>
+                <p className='text-sm text-moduleHeader/60 font-base'>
                 4 games
                 </p>
             </div>
