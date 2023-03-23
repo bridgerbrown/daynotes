@@ -6,7 +6,7 @@ import Footer from '@/components/footer'
 export default function Calendar() {
   return (
     <>
-      <main className="font-SansPro bg-[#141234] relative min-h-screen w-screen">
+      <main className="font-SansPro bg-mainBg relative min-h-screen w-screen">
         <Navbar />
             <CalendarCard />
         <Footer />

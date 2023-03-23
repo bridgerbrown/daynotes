@@ -3,7 +3,6 @@ import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import dynamic from "next/dynamic";
 import { io } from 'socket.io-client'
-import { clearInterval } from "timers";
 
 const SAVE_INTERVAL_MS = 2000
 const TOOLBAR_OPTIONS = [
@@ -12,7 +11,7 @@ const TOOLBAR_OPTIONS = [
     [{ list: "ordered" }, { list: "bullet" }],
     ["bold", "italic", "underline"],
     [{ color: [] }, { background: [] }],
-    [{ aling: [] }],
+    [{ align: [] }],
     ["image", "blockquote", "code-block"],
     ["clean"],
 ]

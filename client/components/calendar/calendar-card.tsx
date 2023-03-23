@@ -93,18 +93,23 @@ export default function CalendarCard() {
   )
 
   return (
-    <div className="pt-16">
-      <div className="border-2 py-12 rounded-lg max-w-md w-[700px] px-4 mx-auto sm:px-7 md:max-w-6xl md:px-6">
-        <div className="">
-          <section className="border-b border-gray-400 pb-4 md:pr-14">
-            <div className="flex items-center">
-              <h2 className="flex-auto text-2xl font-semibold text-gray-100">
+    <div className="pt-16 flex justify-center items-center">
+      <section className="pb-12 w-[1000px] shadow-xl min-h-32 bg-moduleHeaderBg pt-4 mt-2 border border-moduleBorder/20 rounded-md">
+        <header className="pb-4 flex items-center px-6 border-b border-moduleHeaderBorder/20">
+            <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-xl uppercase">
+                CALENDAR
+            </h2>
+          </header>
+        <div className="bg-white">
+          <section className="border-b border-moduleBorder/20 pb-4 md:pr-14">
+            <div className="pl-6 pt-6 flex items-center">
+              <h2 className="flex-auto text-2xl font-semibold text-moduleHeader/70">
                 {format(firstDayCurrentMonth, 'MMMM yyyy')}
               </h2>
               <button
                 type="button"
                 onClick={previousMonth}
-                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-200 hover:text-gray-500"
+                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-700 hover:text-gray-500"
               >
                 <span className="sr-only">Previous month</span>
                 <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
@@ -112,13 +117,13 @@ export default function CalendarCard() {
               <button
                 onClick={nextMonth}
                 type="button"
-                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-200 hover:text-gray-500"
+                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-700 hover:text-gray-500"
               >
                 <span className="sr-only">Next month</span>
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="grid grid-cols-7 mt-10 text-lg leading-6 text-center text-gray-200">
+            <div className="grid grid-cols-7 mt-10 text-lg leading-6 text-center text-gray-700">
               <div>S</div>
               <div>M</div>
               <div>T</div>
@@ -147,7 +152,7 @@ export default function CalendarCard() {
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-200',
+                        'text-gray-500',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
@@ -178,14 +183,14 @@ export default function CalendarCard() {
               ))}
             </div>
           </section>
-          <section className="mt-12 pt-8 md:mt-0 ml-4">
-            <h2 className="font-semibold text-gray-200">
+          <section className="mt-12 py-8 md:mt-0 ml-6">
+            <h2 className="font-semibold text-gray-500">
               <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
                 {format(selectedDay, 'MMM dd, yyy')}
               </time>
               {' '} Notes
             </h2>
-            <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
+            <ol className="pl-6 pt-6 space-y-1 text-sm leading-6 text-gray-500">
               {selectedDayMeetings.length > 0 ? (
                 selectedDayMeetings.map((meeting) => (
                   <Meeting meeting={meeting} key={meeting.id} />
@@ -196,7 +201,7 @@ export default function CalendarCard() {
             </ol>
           </section>
         </div>
-      </div>
+      </section>
     </div>
   )
 }
