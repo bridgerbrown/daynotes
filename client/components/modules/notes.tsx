@@ -5,7 +5,7 @@ import TextEditor from '../text-editor/text-editor'
 import dynamic from 'next/dynamic'
 const EditorNoSSR = dynamic(() => import('../../components/text-editor/text-editor'), { ssr: false })
 
-export default function Notes() {
+export default function Notes(props: any) {
   
   return (
     <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
@@ -23,7 +23,7 @@ export default function Notes() {
             </div>
         </header>
         <div className='h-[9in] text-black font-light bg-moduleContentBg w-full'>
-          <EditorNoSSR />
+          <EditorNoSSR documentId={props.documentId} />
         </div>
     </div>
   )

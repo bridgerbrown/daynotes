@@ -4,7 +4,6 @@ import "quill/dist/quill.snow.css"
 import dynamic from "next/dynamic";
 import { io } from 'socket.io-client'
 
-
 const SAVE_INTERVAL_MS = 2000
 const TOOLBAR_OPTIONS = [
     [{ header: [1, 2, 3, 4, false] }],

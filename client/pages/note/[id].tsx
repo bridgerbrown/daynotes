@@ -17,7 +17,7 @@ export default function Test() {
   const [selectedDay, setSelectedDay] = useState(today)
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
-  const { id: documentId } = format(selectedDay, 'M-d-y')
+  const { id: documentId } = "user-" + format(selectedDay, 'M-d-y')
 
   const prevDay = () => {
     setSelectedDay(yesterday)
@@ -63,7 +63,7 @@ export default function Test() {
               <div className='mb-16 pt-4 flex flex-col justify-center items-center'>
                 <DayHeader selectedDay={selectedDay} />
                 <Goals />
-                <Notes />
+                <Notes documentId={documentId} />
               </div>
             </div>
           </div>
