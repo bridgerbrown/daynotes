@@ -6,13 +6,13 @@ import Calendar from '@/components/calendar/calendar-card'
 import GameCard from '@/components/game/game-card'
 import Weekly from '@/components/calendar/weekly'
 import React, {useState} from 'react'
-import Quill from '@/components/text-editor/text-editor'
+import Quill from '@/components/modules/text-editor'
 import dynamic from 'next/dynamic'
 import LearningObjectives from '@/components/modules/goals'
 import DayHeader from '@/components/modules/day-header'
 import Notes from '@/components/modules/notes'
 import Games from '@/components/modules/games'
-const TextEditor = dynamic(() => import("../components/text-editor/text-editor"), { ssr: false })
+const TextEditor = dynamic(() => import("../components/modules/text-editor"), { ssr: false })
 import { MongoClient } from 'mongodb'
 
 export default function Home() {

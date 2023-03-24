@@ -1,6 +1,11 @@
 import React from "react"
+import Link from "next/link"
+import { startOfToday, format } from "date-fns"
 
 export default function Navbar(){
+    let today = startOfToday()
+    let todayFormatted = format(today, 'M-d-y')
+    
     return(
         <nav className="py-6 px-8 text-slate-900 flex justify-between">
             <div className="flex justify-center items-center">
@@ -15,7 +20,7 @@ export default function Navbar(){
                     Home
                 </li>
                 <li>
-                    Today
+                    <Link href={`/note/${todayFormatted}`}>Today</Link>
                 </li>
                 <li>
                     Calendar

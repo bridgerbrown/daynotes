@@ -7,10 +7,10 @@ import GameCard from '@/components/game/game-card'
 import Weekly from '@/components/calendar/weekly'
 import React, {useState} from 'react'
 import { format, startOfToday, startOfYesterday, add } from 'date-fns'
-import Quill from '@/components/text-editor/text-editor'
+import Quill from '@/components/modules/text-editor'
 import dynamic from 'next/dynamic'
 import LearningObjectives from '@/components/modules/goals'
-const TextEditor = dynamic(() => import("../components/text-editor/text-editor"), { ssr: false })
+const TextEditor = dynamic(() => import("../components/modules/text-editor"), { ssr: false })
 
 export default function Home() {
   let today = startOfToday()
