@@ -5,12 +5,13 @@ import { v4 as uuidV4 } from 'uuid'
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import DayHeader from '@/components/modules/day-header';
-import Notes from '@/components/modules/notes';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Goals from '@/components/modules/goals';
 import { format, startOfToday, startOfYesterday, add } from 'date-fns'
-import TextEditor from '../../../components/modules/text-editor';
+const TextEditorNoSSR = dynamic(() => import('../../../components/modules/text-editor'), { ssr: false })
+import clientPromise from '@/lib/mongodb';
 
-export default function Day() {
+export default function Day({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
@@ -18,6 +19,12 @@ export default function Day() {
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
   const [noteActivated, setNoteActivated] = useState<boolean>(false)
+
+  console.log(notes)
+
+  function checkIfNoteExists() {
+    notes ? setNoteActivated(true) : setNoteActivated(false)
+  }
 
   const prevDay = () => {
     setSelectedDay(yesterday)
@@ -28,6 +35,7 @@ export default function Day() {
     setSelectedDay(tomorrow)
     router.push(`/user/note/${format(tomorrow, 'M-d-y')}`)
   }
+
 
   const activateNote = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -69,7 +77,7 @@ export default function Day() {
                 <Goals />
                 {
                   noteActivated ?
-                  <TextEditor documentId={documentId} />
+                  <TextEditorNoSSR documentId={documentId} />
                   :
                   <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
                   <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
@@ -94,4 +102,24 @@ export default function Day() {
         <Footer />
       </main>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => { 
+    try {
+      const client = await clientPromise;
+      const db = client.db("notes-db");
+
+      const notes = await db
+          .collection("notes")
+          .find({})
+          .toArray();
+
+      const foundNote = notes.filter((item: any) => item._id === context.query.id ? item : null)
+      console.log(foundNote)
+      return {
+          props: { notes: JSON.parse(JSON.stringify(foundNote)) },
+      };
+    } catch (e) {
+      console.error(e);
+  } 
 }
