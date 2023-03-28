@@ -9,7 +9,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Goals from '@/components/modules/goals';
 import { format, startOfToday, startOfYesterday, add } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../../components/modules/text-editor'), { ssr: false })
-import clientPromise, { createNote } from '@/lib/mongodb';
+import clientPromise, { createNote } from '@/data/mongodb/mongodb';
 
 export default function Day({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
@@ -117,6 +117,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     } catch (e) {
       console.error(e);
+      return {
+        props: { notes: [] }
+      }
   } 
 }
 

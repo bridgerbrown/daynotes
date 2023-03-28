@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-
 import { MongoClient } from 'mongodb'
 
 if (!process.env.MONGODB_CONNECTION_STRING) {
@@ -29,15 +26,3 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default clientPromise
-
-export async function createNote(documentId: any) {
-  try {
-    const client = await clientPromise;
-    const database = client.db("notes-db");
-    const notes = database.collection('notes')
-    await notes.insertOne({ _id: documentId, data: "" })
-
-  } catch (e) {
-    console.error(e);
-} 
-}

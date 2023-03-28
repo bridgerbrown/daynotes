@@ -23,7 +23,7 @@ export default function Navbar(){
                     <Link href={`/note/${todayFormatted}`}>Today</Link>
                 </li>
                 <li>
-                    Calendar
+                    <Link href={`/calendar`}>Calendar</Link>
                 </li>
                 <li>
                     User

@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FormProvider, useForm, Resolver } from 'react-hook-form'
 import { useRouter } from 'next/router'
-import { auth } from '@/components/firebase/firebase.config'
+import { auth } from '@/data/firebase/firebase.config'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
+import { checkUser } from '@/data/mongodb/mongodb-auth'
+import clientPromise from '@/data/mongodb/mongodb'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
 type FormValues = {
   email: string;
@@ -13,7 +16,7 @@ type FormValues = {
   passwordConfirmation: string;
 }
 
-export default function SignUp() {
+export default function SignUp({users}: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const methods = useForm({ mode: "onBlur"})
     const router = useRouter()
     const [invalid, setInvalid] = useState("")
@@ -39,12 +42,12 @@ export default function SignUp() {
       getValues
     } = useForm<FormValues>({ resolver });
 
-    function createUserData(email: any){
-      checkUser(email)
-        .then((item) => {
-          console.log("signup " + item)
-        })
-    }
+    // function createUserData(username: any){
+    //   checkUser(username)
+    //     .then((item) => {
+    //       console.log("signup success")
+    //     })
+    // }
   
     const onSubmit = async (data: any) => {
       const pw1: any = document.getElementById("pw1")
@@ -166,4 +169,24 @@ export default function SignUp() {
       </div>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (context) => { 
+  try {
+    const client = await clientPromise;
+    const db = client.db("users-db");
+    const users = await db
+        .collection("users")
+        .find({ username: 1 })
+        .toArray();
+    console.log(users)
     
+    return {
+        props: { users: JSON.parse(JSON.stringify(users)) },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { users: [] }
+    }
+  } 
+}   

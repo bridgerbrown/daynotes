@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FormProvider, useForm, Resolver } from 'react-hook-form'
 import { useRouter } from 'next/router'
-import { auth } from '@/components/firebase/firebase.config'
+import { auth } from '@/data/firebase/firebase.config'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
@@ -13,7 +13,7 @@ type FormValues = {
   passwordConfirmation: string;
 }
 
-export default function SignUp() {
+export default function LogIn() {
     const methods = useForm({ mode: "onBlur"})
     const router = useRouter()
     const [invalid, setInvalid] = useState("")
