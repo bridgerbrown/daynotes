@@ -19,7 +19,7 @@ const TOOLBAR_OPTIONS = [
 export default function TextEditor(props: any){
     const [socket, setSocket] = useState<any>()
     const [quill, setQuill] = useState<any>()
-    const { documentId } = props
+    const { documentId, noteActivated } = props
 
     useEffect(() => {
         const s = io("http://localhost:3001")
@@ -31,55 +31,64 @@ export default function TextEditor(props: any){
     }, [])
 
     useEffect(() => {
-        if (socket == null || quill == null) return
+        if(noteActivated){
+            if (socket == null || quill == null) return
 
-        socket.once("load-document", (document: any) => {
-            quill.setContents(document)
-            quill.enable()
-        })
-
-        socket.emit('get-document', documentId)
-    }, [socket, quill, documentId])
+            socket.once("load-document", (document: any) => {
+                document !== null ? () => props.setNoteActivated(true) : () => props.setNoteActivated(false) 
+                quill.setContents(document)
+                quill.enable()
+            })
+    
+            socket.emit('get-document', documentId)
+        }
+    }, [socket, quill, documentId, props, noteActivated])
 
     useEffect(() => {
-        if (socket == null || quill == null) return
+        if(noteActivated){
+            if (socket == null || quill == null) return
 
-        const interval = setInterval(() => {
-            socket.emit('save-document', quill.getContents())
-        }, SAVE_INTERVAL_MS)
-
-        return () => {
-            clearInterval(interval)
+            const interval = setInterval(() => {
+                socket.emit('save-document', quill.getContents())
+            }, SAVE_INTERVAL_MS)
+    
+            return () => {
+                clearInterval(interval)
+            }
         }
-    }, [socket, quill])
+    }, [socket, quill, noteActivated])
 
     useEffect(() => {
-        if (socket == null || quill == null) return
+        if(noteActivated){
+            if (socket == null || quill == null) return
 
-        const handler = (delta: any) => {
-            quill.updateContents(delta)
+            const handler = (delta: any) => {
+                quill.updateContents(delta)
+            }
+            socket.on('receive-changes', handler)
+    
+            return () => {
+                socket.off('receive-changes', handler)
+            }
         }
-        socket.on('receive-changes', handler)
-
-        return () => {
-            socket.off('receive-changes', handler)
-        }
-    }, [socket, quill])
+    }, [socket, quill, noteActivated])
 
 
     useEffect(() => {
-        if (socket == null || quill == null) return
+        if(noteActivated){
+            if (socket == null || quill == null) return
 
-        const handler = (delta: any, oldDelta: any, source: any) => {
-            if (source !== 'user') return
-            socket.emit("send-changes", delta)
+            const handler = (delta: any, oldDelta: any, source: any) => {
+                if (source !== 'user') return
+                socket.emit("send-changes", delta)
+            }
+            quill.on('text-change', handler)
+    
+            return () => {
+                quill.off('text-change', handler)
+            }
         }
-        quill.on('text-change', handler)
-
-        return () => {
-            quill.off('text-change', handler)
-        }
-    }, [socket, quill])
+    }, [socket, quill, noteActivated])
 
     // const showToolbar = () => {
     //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"

@@ -9,7 +9,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Goals from '@/components/modules/goals';
 import { format, startOfToday, startOfYesterday, add } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../../components/modules/text-editor'), { ssr: false })
-import clientPromise from '@/lib/mongodb';
+import clientPromise, { createNote } from '@/lib/mongodb';
 
 export default function Day({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
@@ -20,11 +20,9 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
   const tomorrow = add(selectedDay, { days: 1})
   const [noteActivated, setNoteActivated] = useState<boolean>(false)
 
-  console.log(notes)
-
-  function checkIfNoteExists() {
-    notes ? setNoteActivated(true) : setNoteActivated(false)
-  }
+  useEffect(() => {
+    notes.length ? setNoteActivated(true) : setNoteActivated(false)
+  }, [selectedDay, router.query])
 
   const prevDay = () => {
     setSelectedDay(yesterday)
@@ -35,7 +33,6 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
     setSelectedDay(tomorrow)
     router.push(`/user/note/${format(tomorrow, 'M-d-y')}`)
   }
-
 
   const activateNote = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -77,7 +74,7 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
                 <Goals />
                 {
                   noteActivated ?
-                  <TextEditorNoSSR documentId={documentId} />
+                  <TextEditorNoSSR documentId={documentId} noteActivated={noteActivated} />
                   :
                   <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
                   <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
@@ -115,7 +112,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           .toArray();
 
       const foundNote = notes.filter((item: any) => item._id === context.query.id ? item : null)
-      console.log(foundNote)
       return {
           props: { notes: JSON.parse(JSON.stringify(foundNote)) },
       };
@@ -123,3 +119,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       console.error(e);
   } 
 }
+
