@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { FormProvider, useForm, Resolver } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { auth } from '@/data/firebase/firebase.config'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 
@@ -38,41 +38,22 @@ export default function LogIn() {
       formState: { errors },
       getValues
     } = useForm<FormValues>({ resolver });
-
-    function createUserData(email: any){
-      checkUser(email)
-        .then((item) => {
-          console.log("signup " + item)
-        })
-    }
   
     const onSubmit = async (data: any) => {
-      const pw1: any = document.getElementById("pw1")
-      const pw2: any = document.getElementById("pw2")
-      if(pw1.value === pw2.value){
-        await createUserWithEmailAndPassword(auth, data.email, data.password)
+      await signInWithEmailAndPassword(auth, data.email, data.password)
         .then(() => {
-          createUserData(data.email),
+          setInvalid(""),
           setLoadingTransition(true),
-          setTimeout(() => {router.push("/profile");}, 1000),
-          setInvalid("")
+          setTimeout(() => {router.push(`/user/${data.username}`);}, 1000)
         })
         .catch ((error: any) => {
-          if (error) {
-            console.log(error.message)
-            setInvalid(error.message)
+          console.log(error.message)
+          if (error.code === "auth/wrong-password") {
+            setInvalid("Invalid password")
+          } else if (error.code === "auth/user-not-found"){
+            setInvalid("User not found")
           }
-          if (error.code === "auth/weak-password") {
-            setInvalid("Password shoud be at least 6 characters long.")
-          } else if (error.code === "auth/email-already-in-use"){
-            setInvalid("Email already in use.")
-          } else if (error.code === "auth/internal-error"){
-            setInvalid("Please check fields.")
-          }
-      })
-      } else {
-        setInvalid("Passwords do not match.")
-      }
+        })
     };
 
     return (

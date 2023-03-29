@@ -49,7 +49,6 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
         body: JSON.stringify({
           username: username,
           email: email,
-          notes: {}
         }),
       });
       res = await res.json();
