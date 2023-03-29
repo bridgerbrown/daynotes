@@ -8,10 +8,9 @@ import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import clientPromise from '@/lib/mongodb'
-import { createUser } from '@/pages/api/users'
-
 
 type FormValues = {
+  username: string;
   email: string;
   password: string;
   passwordConfirmation: string;
@@ -43,50 +42,51 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
       getValues
     } = useForm<FormValues>({ resolver });
 
-    console.log(users)
-
-    async function createUserData(username: any){
+    async function createUserData(username: string, email: string){
       let res = await fetch("http://localhost:3000/api/users",
       {
         method: "POST",
         body: JSON.stringify({
           username: username,
+          email: email,
           notes: {}
         }),
       });
       res = await res.json();
     }
-
-    useEffect(() => {
-      createUserData("bob")
-    }, [])
   
     const onSubmit = async (data: any) => {
       const pw1: any = document.getElementById("pw1")
       const pw2: any = document.getElementById("pw2")
-      if(pw1.value === pw2.value){
-        await createUserWithEmailAndPassword(auth, data.email, data.password)
-        .then(() => {
-          createUserData(data.email),
-          setLoadingTransition(true),
-          setTimeout(() => {router.push("/profile");}, 1000),
-          setInvalid("")
+
+      switch (data) {
+        case pw1.value !== pw2.value:
+          setInvalid("Passwords do not match.")
+          break;
+        case !users.includes(data.username):
+          setInvalid("Username is taken")
+          break; 
+        default:
+          await createUserWithEmailAndPassword(auth, data.email, data.password)
+          .then(() => {
+            createUserData(data.username, data.email),
+            setLoadingTransition(true),
+            setTimeout(() => {router.push(`/user/${data.username}`);}, 1000),
+            setInvalid("")
+          })
+          .catch ((error: any) => {
+            if (error) {
+              console.log(error.message)
+              setInvalid(error.message)
+            }
+            if (error.code === "auth/weak-password") {
+              setInvalid("Password shoud be at least 6 characters long.")
+            } else if (error.code === "auth/email-already-in-use"){
+              setInvalid("Email already in use.")
+            } else if (error.code === "auth/internal-error"){
+              setInvalid("Please check fields.")
+            }
         })
-        .catch ((error: any) => {
-          if (error) {
-            console.log(error.message)
-            setInvalid(error.message)
-          }
-          if (error.code === "auth/weak-password") {
-            setInvalid("Password shoud be at least 6 characters long.")
-          } else if (error.code === "auth/email-already-in-use"){
-            setInvalid("Email already in use.")
-          } else if (error.code === "auth/internal-error"){
-            setInvalid("Please check fields.")
-          }
-      })
-      } else {
-        setInvalid("Passwords do not match.")
       }
     };
 
@@ -98,6 +98,20 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
                 <h4 className="mb-6 text-2xl font-semibold tracking-wide">Sign Up</h4>
                 <FormProvider {...methods}>
                   <form action="" onSubmit={handleSubmit(onSubmit)} className="">
+                    <div className="">
+                      <div className="mb-2">
+                        <label htmlFor="" className="text-sm">
+                          Username
+                        </label>
+                      </div>
+  
+                      <input
+                        type="text"
+                        {...register("username", { required: "Username is required" })}
+                        className="mb-4"
+                      />
+                      {errors.email && <p className="error">{errors.email.message}</p>}
+                    </div>
                     <div className="">
                       <div className="mb-2">
                         <label htmlFor="" className="text-sm">
