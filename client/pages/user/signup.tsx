@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { FormProvider, useForm, Resolver } from 'react-hook-form'
 import { useRouter } from 'next/router'
@@ -6,9 +6,10 @@ import { auth } from '@/data/firebase/firebase.config'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
-import { checkUser } from '@/data/mongodb/mongodb-auth'
-import clientPromise from '@/data/mongodb/mongodb'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import clientPromise from '@/lib/mongodb'
+import { createUser } from '@/pages/api/users'
+
 
 type FormValues = {
   email: string;
@@ -42,12 +43,23 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
       getValues
     } = useForm<FormValues>({ resolver });
 
-    // function createUserData(username: any){
-    //   checkUser(username)
-    //     .then((item) => {
-    //       console.log("signup success")
-    //     })
-    // }
+    console.log(users)
+
+    async function createUserData(username: any){
+      let res = await fetch("http://localhost:3000/api/users",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          notes: {}
+        }),
+      });
+      res = await res.json();
+    }
+
+    useEffect(() => {
+      createUserData("bob")
+    }, [])
   
     const onSubmit = async (data: any) => {
       const pw1: any = document.getElementById("pw1")
@@ -173,15 +185,19 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
 export const getServerSideProps: GetServerSideProps = async (context) => { 
   try {
     const client = await clientPromise;
-    const db = client.db("users-db");
-    const users = await db
-        .collection("users")
-        .find({ username: 1 })
+    const database = client.db('users-db');
+
+    const users = await database
+        .collection('users')
+        .find({})
         .toArray();
-    console.log(users)
     
+    const userIds = users.map(function (obj) { return obj.username} )
+
     return {
-        props: { users: JSON.parse(JSON.stringify(users)) },
+        props: { 
+          users: JSON.parse(JSON.stringify(userIds)) 
+        },
     };
   } catch (e) {
     console.error(e);
