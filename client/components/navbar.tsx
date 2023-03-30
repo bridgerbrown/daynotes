@@ -1,10 +1,12 @@
 import React from "react"
 import Link from "next/link"
 import { startOfToday, format } from "date-fns"
+import { useUser } from "@auth0/nextjs-auth0/client"
 
 export default function Navbar(){
     let today = startOfToday()
     let todayFormatted = format(today, 'M-d-y')
+    const { user } = useUser()
     
     return(
         <nav className="py-6 px-8 text-slate-900 flex justify-between">
@@ -20,7 +22,11 @@ export default function Navbar(){
                     Home
                 </li>
                 <li>
-                    <Link href={`/user/note/${todayFormatted}`}>Today</Link>
+                    {
+                        user !== undefined && (
+                        <Link href={`/user/note/${user.email}_${todayFormatted}`}>Today</Link>
+                        )
+                    }
                 </li>
                 <li>
                     <Link href={`/calendar`}>Calendar</Link>

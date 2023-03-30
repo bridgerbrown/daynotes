@@ -1,7 +1,6 @@
 import React, { useEffect, useState, MouseEvent } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
-import { v4 as uuidV4 } from 'uuid'
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import DayHeader from '@/components/modules/day-header';
@@ -10,8 +9,10 @@ import Goals from '@/components/modules/goals';
 import { format, startOfToday, startOfYesterday, add } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../../components/modules/text-editor'), { ssr: false })
 import clientPromise from '@/lib/mongodb';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 export default function Day({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { user } = useUser()
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
@@ -26,12 +27,20 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
 
   const prevDay = () => {
     setSelectedDay(yesterday)
-    router.push(`/user/note/${format(yesterday, 'M-d-y')}`)
+    {
+      user !== undefined && (
+        router.push(`/note/${user.email}_${format(yesterday, 'M-d-y')}`)
+      )
+    }
   }
 
   const nextDay = () => {
     setSelectedDay(tomorrow)
-    router.push(`/user/note/${format(tomorrow, 'M-d-y')}`)
+    {
+      user !== undefined && (
+        router.push(`/note/${user.email}_${format(tomorrow, 'M-d-y')}`)
+      )
+    }
   }
 
   const activateNote = (e: MouseEvent<HTMLButtonElement>) => {

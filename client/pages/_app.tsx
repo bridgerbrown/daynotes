@@ -1,12 +1,12 @@
-import { AuthContextProvider } from '@/data/context/authContext'
+import { UserProvider } from '@auth0/nextjs-auth0/client'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { Source_Sans_Pro } from 'next/font/google'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AuthContextProvider>
+    <UserProvider>
       <Component {...pageProps} />
-    </AuthContextProvider>
+    </UserProvider>
   )
 }

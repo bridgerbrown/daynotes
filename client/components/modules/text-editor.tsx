@@ -42,7 +42,7 @@ export default function TextEditor(props: any){
                 quill.enable()
             })
     
-            socket.emit('get-document', documentId, userFound)
+            socket.emit('get-document', documentId)
         }
     }, [socket, quill, documentId, props, noteActivated])
 
