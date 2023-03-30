@@ -3,6 +3,7 @@ import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import dynamic from "next/dynamic";
 import { io } from 'socket.io-client'
+import { useAuth } from "@/data/context/authContext";
 
 const SAVE_INTERVAL_MS = 2000
 const TOOLBAR_OPTIONS = [
@@ -17,6 +18,7 @@ const TOOLBAR_OPTIONS = [
 ]
 
 export default function TextEditor(props: any){
+    const { userFound } = useAuth()
     const [socket, setSocket] = useState<any>()
     const [quill, setQuill] = useState<any>()
     const { documentId, noteActivated } = props
@@ -40,7 +42,7 @@ export default function TextEditor(props: any){
                 quill.enable()
             })
     
-            socket.emit('get-document', documentId)
+            socket.emit('get-document', documentId, userFound)
         }
     }, [socket, quill, documentId, props, noteActivated])
 

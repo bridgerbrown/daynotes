@@ -20,13 +20,13 @@ export default function Navbar(){
                     Home
                 </li>
                 <li>
-                    <Link href={`/note/${todayFormatted}`}>Today</Link>
+                    <Link href={`/user/note/${todayFormatted}`}>Today</Link>
                 </li>
                 <li>
                     <Link href={`/calendar`}>Calendar</Link>
                 </li>
                 <li>
-                    User
+                <Link href={`/user/login`}>Log In</Link>
                 </li>
             </ul>
         </nav>

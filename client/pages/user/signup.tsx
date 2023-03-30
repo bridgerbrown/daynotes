@@ -53,6 +53,18 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
       });
       res = await res.json();
     }
+
+    async function createNotesData(email: string){
+      let res = await fetch("http://localhost:3000/api/notes",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          notes: {}
+        }),
+      });
+      res = await res.json();
+    }
   
     const onSubmit = async (data: any) => {
       const pw1: any = document.getElementById("pw1")
@@ -69,6 +81,7 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
           await createUserWithEmailAndPassword(auth, data.email, data.password)
           .then(() => {
             createUserData(data.username, data.email),
+            createNotesData(data.email),
             setLoadingTransition(true),
             setTimeout(() => {router.push(`/user/${data.username}`);}, 1000),
             setInvalid("")
@@ -93,105 +106,105 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
         <div className="pb-60 w-screen relative bg-stone-100 min-h-screen">
         <Navbar />
         <div className="flex justify-center text-center">
-              <div className="xs:w-11/12 sm:w-144 px-16 flex-col justify-center items-center border border-slate-300 rounded-lg pt-28 pb-12 mt-20 mb-4 bg-white">
-                <h4 className="mb-6 text-2xl font-semibold tracking-wide">Sign Up</h4>
-                <FormProvider {...methods}>
-                  <form action="" onSubmit={handleSubmit(onSubmit)} className="">
-                    <div className="">
-                      <div className="mb-2">
-                        <label htmlFor="" className="text-sm">
-                          Username
-                        </label>
-                      </div>
-  
-                      <input
-                        type="text"
-                        {...register("username", { required: "Username is required" })}
-                        className="mb-4"
-                      />
-                      {errors.email && <p className="error">{errors.email.message}</p>}
-                    </div>
-                    <div className="">
-                      <div className="mb-2">
-                        <label htmlFor="" className="text-sm">
-                          Email
-                        </label>
-                      </div>
-  
-                      <input
-                        type="email"
-                        {...register("email", { required: "Email is required" })}
-                        className="mb-4"
-                      />
-                      {errors.email && <p className="error">{errors.email.message}</p>}
-                    </div>
-                    <div className="">
-                      <div className="mb-2">
-                        <label htmlFor="" className="text-sm">
-                          Password
-                        </label>
-                      </div>
-  
-                      <input
-                        type="password"
-                        {...register("password", { required: "Password is required" })}
-                        className="mb-4"
-                        id='pw1'
-                      />
-                      {errors.password && <p className="error">{errors.password.message}</p>}
-                    </div>
-                    <div className="">
-                    <div className="mb-2">
-                      <label htmlFor="" className="text-sm">
-                        Confirm Password
-                      </label>
-                    </div>
+          <div className="xs:w-11/12 sm:w-[500px] px-16 flex-col justify-center items-center border border-slate-300 rounded-lg pt-28 pb-8 mt-20 mb-4 bg-gray-200">
+            <h4 className="mb-6 text-2xl font-semibold tracking-wide">Sign Up</h4>
+            <FormProvider {...methods}>
+              <form action="" onSubmit={handleSubmit(onSubmit)} className="">
+                <div className="">
+                  <div className="mb-2">
+                    <label htmlFor="" className="text-sm">
+                      Username
+                    </label>
+                  </div>
 
-                    <input
-                      type="password"
-                      {...register("passwordConfirmation", {
-                        required: "Verify your password",
-                        validate: {
-                          matchesPreviousPassword: (value) => {
-                            const { password } = getValues();
-                            return password === value || "Passwords should match!";
-                          },
-                        }
-                      })}
-                      className="mb-4"
-                      id="pw2"
-                    />
-                    {errors.passwordConfirmation && (
-                      <p className="">{errors.passwordConfirmation.message}</p>
-                    )}
+                  <input
+                    type="text"
+                    {...register("username", { required: "Username is required" })}
+                    className="mb-4"
+                  />
+                  {errors.email && <p className="error">{errors.email.message}</p>}
+                </div>
+                <div className="">
+                  <div className="mb-2">
+                    <label htmlFor="" className="text-sm">
+                      Email
+                    </label>
                   </div>
-                  <div className="flex flex-col items-center justify-center">
-                      <button
-                        type="submit"
-                        className=""
-                      >
-                        <p className="my-4 bg-blue-900 text-white px-4 py-1.5 rounded-full text-sm hover:bg-blue-700">Submit</p>
-                      </button>
-                      <p className="text-sm text-red-600 mb-4 text-center">{invalid}</p>
-                    </div>
-                  </form>
-                </FormProvider>
-                <Link href="/profile/login">
-                  <p className="text-xs text-slate-500">Already have an account? Click here to log in!</p>
-                </Link>
-                {
-                  loadingTransition
-                  ?
-                  <div className='pt-8 '>
-                    Loading...
+
+                  <input
+                    type="email"
+                    {...register("email", { required: "Email is required" })}
+                    className="mb-4"
+                  />
+                  {errors.email && <p className="error">{errors.email.message}</p>}
+                </div>
+                <div className="">
+                  <div className="mb-2">
+                    <label htmlFor="" className="text-sm">
+                      Password
+                    </label>
                   </div>
-                  :
-                  <div className='pt-24 pb-5 mb-0.5'></div>
-                }
+
+                  <input
+                    type="password"
+                    {...register("password", { required: "Password is required" })}
+                    className="mb-4"
+                    id='pw1'
+                  />
+                  {errors.password && <p className="error">{errors.password.message}</p>}
+                </div>
+                <div className="">
+                <div className="mb-2">
+                  <label htmlFor="" className="text-sm">
+                    Confirm Password
+                  </label>
+                </div>
+
+                <input
+                  type="password"
+                  {...register("passwordConfirmation", {
+                    required: "Verify your password",
+                    validate: {
+                      matchesPreviousPassword: (value) => {
+                        const { password } = getValues();
+                        return password === value || "Passwords should match!";
+                      },
+                    }
+                  })}
+                  className="mb-4"
+                  id="pw2"
+                />
+                {errors.passwordConfirmation && (
+                  <p className="">{errors.passwordConfirmation.message}</p>
+                )}
               </div>
+              <div className="flex flex-col items-center justify-center">
+                  <button
+                    type="submit"
+                    className=""
+                  >
+                    <p className="my-4 bg-gray-500 text-white px-4 py-1.5 rounded-full text-sm hover:bg-gray-700">Submit</p>
+                  </button>
+                  <p className="text-sm text-red-600 mb-4 text-center">{invalid}</p>
+                </div>
+              </form>
+            </FormProvider>
+            <Link href="/user/login">
+              <p className="text-xs text-slate-500">Already have an account? Click here to log in!</p>
+            </Link>
+            {
+              loadingTransition
+              ?
+              <div className='pt-8 '>
+                Loading...
+              </div>
+              :
+              <div className='pt-24 pb-5 mb-0.5'></div>
+            }
           </div>
-          <Footer />
-      </div>
+        </div>
+        <Footer />
+    </div>
   );
 };
 

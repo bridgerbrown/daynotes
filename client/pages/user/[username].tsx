@@ -7,7 +7,7 @@ import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 export default function Profile({users}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const { userFound, loading } = useAuth()
+    const { userFound, loading, logOut } = useAuth()
     const findUser = users.find((item: any) => item.email === userFound)
 
     console.log(userFound)
@@ -21,15 +21,40 @@ export default function Profile({users}: InferGetServerSidePropsType<typeof getS
     return (
         <main className='w-screen min-h-screen relative font-Hind bg-stone-100'>
             <Navbar />
-                <header className='flex justify-center'>
-                    <div className='xs:w-11/12 sm:w-144 lg:w-192  mt-8 mb-4'>
-                        <h1 className='text-xl font-normal tracking-wide'>Profile</h1>
-                    </div>
-                </header>
-                <section className='pb-60 flex justify-center'>
+                <section className='flex justify-center'>
                     {
                         userFound ?
-                        <div><h1 className='font-xl text-black'>{findUser.username}</h1></div>
+                        <section className="w-[700px] shadow-lg mt-6 pb-12 min-h-32 bg-moduleHeaderBg border-moduleBorder/20  pt-4 border border-[#383163] rounded-md">
+                            <header className="pb-4 flex items-center px-6 border-b  border-moduleHeaderBorder/20">
+                                <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-base uppercase">
+                                    Profile
+                                </h2>
+                            </header>
+                            <div className='flex flex-col bg-gray-100 text-black pt-8 pb-8 space-y-1 text-base font-light tracking-wide pl-8 list-decimal'>
+                                <div className='space-x-8 flex'>
+                                    <div className='w-[100px] h-[100px] bg-red-100 rounded-full'></div>
+                                    <div className=''>
+                                        <h1 className='text-lg text-black'>
+                                            Username: {findUser.username}
+                                        </h1>
+                                        <h1 className='text-lg text-black'>
+                                            Email: {findUser.email}
+                                        </h1>
+                                        <h1 className='text-sm text-black'>
+                                            Member since March 2023
+                                        </h1>
+                                        <h2 className='pt-2'>Rank: Platinum IV</h2>
+                                    </div>
+                                </div>
+                                <div className='w-full flex justify-end pr-8'>
+                                    <button className='text-sm font-semibold px-4 py-2 rounded-md bg-gray-200'
+                                        onClick={() => logOut()}
+                                    >
+                                        LOG OUT
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
                         :
                         <div></div>
                     }

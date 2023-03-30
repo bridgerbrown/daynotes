@@ -1,4 +1,5 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState, ReactNode, FC } from "react";
 import { auth } from "../firebase/firebase.config"
 
@@ -12,6 +13,7 @@ export const useAuth = () => useContext(AuthContext)
 export const AuthContextProvider = ({children}: AuthContextType) => {
     const [userFound, setUserFound] = useState<any>(null)
     const [loading, setLoading] = useState(true)
+    const router = useRouter()
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -26,6 +28,7 @@ export const AuthContextProvider = ({children}: AuthContextType) => {
         setLoading(true)
         await signOut(auth);
         setLoading(false)
+        router.push("/user/login")
       };
 
     return (

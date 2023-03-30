@@ -60,7 +60,7 @@ export default function LogIn() {
         <div className="pb-60 font-Hind w-screen relative bg-stone-100 min-h-screen">
         <Navbar />
         <div className="flex justify-center text-center">
-              <div className="xs:w-11/12 sm:w-144 flex-col justify-center items-center border border-slate-300 rounded-lg pt-28 pb-12 mt-20 mb-4 bg-white">
+              <div className="xs:w-11/12 sm:w-[500px] flex-col justify-center items-center border border-slate-300 rounded-lg pt-28 pb-12 mt-20 mb-4 bg-gray-200">
                 <h4 className="mb-6 text-2xl font-semibold tracking-wide">Log In</h4>
                 <FormProvider {...methods}>
                   <form action="" onSubmit={handleSubmit(onSubmit)} className="">
@@ -97,13 +97,13 @@ export default function LogIn() {
                         type="submit"
                         className=""
                       >
-                        <p className="my-4 bg-blue-900 text-white px-4 py-1.5 rounded-full text-sm hover:bg-blue-700">Submit</p>
+                        <p className="my-4 bg-gray-500 text-white px-4 py-1.5 rounded-full text-sm hover:bg-gray-700">Submit</p>
                       </button>
                       <p className="text-sm text-red-600 mb-4">{invalid}</p>
                     </div>
                   </form>
                 </FormProvider>
-                <Link href="/profile/signup">
+                <Link href="/user/signup">
                   <p className="text-xs text-slate-500">Don&apos;t have an account? Click here to sign up!</p>
                 </Link>
                 {
