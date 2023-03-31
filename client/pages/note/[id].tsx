@@ -7,12 +7,14 @@ import DayHeader from '@/components/modules/day-header';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Goals from '@/components/modules/goals';
 import { format, startOfToday, startOfYesterday, add } from 'date-fns'
-const TextEditorNoSSR = dynamic(() => import('../../../components/modules/text-editor'), { ssr: false })
+const TextEditorNoSSR = dynamic(() => import('../../components/modules/text-editor'), { ssr: false })
 import clientPromise from '@/lib/mongodb';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { useAuth } from '@/components/context/AuthContext';
 
 export default function Day({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user } = useUser()
+  const { setUsersId, usersId } = useAuth()
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
@@ -23,13 +25,14 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
 
   useEffect(() => {
     notes.length ? setNoteActivated(true) : setNoteActivated(false)
+    getUserDocument(user?.email)
   }, [selectedDay, router.query])
 
   const prevDay = () => {
     setSelectedDay(yesterday)
     {
       user !== undefined && (
-        router.push(`/note/${user.email}_${format(yesterday, 'M-d-y')}`)
+        router.push(`/note/${usersId}_${format(yesterday, 'M-d-y')}`)
       )
     }
   }
@@ -38,7 +41,7 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
     setSelectedDay(tomorrow)
     {
       user !== undefined && (
-        router.push(`/note/${user.email}_${format(tomorrow, 'M-d-y')}`)
+        router.push(`/note/${usersId}_${format(tomorrow, 'M-d-y')}`)
       )
     }
   }
@@ -46,6 +49,17 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
   const activateNote = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     setNoteActivated(true)
+}
+
+async function getUserDocument(email: any){
+  let res = await fetch("http://localhost:3000/api/users")
+  const data = await res.json();
+  const arr = []
+  for(var i in data){
+    arr.push(data[i]);
+  }
+  const users = arr[1].filter((item: any) => item.email == email)
+  setUsersId(users[0]._id)
 }
 
   return (

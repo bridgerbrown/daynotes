@@ -3,7 +3,7 @@ import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import dynamic from "next/dynamic";
 import { io } from 'socket.io-client'
-import { useAuth } from "@/data/context/authContext";
+import { useAuth } from "@/components/context/AuthContext";
 
 const SAVE_INTERVAL_MS = 2000
 const TOOLBAR_OPTIONS = [

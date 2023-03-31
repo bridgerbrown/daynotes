@@ -54,17 +54,17 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
       res = await res.json();
     }
 
-    async function createNotesData(email: string){
-      let res = await fetch("http://localhost:3000/api/notes",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: email,
-          notes: {}
-        }),
-      });
-      res = await res.json();
-    }
+    // async function createNotesData(email: string){
+    //   let res = await fetch("http://localhost:3000/api/notes",
+    //   {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       email: email,
+    //       notes: {}
+    //     }),
+    //   });
+    //   res = await res.json();
+    // }
   
     const onSubmit = async (data: any) => {
       const pw1: any = document.getElementById("pw1")
@@ -81,7 +81,6 @@ export default function SignUp({users}: InferGetServerSidePropsType<typeof getSe
           await createUserWithEmailAndPassword(auth, data.email, data.password)
           .then(() => {
             createUserData(data.username, data.email),
-            createNotesData(data.email),
             setLoadingTransition(true),
             setTimeout(() => {router.push(`/user/${data.username}`);}, 1000),
             setInvalid("")

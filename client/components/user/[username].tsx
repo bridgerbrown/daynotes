@@ -2,7 +2,7 @@ import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
 import React from 'react'
 import { GetServerSideProps, InferGetServerSidePropsType, } from 'next'
-import { useAuth } from '@/data/context/authContext';
+import { useAuth } from '@/components/context/AuthContext';
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
