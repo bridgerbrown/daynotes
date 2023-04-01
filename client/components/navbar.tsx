@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Link from "next/link"
 import { startOfToday, format } from "date-fns"
 import { useUser } from "@auth0/nextjs-auth0/client"
@@ -9,6 +9,10 @@ export default function Navbar(){
     let todayFormatted = format(today, 'M-d-y')
     const { user } = useUser()
     const { usersId, setUsersId } = useAuth()
+
+    useEffect(() => {
+        getUserDocument(user?.email)
+    }, [])
     
     async function getUserDocument(email: any){
         let res = await fetch("http://localhost:3000/api/users")
@@ -20,6 +24,7 @@ export default function Navbar(){
         const users = arr[1].filter((item: any) => item.email == email)
         setUsersId(users[0]._id)
       }
+
 
     return(
         <nav className="py-6 px-8 text-slate-900 flex justify-between">
@@ -45,7 +50,13 @@ export default function Navbar(){
                     <Link href={`/calendar`}>Calendar</Link>
                 </li>
                 <li>
-                <Link href={`/user/login`}>Log In</Link>
+                    {
+                        user ?
+                        <Link href={`/user/${user.nickname}`}>User</Link>
+
+                        :
+                        <Link href={`/api/auth/login`}>Log In</Link>
+                    }
                 </li>
             </ul>
         </nav>

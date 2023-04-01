@@ -134,7 +134,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           .find({})
           .toArray();
 
-      const foundNote = notes.filter((item: any) => item._id === context.query.id ? item : null)
+      const foundNote = notes.filter((item: any) => item.name === context.query.id ? item : null)
       return {
           props: { notes: JSON.parse(JSON.stringify(foundNote)) },
       };
