@@ -18,7 +18,7 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
-  const [selectedDay, setSelectedDay] = useState(today)
+  const [selectedDay, setSelectedDay] = useState(todayc)
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
   const [noteActivated, setNoteActivated] = useState<boolean>(false)
@@ -27,6 +27,7 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
     notes.length ? setNoteActivated(true) : setNoteActivated(false)
     getUserDocument(user?.email)
   }, [selectedDay, router.query])
+
 
   const prevDay = () => {
     setSelectedDay(yesterday)
@@ -97,7 +98,7 @@ async function getUserDocument(email: any){
                 <Goals />
                 {
                   noteActivated ?
-                  <TextEditorNoSSR documentId={documentId} noteActivated={noteActivated} />
+                  <TextEditorNoSSR documentId={documentId} noteActivated={noteActivated} selectedDay={selectedDay} />
                   :
                   <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
                   <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
@@ -135,6 +136,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           .toArray();
 
       const foundNote = notes.filter((item: any) => item.name === context.query.id ? item : null)
+
+      console.log(foundNote)
       return {
           props: { notes: JSON.parse(JSON.stringify(foundNote)) },
       };
