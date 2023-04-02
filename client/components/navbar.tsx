@@ -12,6 +12,7 @@ export default function Navbar(){
 
     useEffect(() => {
         getUserDocument(user?.email)
+        console.log(user?.email)
     }, [])
     
     async function getUserDocument(email: any){
@@ -23,6 +24,7 @@ export default function Navbar(){
         }
         const users = arr[1].filter((item: any) => item.email == email)
         setUsersId(users[0]._id)
+        console.log(users)
       }
 
 

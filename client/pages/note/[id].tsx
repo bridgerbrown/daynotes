@@ -18,7 +18,7 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
-  const [selectedDay, setSelectedDay] = useState(todayc)
+  const [selectedDay, setSelectedDay] = useState(today)
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
   const [noteActivated, setNoteActivated] = useState<boolean>(false)
@@ -26,6 +26,7 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
   useEffect(() => {
     notes.length ? setNoteActivated(true) : setNoteActivated(false)
     getUserDocument(user?.email)
+    console.log(notes)
   }, [selectedDay, router.query])
 
 
