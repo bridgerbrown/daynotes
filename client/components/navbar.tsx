@@ -10,10 +10,10 @@ export default function Navbar(){
     const { user } = useUser()
     const { usersId, setUsersId } = useAuth()
 
-    // useEffect(() => {
-    //     getUserDocument(user?.email)
-    //     console.log(user?.email)
-    // }, [])
+    useEffect(() => {
+        getUserDocument(user?.email)
+        console.log(user?.email)
+    }, [])
     
     async function getUserDocument(email: any){
         let res = await fetch("http://localhost:3000/api/users")

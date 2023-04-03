@@ -6,7 +6,7 @@ import Footer from '@/components/footer';
 import DayHeader from '@/components/modules/day-header';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Goals from '@/components/modules/goals';
-import { format, startOfToday, startOfYesterday, add } from 'date-fns'
+import { format, startOfToday, startOfYesterday, add, parseISO, parse } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/text-editor'), { ssr: false })
 import clientPromise from '@/lib/mongodb';
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -18,15 +18,18 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
-  const [selectedDay, setSelectedDay] = useState(today)
+  const [selectedDay, setSelectedDay] = useState(parseISO(notes[0].date))
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
-  const [noteActivated, setNoteActivated] = useState<boolean>(false)
+  const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
+
+  const n = router.query.id?.toString().split('_')[1].toString()
 
   useEffect(() => {
-    notes.length ? setNoteActivated(true) : setNoteActivated(false)
     getUserDocument(user?.email)
-    console.log(notes)
+    console.log(selectedDay)
+    // console.log(parseISO(notes[0].date))
+    console.log(today)
   }, [selectedDay, router.query])
 
 
@@ -47,11 +50,6 @@ export default function Day({notes}: InferGetServerSidePropsType<typeof getServe
       )
     }
   }
-
-  const activateNote = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    setNoteActivated(true)
-}
 
 async function getUserDocument(email: any){
   let res = await fetch("http://localhost:3000/api/users")
@@ -98,25 +96,10 @@ async function getUserDocument(email: any){
                 <DayHeader selectedDay={selectedDay} />
                 <Goals />
                 {
-                  noteActivated ?
-                  <TextEditorNoSSR documentId={documentId} noteActivated={noteActivated} selectedDay={selectedDay} />
+                  noteLoaded ?
+                  <TextEditorNoSSR documentId={documentId} selectedDay={selectedDay} />
                   :
-                  <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
-                  <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
-                      <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-xl uppercase">
-                          Notes
-                      </h2>
-                      <div className='text-moduleHeader/50 flex items-center'>
-                      </div>
-                  </header>
-                  <div className='h-[3in] flex justify-center items-center text-black font-light bg-moduleContentBg/60 w-full'>
-                      <button className='ml-2 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
-                        onClick={activateNote}
-                      >
-                          +
-                      </button>
-                  </div>
-              </div>
+                  <div></div>
                 }
               </div>
             </div>
@@ -127,26 +110,47 @@ async function getUserDocument(email: any){
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => { 
-    try {
-      const client = await clientPromise;
-      const db = client.db("notes-db");
+  try {
+    const client = await clientPromise;
+    const db = client.db("notes-db");
 
-      const notes = await db
-          .collection("notes")
-          .find({})
-          .toArray();
+    const notes = await db
+        .collection("notes")
+        .find({})
+        .toArray();
 
-      const foundNote = notes.filter((item: any) => item.name === context.query.id ? item : null)
+    const foundNote = notes.filter((item: any) => item.name === context.query.id ? item : null)
 
-      console.log(foundNote)
-      return {
-          props: { notes: JSON.parse(JSON.stringify(foundNote)) },
-      };
-    } catch (e) {
-      console.error(e);
-      return {
-        props: { notes: [] }
-      }
+    return {
+        props: { notes: JSON.parse(JSON.stringify(foundNote)) },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { notes: [] }
+    }
   } 
 }
 
+
+// {
+//   noteActivated ?
+//   <TextEditorNoSSR documentId={documentId} noteActivated={noteActivated} selectedDay={selectedDay} />
+//   :
+//   <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
+//   <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
+//       <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-xl uppercase">
+//           Notes
+//       </h2>
+//       <div className='text-moduleHeader/50 flex items-center'>
+//       </div>
+//   </header>
+//   <div className='h-[3in] flex justify-center items-center text-black font-light bg-moduleContentBg/60 w-full'>
+//       <button className='ml-2 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
+//         onClick={activateNote}
+//       >
+//           +
+//       </button>
+//   </div>
+// </div>
+// }
