@@ -12,24 +12,20 @@ import clientPromise from '@/lib/mongodb';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useAuth } from '@/components/context/AuthContext';
 
-export default function Day({notes}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Day({note}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user } = useUser()
   const { setUsersId, usersId } = useAuth()
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
-  const [selectedDay, setSelectedDay] = useState(parseISO(notes[0].date))
+  const [selectedDay, setSelectedDay] = useState((parseISO(note.date)))
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
   const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
 
-  const n = router.query.id?.toString().split('_')[1].toString()
-
   useEffect(() => {
     getUserDocument(user?.email)
-    console.log(selectedDay)
     // console.log(parseISO(notes[0].date))
-    console.log(today)
   }, [selectedDay, router.query])
 
 
@@ -114,15 +110,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const client = await clientPromise;
     const db = client.db("notes-db");
 
-    const notes = await db
+    const note = await db
         .collection("notes")
-        .find({})
-        .toArray();
+        .findOne({ name: context.query.id})
+        if (!note) {
+            console.log("creating new note")
+            return await db.collection("notes").insertOne({ name: context.query.id, date: context.query.id?.toString().split('_')[1].toString() })
+        }
+        console.log(note)
 
-    const foundNote = notes.filter((item: any) => item.name === context.query.id ? item : null)
 
     return {
-        props: { notes: JSON.parse(JSON.stringify(foundNote)) },
+        props: { note: JSON.parse(JSON.stringify(note)) },
     };
   } catch (e) {
     console.error(e);
