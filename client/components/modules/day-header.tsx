@@ -23,8 +23,7 @@ export default function DayHeader(props: any) {
             </div>
             </header>
         </div>
-        <div className='flex space-x-3'>
-          <Image 
+          {/* <Image 
               src="/fizz-icon.webp"
               width={100}
               height={100}
@@ -51,8 +50,7 @@ export default function DayHeader(props: any) {
               height={100}
               alt="champ icon"
               className={champIcon}
-          />
-        </div>
+          /> */}
     </section>
   )
 }
