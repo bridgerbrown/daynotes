@@ -17,9 +17,6 @@ export default function DayHeader(props: any) {
                 Today
                 </h2>
                 <div className='w-1 h-1 bg-[#b3b4ce] rounded-full mx-2 mt-0.5'></div>
-                <p className='text-sm text-moduleHeader/60 font-base'>
-                4 games
-                </p>
             </div>
             </header>
         </div>

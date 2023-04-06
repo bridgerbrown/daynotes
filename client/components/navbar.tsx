@@ -5,10 +5,12 @@ import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAuth } from "./context/AuthContext"
 
 export default function Navbar(){
+    const liStyle: string = `pl-8`
     let today = startOfToday()
     let todayFormatted = format(today, 'M-d-y')
     const { user } = useUser()
     const { usersId, setUsersId } = useAuth()
+    
 
     useEffect(() => {
         getUserDocument(user?.email)
@@ -36,21 +38,25 @@ export default function Navbar(){
                     <span className="text-moduleHeader/60">Notes</span>
                 </h1>
             </div>
-            <ul className="text-black tracking-wide font-base pt-1 flex space-x-8 text-base">
-                <li>
-                    Home
+            <ul className="text-black tracking-wide font-base pt-1 flex text-base">
+                <li className={liStyle}>
+                    <Link href={`/`}>Home</Link>
                 </li>
-                <li>
                     {
                         user !== undefined && (
-                        <Link href={`/note/${usersId}_${todayFormatted}`}>Today</Link>
+                        <li className={liStyle}>
+                            <Link href={`/note/${usersId}_${todayFormatted}`}>Today</Link>
+                        </li>
                         )
                     }
-                </li>
-                <li>
-                    <Link href={`/calendar`}>Calendar</Link>
-                </li>
-                <li>
+                {
+                    user ?
+                    <li className={liStyle}><Link href={`/calendar}`}>Calendar</Link></li>
+
+                    :
+                    <div></div>
+                }
+                <li className={liStyle}>
                     {
                         user ?
                         <Link href={`/user/${user.nickname}`}>User</Link>

@@ -18,14 +18,14 @@ export default function Day({note}: InferGetServerSidePropsType<typeof getServer
   const router = useRouter()
   const { id: documentId } = router.query
   let today = startOfToday()
-  const [selectedDay, setSelectedDay] = useState((parseISO(note.date)))
+  const [selectedDay, setSelectedDay] = useState(today)
   const yesterday = add(selectedDay, { days: -1})
   const tomorrow = add(selectedDay, { days: 1})
-  const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
+  const [noteLoaded, setNoteLoaded] = useState<boolean>(true)
 
   useEffect(() => {
     getUserDocument(user?.email)
-    // console.log(parseISO(notes[0].date))
+    console.log(note)
   }, [selectedDay, router.query])
 
 
@@ -109,16 +109,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const client = await clientPromise;
     const db = client.db("notes-db");
+    // const date: any = context.query.id?.toString().split('_')[1].toString()
+    const notes = await db
+      .collection("notes")
+      .find({})
+      .toArray();
 
-    const note = await db
-        .collection("notes")
-        .findOne({ name: context.query.id})
-        if (!note) {
-            console.log("creating new note")
-            return await db.collection("notes").insertOne({ name: context.query.id, date: context.query.id?.toString().split('_')[1].toString() })
-        }
-        console.log(note)
-
+      const note = notes.filter((item: any) => item.name === context.query.id ? item : null)
+        // .collection("notes")
+        // .findOne({ name: context.query.id})
+        // if (!note) {
+        //     console.log("creating new note")
+        //     return await db.collection("notes").insertOne({ name: context.query.id, date: parseISO(date) })
+        // }
 
     return {
         props: { note: JSON.parse(JSON.stringify(note)) },
@@ -126,7 +129,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } catch (e) {
     console.error(e);
     return {
-      props: { notes: [] }
+      props: { note: [] }
     }
   } 
 }
