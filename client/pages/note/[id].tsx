@@ -25,7 +25,7 @@ export default function Day({note}: InferGetServerSidePropsType<typeof getServer
 
   useEffect(() => {
     getUserDocument(user?.email)
-    console.log(note)
+    console.log(parseISO(note[0].date))
   }, [selectedDay, router.query])
 
 
@@ -33,7 +33,7 @@ export default function Day({note}: InferGetServerSidePropsType<typeof getServer
     setSelectedDay(yesterday)
     {
       user !== undefined && (
-        router.push(`/note/${usersId}_${format(yesterday, 'M-d-y')}`)
+        router.push(`/note/${usersId}_${yesterday}`)
       )
     }
   }
@@ -42,7 +42,7 @@ export default function Day({note}: InferGetServerSidePropsType<typeof getServer
     setSelectedDay(tomorrow)
     {
       user !== undefined && (
-        router.push(`/note/${usersId}_${format(tomorrow, 'M-d-y')}`)
+        router.push(`/note/${usersId}_${tomorrow}`)
       )
     }
   }
