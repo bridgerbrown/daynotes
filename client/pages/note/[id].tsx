@@ -25,7 +25,7 @@ export default function Day({note}: InferGetServerSidePropsType<typeof getServer
 
   useEffect(() => {
     getUserDocument(user?.email)
-    console.log(parseISO(note[0].date))
+    console.log(note)
   }, [selectedDay, router.query])
 
 

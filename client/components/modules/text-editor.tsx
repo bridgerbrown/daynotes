@@ -54,7 +54,7 @@ export default function TextEditor(props: any){
         return () => {
             clearInterval(interval)
         }
-    }, [socket, quill])
+    }, [socket, quill, documentId, props])
 
     useEffect(() => {
         if (socket == null || quill == null) return
@@ -67,7 +67,7 @@ export default function TextEditor(props: any){
         return () => {
             socket.off('receive-changes', handler)
         }
-    }, [socket, quill])
+    }, [socket, quill, documentId, props])
 
 
     useEffect(() => {
@@ -82,7 +82,7 @@ export default function TextEditor(props: any){
         return () => {
             quill.off('text-change', handler)
         }
-    }, [socket, quill])
+    }, [socket, quill, documentId, props])
 
     // const showToolbar = () => {
     //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"
