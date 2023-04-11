@@ -18,6 +18,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "api/users.js", "lib/mongodb.tsx", "components/test.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "api/users.js", "lib/mongodb.tsx", "components/test.js", "global.d.js"],
   "exclude": ["node_modules"]
 }

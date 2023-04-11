@@ -12,21 +12,20 @@ export default function Navbar(){
     const { usersId, setUsersId } = useAuth()
     
 
-    useEffect(() => {
-        getUserDocument(user?.email)
-        console.log(user?.email)
-    }, [])
+    // useEffect(() => {
+    //     getUserDocument(user?.email)
+    // }, [])
     
-    async function getUserDocument(email: any){
-        let res = await fetch("http://localhost:3000/api/users")
-        const data = await res.json();
-        const arr = []
-        for(var i in data){
-          arr.push(data[i]);
-        }
-        const users = arr[1].filter((item: any) => item.email === email)
-        setUsersId(users[0]._id)
-      }
+    // async function getUserDocument(email: any){
+    //     let res = await fetch("http://localhost:3000/api/users")
+    //     const data = await res.json();
+    //     const arr = []
+    //     for(var i in data){
+    //       arr.push(data[i]);
+    //     }
+    //     const users = arr[1].filter((item: any) => item.email === email)
+    //     setUsersId(users[0]._id)
+    //   }
 
 
     return(
@@ -69,7 +68,9 @@ export default function Navbar(){
                         <Link href={`/user/${user.nickname}`}>User</Link>
 
                         :
-                        <Link href={`/api/auth/login`}>Log In</Link>
+                        <Link href={`/api/auth/login`}
+                            data-testid="login"
+                        >Log In</Link>
                     }
                 </li>
             </ul>
