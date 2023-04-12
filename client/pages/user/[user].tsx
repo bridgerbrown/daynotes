@@ -1,4 +1,4 @@
-import Footer from '@/components/footer'
+import Footer from '@/components/modules/footer'
 import Navbar from '@/components/navbar'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useRouter } from 'next/router'

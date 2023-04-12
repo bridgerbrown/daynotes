@@ -1,7 +1,7 @@
-import CalendarCard from '@/components/calendar/calendar-card'
+import CalendarCard from '@/components/modules/calendar/calendar-card'
 import React from 'react'
 import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
+import Footer from '@/components/modules/footer'
 
 export default function Calendar() {
   return (

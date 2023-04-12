@@ -1,8 +1,8 @@
 import React, { useEffect, useState, MouseEvent } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
+import Navbar from '@/components/modules/navbar';
+import Footer from '@/components/modules/footer';
 import DayHeader from '@/components/modules/day-header';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Goals from '@/components/modules/goals';

@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @jest-environment jsdom
  */
 
 import "@testing-library/jest-dom"
@@ -7,20 +7,21 @@ import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import { mocked } from 'jest-mock'
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Navbar from '../Navbar';
-import DayNote from "@/pages/note/[id]";
+import Link from 'next/link';
+import { startOfToday } from "date-fns";
+
 const Environment = require('jest-environment-jsdom');
 // import clientPromise from '@/lib/mongodb';
 
 jest.mock('@auth0/nextjs-auth0/client');
+jest.mock("next/link", () => {
+    return ({ children }) => children;
+});
 
 const mockedAuth0 = mocked(useUser, true);
 
 describe('User to todays note', () => {
-    // beforeAll(async () => {
-    //     await clientPromise;
-    //   });
-
-    beforeEach(() => {
+    beforeEach(async () => {
         mockedAuth0.mockReturnValue({
             isAuthenticated: true,
             user: "user",
@@ -34,7 +35,7 @@ describe('User to todays note', () => {
         });
     });
 
-    test("User is logged in", () => {
+    it("should log user in", () => {
         render(
             <Navbar />
         );
@@ -42,10 +43,11 @@ describe('User to todays note', () => {
         expect(userButton).toBeInTheDocument();
     });
 
-    test("Todays note is rendered", () => {
+    it("should render Note page", async () => {
+        const usersId = "123456789";
+        const todaysDate = startOfToday()
         render(
-            <Day />
+            <Link href={`/note/${usersId}_${todaysDate}`}></Link>
         )
-        
     })
 });

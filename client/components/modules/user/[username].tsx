@@ -1,5 +1,5 @@
 import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
+import Footer from '@/components/modules/footer'
 import React from 'react'
 import { GetServerSideProps, InferGetServerSidePropsType, } from 'next'
 import { useAuth } from '@/components/context/AuthContext';

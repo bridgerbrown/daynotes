@@ -5,8 +5,9 @@ import dynamic from "next/dynamic";
 import { io } from 'socket.io-client'
 import { useAuth } from "@/components/context/AuthContext";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useRouter } from "next/router";
 
-const SAVE_INTERVAL_MS = 2000
+const SAVE_INTERVAL_MS = 1000
 const TOOLBAR_OPTIONS = [
     [{ header: [1, 2, 3, 4, false] }],
     [{ font: [] }],
@@ -23,6 +24,7 @@ export default function TextEditor(props: any){
     const [socket, setSocket] = useState<any>()
     const [quill, setQuill] = useState<any>()
     const { documentId, noteActivated } = props
+    const router = useRouter()
 
     useEffect(() => {
         const s = io("http://localhost:3001")
@@ -42,7 +44,7 @@ export default function TextEditor(props: any){
         })
 
         socket.emit('get-document', documentId, user?.email, props.selectedDay)
-    }, [socket, quill, documentId, props])
+    }, [socket, quill, documentId, props, router.query])
 
     useEffect(() => {
         if (socket == null || quill == null) return
@@ -54,7 +56,7 @@ export default function TextEditor(props: any){
         return () => {
             clearInterval(interval)
         }
-    }, [socket, quill, documentId, props])
+    }, [socket, quill, documentId, props, router.query])
 
     useEffect(() => {
         if (socket == null || quill == null) return
@@ -67,7 +69,7 @@ export default function TextEditor(props: any){
         return () => {
             socket.off('receive-changes', handler)
         }
-    }, [socket, quill, documentId, props])
+    }, [socket, quill, documentId, props, router.query])
 
 
     useEffect(() => {
@@ -82,7 +84,7 @@ export default function TextEditor(props: any){
         return () => {
             quill.off('text-change', handler)
         }
-    }, [socket, quill, documentId, props])
+    }, [socket, quill, documentId, props, router.query])
 
     // const showToolbar = () => {
     //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"

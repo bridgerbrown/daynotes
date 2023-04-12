@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { auth } from '@/data/firebase/firebase.config'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
+import Footer from '@/components/modules/footer'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import clientPromise from '@/lib/mongodb'
 

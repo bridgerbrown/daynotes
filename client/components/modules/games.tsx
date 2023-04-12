@@ -1,5 +1,5 @@
 import React from 'react'
-import GameCard from '../game/game-card'
+import GameCard from './game/game-card'
 
 export default function Games() {
   return (
