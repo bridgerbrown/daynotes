@@ -12,7 +12,7 @@ import clientPromise from '@/lib/mongodb';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useAuth } from '@/components/context/AuthContext';
 
-export default function Day({note}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function DayNote({note}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user } = useUser()
   const { setUsersId, usersId } = useAuth()
   const router = useRouter()

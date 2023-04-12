@@ -1,9 +1,6 @@
 // jest.config.mjs
 import nextJest from 'next/jest.js'
-import pkg from 'jest-fetch-mock'
 
-const { enableMocks } = pkg
-enableMocks()
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -18,6 +15,7 @@ const config = {
 
   testEnvironment: 'jest-environment-jsdom',
   automock: false,
+  preset: "@shelf/jest-mongodb"
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

@@ -2,13 +2,20 @@ import Footer from '@/components/footer'
 import Navbar from '@/components/navbar'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 
 export default function User() {
     const router = useRouter()
     let { user } = useUser()
     // { user !== undefined && ( router.push(`/user/${user.name}`))}
+    const [loggedIn, setLoggedIn] = React.useState(false)
+
+    useEffect(() => {
+        if (user) {
+            setLoggedIn(true)
+        }
+    }, [user])
 
     return (
         <main className='w-screen min-h-screen relative font-Hind bg-stone-100'>
