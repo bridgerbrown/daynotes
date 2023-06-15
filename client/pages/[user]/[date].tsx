@@ -11,10 +11,14 @@ const TextEditorNoSSR = dynamic(() => import('../../components/modules/text-edit
 import clientPromise from '@/lib/mongodb';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useAuth } from '@/components/context/AuthContext';
+import { ParsedUrl } from 'query-string';
 
-export default function DayNote({note}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+interface Params extends ParsedUrl {
+  slug: string;
+}
+
+export default function DayNote() {
   const router = useRouter()
-  const { id: documentId } = router.query
   let today = format(startOfDay(new Date()), 'MM-dd-yyyy')
   const [selectedDay, setSelectedDay] = useState(format(startOfDay(new Date()), 'MM-dd-yyyy'))
   const yesterday = format(subDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
@@ -77,7 +81,7 @@ export default function DayNote({note}: InferGetServerSidePropsType<typeof getSe
                 <Goals />
                 {
                   noteLoaded ?
-                  <TextEditorNoSSR documentId={documentId} selectedDay={selectedDay} />
+                  <TextEditorNoSSR selectedDay={selectedDay} />
                   :
                   <div></div>
                 }
@@ -87,29 +91,6 @@ export default function DayNote({note}: InferGetServerSidePropsType<typeof getSe
         <Footer />
       </main>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => { 
-  const { user, date } = context.params;
-
-  try {
-    const client = await clientPromise;
-    const db = client.db("notes-db");
-    const documentData = await db.collection('notes').findOne({ user, date });
-
-    return {
-        props: { 
-          documentData: JSON.parse(JSON.stringify(documentData)),
-      },
-    };
-  } catch (e) {
-    console.error("Error fetching MongoDB doc", e);
-    return {
-      props: {
-        documentData: null,
-      }
-    }
-  } 
 }
 
 

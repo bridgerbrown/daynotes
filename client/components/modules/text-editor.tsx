@@ -20,18 +20,31 @@ const TOOLBAR_OPTIONS = [
 ]
 
 export default function TextEditor(props: any){
-    const { user } = useUser()
-    const [socket, setSocket] = useState<any>()
-    const [quill, setQuill] = useState<any>()
-    const { documentId, noteActivated } = props
-    const router = useRouter()
+    const { user } = useUser();
+    const [socket, setSocket] = useState<any>();
+    const [quill, setQuill] = useState<any>();
+    const [userId, setUserId] = useState<string>("");
+
+    async function getUserDocument(email: any){
+      let res = await fetch("http://localhost:3000/api/users")
+      const data = await res.json();
+      const arr = []
+      for(var i in data){
+        arr.push(data[i]);
+      }
+      const user = arr[1].filter((item: any) => item.email === email)
+      setUserId(user[0].userId)
+    }
+
+    useEffect(() => {
+      getUserDocument(user?.email)
+      console.log(userId)
+    }, [])
 
     useEffect(() => {
         const s = io("http://localhost:3001")
         setSocket(s)
         
-        console.log(user)
-
         return () => {
             s.disconnect()
         }
@@ -45,8 +58,8 @@ export default function TextEditor(props: any){
             quill.enable()
         })
 
-        socket.emit('get-document', documentId, user?.email, props.selectedDay)
-    }, [socket, quill, documentId, props, router.query])
+        socket.emit('get-document', userId, user?.email, props.selectedDay)
+    }, [socket, quill, props ])
 
     useEffect(() => {
         if (socket == null || quill == null) return
@@ -58,7 +71,7 @@ export default function TextEditor(props: any){
         return () => {
             clearInterval(interval)
         }
-    }, [socket, quill, documentId, props, router.query])
+    }, [socket, quill, props ])
 
     useEffect(() => {
         if (socket == null || quill == null) return
@@ -71,7 +84,7 @@ export default function TextEditor(props: any){
         return () => {
             socket.off('receive-changes', handler)
         }
-    }, [socket, quill, documentId, props, router.query])
+    }, [socket, quill, props ])
 
 
     useEffect(() => {
@@ -86,7 +99,7 @@ export default function TextEditor(props: any){
         return () => {
             quill.off('text-change', handler)
         }
-    }, [socket, quill, documentId, props, router.query])
+    }, [socket, quill, props ])
 
     // const showToolbar = () => {
     //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"
