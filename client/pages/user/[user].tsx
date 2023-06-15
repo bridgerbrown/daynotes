@@ -1,5 +1,5 @@
 import Footer from '@/components/modules/footer'
-import Navbar from '@/components/navbar'
+import Navbar from '@/components/modules/navbar'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'

@@ -1,21 +1,22 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.tsx",
+    "devStart": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
-    "socket.io": "^4.6.1",
-    "ts-node": "^10.9.1"
+    "dotenv": "^16.0.3",
+    "mongodb": "4.5",
+    "mongoose": "^7.0.2",
+    "socket.io": "^4.6.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21",
-    "typescript": "^5.0.2"
+    "nodemon": "^2.0.21"
   }
 }

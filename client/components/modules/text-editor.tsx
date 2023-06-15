@@ -29,6 +29,8 @@ export default function TextEditor(props: any){
     useEffect(() => {
         const s = io("http://localhost:3001")
         setSocket(s)
+        
+        console.log(user)
 
         return () => {
             s.disconnect()
