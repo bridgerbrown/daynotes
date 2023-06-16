@@ -7,12 +7,10 @@ import DayHeader from '@/components/modules/day-header';
 import Goals from '@/components/modules/goals';
 import { format, subDays, addDays, startOfDay } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/text-editor'), { ssr: false })
-import clientPromise from '@/lib/mongodb';
 import { ParsedUrl } from 'query-string';
 import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
-import { useAuth } from "@/components/context/AuthContext";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface Params extends ParsedUrl {
@@ -37,7 +35,7 @@ export default function DayNote() {
   const [selectedDay, setSelectedDay] = useState(format(startOfDay(new Date()), 'MM-dd-yyyy'))
   const yesterday = format(subDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
   const tomorrow = format(addDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
-  const [noteLoaded, setNoteLoaded] = useState<boolean>(true)
+  const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
@@ -143,19 +141,6 @@ export default function DayNote() {
   //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "none"
   //     document.querySelector<HTMLElement>(".ql-editor")!.style.paddingTop = "40px"
   // }
-  const wrapperRef: any = useCallback((wrapper: any) => {
-    if (wrapper == null) return
-
-    wrapper.innerHTML = ''
-    const editor = document.createElement('div')
-    wrapper.append(editor)
-    const q: any = new Quill(editor, { theme: "snow", modules: { toolbar: TOOLBAR_OPTIONS } })
-    q.disable()
-    q.setText('Loading...')
-    setQuill(q)
-    // document.getElementById("editor")?.addEventListener("mouseover", showToolbar)
-    // document.getElementById("editor")?.addEventListener("mouseleave", hideToolbar)
-  }, [])
 
   return (
     <main className="font-SansPro bg-gray-200 relative min-h-screen w-screen">
@@ -190,30 +175,7 @@ export default function DayNote() {
               <div className='mb-16 pt-4 flex flex-col justify-center items-center'>
                 <DayHeader selectedDay={selectedDay} />
                 <Goals />
-                <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
-                  <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
-                      <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-xl uppercase">
-                          Notes
-                      </h2>
-                      <div className='text-moduleHeader/50 flex items-center'>
-                      <button className='ml-6 text-sm flex items-center justify-center text-center w-6 h-6 pb-0.5 rounded-full border border-moduleHeader/50'>
-                          +
-                      </button>
-                      <p className=' text-xs pl-2'>
-                          Add game
-                      </p>
-                      </div>
-                  </header>
-                  <div className='h-[9in] text-black font-light bg-moduleContentBg w-full'>
-                      {
-                        noteLoaded ?
-                        <div ref={wrapperRef} id="editor" className="editorContainer bg-white w-full h-96">
-                        </div>
-                        :
-                        <div></div>
-                      }
-                  </div>
-                </div>
+                <TextEditorNoSSR setQuill={setQuill} />
               </div>
             </div>
           </div>
