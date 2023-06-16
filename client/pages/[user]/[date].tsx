@@ -75,11 +75,12 @@ export default function DayNote() {
   useEffect(() => {
     const s = io("http://localhost:3001")
     setSocket(s)
-    
+    getUserDocument(user?.email)
+
     return () => {
         s.disconnect()
     }
-  }, [])
+  }, [selectedDay])
 
   useEffect(() => {
     if (socket == null || quill == null) return
@@ -90,7 +91,7 @@ export default function DayNote() {
     })
 
     socket.emit('get-document', userId, user?.email, selectedDay)
-  }, [socket, quill ])
+  }, [socket, quill, router.asPath, selectedDay])
 
   useEffect(() => {
     if (socket == null || quill == null) return
@@ -102,7 +103,7 @@ export default function DayNote() {
     return () => {
         clearInterval(interval)
     }
-  }, [socket, quill ])
+  }, [socket, quill, router.asPath, selectedDay])
 
   useEffect(() => {
     if (socket == null || quill == null) return
@@ -115,7 +116,7 @@ export default function DayNote() {
     return () => {
         socket.off('receive-changes', handler)
     }
-  }, [socket, quill ])
+  }, [socket, quill, router.asPath, selectedDay])
 
 
   useEffect(() => {
@@ -130,7 +131,7 @@ export default function DayNote() {
     return () => {
         quill.off('text-change', handler)
     }
-  }, [socket, quill ])
+  }, [socket, quill, router.asPath, selectedDay])
 
   // const showToolbar = () => {
   //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"

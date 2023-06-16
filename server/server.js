@@ -40,13 +40,10 @@ async function findOrCreateDocument(userId, date) {
         } else {
             console.log("note doesnt exist")
             await notes.insertOne({ userId: userId, date: date, data: {}})
-            note = await notes.findOne({ userId: userId, date: date });
-            return note;
         }
       } catch {
         await client.close()
         console.log("error")
-        throw error;
       }
 }
 
