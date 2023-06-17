@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
-import DayHeader from '@/components/modules/day-header';
+import DayHeader from '@/components/modules/DayHeader';
 import Goals from '@/components/modules/goals';
 import { format, subDays, addDays, startOfDay } from 'date-fns'
-const TextEditorNoSSR = dynamic(() => import('../../components/modules/text-editor'), { ssr: false })
+const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
 import Quill from "quill"
 import "quill/dist/quill.snow.css"
@@ -146,36 +146,10 @@ export default function DayNote() {
   return (
     <main className="font-SansPro bg-gray-200 relative min-h-screen w-screen">
         <Navbar />
-          <div className='absolute left-8 top-60'>
-            <div className='flex flex-col justify-center items-center'>
-              <button onClick={prevDay}
-                className="mb-2 bg-button/30 font-light text-white w-24 py-3 rounded-md text-base"
-              >
-                Prev
-                </button>
-              <h3 className='text-black/40 text-sm'>
-                {yesterday}
-              </h3>
-            </div>
-          </div>
-          <div className='absolute right-8 top-60'>
-            <div className='flex flex-col justify-center items-center'>
-              <button onClick={nextDay}
-                className="mb-2 bg-button/30 font-light text-white w-24 py-3 rounded-md text-base"
-              >
-                Next
-                </button>
-              <h3 className='text-black/40 text-sm'>
-                {tomorrow}
-              </h3>
-            </div>
-          </div>
-
           <div className='flex flex-col justify-center items-center'>
-            <div className='min-h-[100vh] mt-0 mb-32 w-8/12 rounded-lg py-6'>
-              <div className='mb-16 pt-4 flex flex-col justify-center items-center'>
-                <DayHeader selectedDay={selectedDay} />
-                <Goals />
+            <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[98%] py-6'>
+              <div className='mb-16 flex flex-col justify-center items-center'>
+                <DayHeader selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
                 <TextEditorNoSSR setQuill={setQuill} />
               </div>
             </div>

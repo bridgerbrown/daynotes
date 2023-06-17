@@ -8,14 +8,12 @@
 
 .editorContainer {
     width: 100%;
-    min-height: 11in;
+    height: 10.55in;
 }
 
 .container .ql-editor {
     width: 100%;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, .3);
     min-height: 500px;
     height: auto !important;
 }
@@ -36,7 +34,6 @@
     z-index: 1;
     background-color: rgb(226 232 240);
     border: none;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
 }
 
 @page {
