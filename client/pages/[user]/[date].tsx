@@ -144,10 +144,10 @@ export default function DayNote() {
   // }
 
   return (
-    <main className="font-SansPro bg-gray-200 relative min-h-screen w-screen">
+    <main className="font-SansPro bg-gray-300 min-h-screen w-screen">
         <Navbar />
           <div className='mt-2 flex flex-col justify-center items-center'>
-            <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[98%] py-6'>
+            <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[96%] py-6'>
               <div className='mb-16 flex flex-col justify-center items-center'>
                 <Today selectedDay={selectedDay} />
                 <PrevNextButtons selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
