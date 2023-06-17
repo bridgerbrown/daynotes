@@ -3,8 +3,8 @@ import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
-import DayHeader from '@/components/modules/DayHeader';
-import Goals from '@/components/modules/goals';
+import PrevNextButtons from '@/components/modules/PrevNextButtons';
+import Today from '@/components/modules/Today';
 import { format, subDays, addDays, startOfDay } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
@@ -146,10 +146,11 @@ export default function DayNote() {
   return (
     <main className="font-SansPro bg-gray-200 relative min-h-screen w-screen">
         <Navbar />
-          <div className='flex flex-col justify-center items-center'>
+          <div className='mt-2 flex flex-col justify-center items-center'>
             <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[98%] py-6'>
               <div className='mb-16 flex flex-col justify-center items-center'>
-                <DayHeader selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
+                <Today selectedDay={selectedDay} />
+                <PrevNextButtons selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
                 <TextEditorNoSSR setQuill={setQuill} />
               </div>
             </div>
