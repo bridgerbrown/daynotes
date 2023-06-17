@@ -80,7 +80,7 @@ export default function DayNote() {
     return () => {
         s.disconnect()
     }
-  }, [selectedDay])
+  }, [router.asPath, selectedDay])
 
   useEffect(() => {
     if (socket == null || quill == null) return
@@ -90,7 +90,7 @@ export default function DayNote() {
         quill.enable()
     })
 
-    socket.emit('get-document', userId, user?.email, selectedDay)
+    socket.emit('get-document', userId, selectedDay)
   }, [socket, quill, router.asPath, selectedDay])
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '@/components/modulesnavbar'
+import Navbar from '@/components/modules/navbar'
 import Footer from '@/components/modules/footer'
 
 export default function Goals() {

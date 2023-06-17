@@ -33,13 +33,14 @@ async function findOrCreateDocument(userId, date) {
         await client.connect()
         const database = client.db('notes-db');
         const notes = database.collection('notes');
-        const note = await notes.findOne({ userId: userId, date: date })
+        let note = await notes.findOne({ userId: userId, date: date })
         if (note) {
             console.log("note exists")
             return note
         } else {
             console.log("note doesnt exist")
-            await notes.insertOne({ userId: userId, date: date, data: {}})
+            note = await notes.insertOne({ userId: userId, date: date, data: {}})
+            return note
         }
       } catch {
         await client.close()
