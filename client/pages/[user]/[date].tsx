@@ -12,6 +12,9 @@ import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Weekly from '@/components/modules/calendar/weekly';
+import Calendar from '../calendar';
+import CalendarCard from '@/components/modules/calendar/calendar-card';
 
 interface Params extends ParsedUrl {
   slug: string;
@@ -39,6 +42,9 @@ export default function DayNote() {
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
+  const [weekView, setWeekView] = useState<boolean>(false);
+  const [monthView, setMonthView] = useState<boolean>(false);
+  const [currentView, setCurrentView] = useState<string>('none');
 
   const { user } = useUser();
   let usersEmail = user?.email;
@@ -58,6 +64,16 @@ export default function DayNote() {
       user !== undefined && (
         router.push(`/${usersEmail}/${tomorrow}`)
       )
+    }
+  }
+
+  const toggleDateView = (type: string) => {
+    if (type == 'week'){
+      setWeekView(!weekView)
+      setMonthView(false)
+    } else {
+      setMonthView(!monthView)
+      setWeekView(false)
     }
   }
 
@@ -146,17 +162,41 @@ export default function DayNote() {
   return (
     <main className="font-SansPro bg-gray-300 min-h-screen w-screen">
         <Navbar />
-          <div className='mt-2 flex flex-col justify-center items-center'>
-            <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[96%] py-6'>
-              <div className='mb-16 flex flex-col justify-center items-center'>
-                <Today selectedDay={selectedDay} />
-                <PrevNextButtons selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
-                <TextEditorNoSSR setQuill={setQuill} />
-              </div>
+        <div className='mt-2 flex flex-col justify-center items-center'>
+          <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[96%]'>
+            {
+              weekView ?
+              <Weekly selectedDay={selectedDay} />
+              :
+              <div></div>
+            }
+            {
+              monthView ?
+              <CalendarCard selectedDay={selectedDay} />
+              :
+              <div></div>
+            }
+            <div className='flex'>
+              <button onClick={() => toggleDateView('week')}
+                className='bg-gray-600 ml-2 mt-2 w-12 h-6 rounded-md font-thin text-white text-sm'  
+              >
+                Week
+              </button>
+              <button onClick={() => toggleDateView('month')}
+                className='bg-gray-600 ml-2 mt-2 w-12 h-6 rounded-md font-thin text-white text-sm'  
+              >
+                Month
+              </button>
+            </div>
+            <div className='mb-16 flex flex-col justify-center items-center'>
+              <Today selectedDay={selectedDay} />
+              <PrevNextButtons selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
+              <TextEditorNoSSR setQuill={setQuill} />
             </div>
           </div>
-        <Footer />
-      </main>
+        </div>
+      <Footer />
+    </main>
   )
 }
 

@@ -93,15 +93,10 @@ export default function CalendarCard() {
   )
 
   return (
-    <div className="pt-16 flex justify-center items-center">
-      <section className="mx-12 pb-12 w-[1000px] shadow-xl min-h-32 bg-moduleHeaderBg pt-4 mt-2 border border-moduleBorder/20 rounded-md">
-        <header className="pb-4 flex items-center px-6 border-b border-moduleHeaderBorder/20">
-            <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-xl uppercase">
-                CALENDAR
-            </h2>
-          </header>
-        <div className="bg-white">
-          <section className="border-b border-moduleBorder/20 pb-4 md:pr-14">
+    <div className="flex justify-center items-center">
+      <section className="w-full min-h-32 rounded-md">
+        <div className="w-full flex justify-center items-center bg-gray-200 shadow-inner"> 
+          <section className="pb-2 w-96">
             <div className="pl-6 pt-6 flex items-center">
               <h2 className="flex-auto text-2xl font-semibold text-moduleHeader/70">
                 {format(firstDayCurrentMonth, 'MMMM yyyy')}
@@ -123,7 +118,7 @@ export default function CalendarCard() {
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="grid grid-cols-7 mt-10 text-lg leading-6 text-center text-gray-700">
+            <div className="grid grid-cols-7 mt-6 text-lg leading-6 text-center text-gray-700">
               <div>S</div>
               <div>M</div>
               <div>T</div>
@@ -132,13 +127,13 @@ export default function CalendarCard() {
               <div>F</div>
               <div>S</div>
             </div>
-            <div className="grid grid-cols-7 mt-2 text-lg">
+            <div className="grid grid-cols-7 mt-2 text-md">
               {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
                   className={classNames(
                     dayIdx === 0 && colStartClasses[getDay(day)],
-                    'py-1.5'
+                    'py-1'
                   )}
                 >
                   <button
@@ -182,23 +177,6 @@ export default function CalendarCard() {
                 </div>
               ))}
             </div>
-          </section>
-          <section className="mt-12 py-8 md:mt-0 ml-6">
-            <h2 className="font-semibold text-gray-500">
-              <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
-                {format(selectedDay, 'MMM dd, yyy')}
-              </time>
-              {' '} Notes
-            </h2>
-            <ol className="pl-6 pt-6 space-y-1 text-sm leading-6 text-gray-500">
-              {selectedDayMeetings.length > 0 ? (
-                selectedDayMeetings.map((meeting) => (
-                  <Meeting meeting={meeting} key={meeting.id} />
-                ))
-              ) : (
-                <p>No meetings for today.</p>
-              )}
-            </ol>
           </section>
         </div>
       </section>

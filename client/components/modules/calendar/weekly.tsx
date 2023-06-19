@@ -109,109 +109,107 @@ export default function Weekly(props: any) {
   )
 
   return (
-    <div className="pt-16">
-      <div className="">
-        <div className="flex justify-center smd:grid md:divide-x md:divide-gray-200">
-          <div className="rounded-lg px-8 pt-8 pb-6 bg-slate-800 w-9/12 md:pr-14">
-            <div className="flex items-center">
-              <h2 className="flex-auto text-2xl font-semibold text-gray-100">
-                {format(selectedDay, 'MMMM yyyy')}
-              </h2>
-              <button
-                type="button"
-                onClick={previousWeek}
-                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-200 hover:text-gray-500"
+    <div className="">
+      <div className="flex justify-center md:divide-gray-200">
+        <div className="rounded-lg px-8 pt-8 pb-6 bg-gray-200 shadow-inner w-full md:pr-14">
+          <div className="flex items-center">
+            <h2 className="flex-auto text-2xl font-regular text-black">
+              {format((new Date(selectedDay)), 'MMMM yyyy')}
+            </h2>
+            <button
+              type="button"
+              onClick={previousWeek}
+              className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-900 hover:text-gray-500"
+            >
+              <span className="sr-only">Previous month</span>
+              <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+            </button>
+            <button
+              onClick={nextWeek}
+              type="button"
+              className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-900 hover:text-gray-500"
+            >
+              <span className="sr-only">Next month</span>
+              <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+            </button>
+          </div>
+          <div className="grid grid-cols-7 mt-8 text-md leading-6 text-center text-gray-700">
+            <div>S</div>
+            <div>M</div>
+            <div>T</div>
+            <div>W</div>
+            <div>T</div>
+            <div>F</div>
+            <div>S</div>
+          </div>
+          <div className="grid grid-cols-7 mt-0 text-md">
+            {week.map((day, dayIdx) => (
+              <div
+                key={day.toString()}
+                className={classNames(
+                  dayIdx === 0 && colStartClasses[getDay(day)],
+                  'py-1.5'
+                )}
               >
-                <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
-              </button>
-              <button
-                onClick={nextWeek}
-                type="button"
-                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-200 hover:text-gray-500"
-              >
-                <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
-              </button>
-            </div>
-            <div className="grid grid-cols-7 mt-10 text-xl leading-6 text-center text-gray-200">
-              <div>S</div>
-              <div>M</div>
-              <div>T</div>
-              <div>W</div>
-              <div>T</div>
-              <div>F</div>
-              <div>S</div>
-            </div>
-            <div className="grid grid-cols-7 mt-4 text-2xl">
-              {week.map((day, dayIdx) => (
-                <div
-                  key={day.toString()}
+                <button
+                  type="button"
+                  onClick={() => setSelectedDay(day)}
                   className={classNames(
-                    dayIdx === 0 && colStartClasses[getDay(day)],
-                    'py-1.5'
+                    isEqual(day, selectedDay) && 'text-slate-900 w-12 h-12',
+                    !isEqual(day, selectedDay) &&
+                      isToday(day) &&
+                      'text-red-500 w-12 h-12',
+                    !isEqual(day, selectedDay) &&
+                      !isToday(day) &&
+                      isSameMonth(day, firstDayCurrentWeek) &&
+                      'text-gray-900 w-12 h-12',
+                    !isEqual(day, selectedDay) &&
+                      !isToday(day) &&
+                      !isSameMonth(day, firstDayCurrentWeek) &&
+                      'text-gray-400 w-12 h-12',
+                    isEqual(day, selectedDay) && isToday(day) && 'w-12 h-12 text-white bg-red-500',
+                    isEqual(day, selectedDay) &&
+                      !isToday(day) &&
+                      'bg-white w-12 h-12',
+                    !isEqual(day, selectedDay) && 'hover:bg-gray-200 hover:text-slate-900 w-12 h-12',
+                    (isEqual(day, selectedDay) || isToday(day)) &&
+                      'font-semibold w-12 h-12',
+                    'mx-auto flex w-12 h-12 items-center justify-center rounded-full'
                   )}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDay(day)}
-                    className={classNames(
-                      isEqual(day, selectedDay) && 'text-slate-900 w-12 h-12',
-                      !isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        'text-red-500 w-12 h-12',
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentWeek) &&
-                        'text-gray-200 w-12 h-12',
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentWeek) &&
-                        'text-gray-400 w-12 h-12',
-                      isEqual(day, selectedDay) && isToday(day) && 'w-12 h-12 text-white bg-red-500',
-                      isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        'bg-white w-12 h-12',
-                      !isEqual(day, selectedDay) && 'hover:bg-gray-200 hover:text-slate-900 w-12 h-12',
-                      (isEqual(day, selectedDay) || isToday(day)) &&
-                        'font-semibold w-12 h-12',
-                      'mx-auto flex w-12 h-12 items-center justify-center rounded-full'
-                    )}
-                  >
-                    <time dateTime={format(day, 'yyyy-MM-dd')}>
-                      {format(day, 'd')}
-                    </time>
-                  </button>
+                  <time dateTime={format(day, 'yyyy-MM-dd')}>
+                    {format(day, 'd')}
+                  </time>
+                </button>
 
-                  <div className="w-1 h-1 mx-auto mt-1">
-                    {meetings.some((meeting) =>
-                      isSameDay(parseISO(meeting.startDatetime), day)
-                    ) && (
-                      <div className="w-1 h-1 rounded-full bg-sky-500"></div>
-                    )}
-                  </div>
+                <div className="w-1 h-1 mx-auto mt-1">
+                  {meetings.some((meeting) =>
+                    isSameDay(parseISO(meeting.startDatetime), day)
+                  ) && (
+                    <div className="w-1 h-1 rounded-full bg-sky-500"></div>
+                  )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-          {/* <section className="mt-12 md:mt-0 md:pl-14">
-            <h2 className="font-semibold text-gray-200">
-              <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
-                {format(selectedDay, 'MMM dd, yyy')}
-              </time>
-              {' '} Notes
-            </h2>
-            <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
-              {selectedDayMeetings.length > 0 ? (
-                selectedDayMeetings.map((meeting) => (
-                  <Meeting meeting={meeting} key={meeting.id} />
-                ))
-              ) : (
-                <p>No meetings for today.</p>
-              )}
-            </ol>
-          </section> */}
         </div>
+        {/* <section className="mt-12 md:mt-0 md:pl-14">
+          <h2 className="font-semibold text-gray-200">
+            <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
+              {format(selectedDay, 'MMM dd, yyy')}
+            </time>
+            {' '} Notes
+          </h2>
+          <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
+            {selectedDayMeetings.length > 0 ? (
+              selectedDayMeetings.map((meeting) => (
+                <Meeting meeting={meeting} key={meeting.id} />
+              ))
+            ) : (
+              <p>No meetings for today.</p>
+            )}
+          </ol>
+        </section> */}
       </div>
     </div>
   )
