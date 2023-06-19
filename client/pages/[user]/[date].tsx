@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
-import PrevNextButtons from '@/components/modules/PrevNextButtons';
-import Today from '@/components/modules/Today';
+import DateHeader from '@/components/modules/DateHeader';
 import { format, subDays, addDays, startOfDay } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
@@ -35,7 +34,7 @@ const TOOLBAR_OPTIONS = [
 export default function DayNote() {
   const router = useRouter()
   let today = format(startOfDay(new Date()), 'MM-dd-yyyy')
-  const [selectedDay, setSelectedDay] = useState(format(startOfDay(new Date()), 'MM-dd-yyyy'))
+  const [selectedDay, setSelectedDay] = useState<any>(format(startOfDay(new Date()), 'MM-dd-yyyy'))
   const yesterday = format(subDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
   const tomorrow = format(addDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
   const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
@@ -160,10 +159,22 @@ export default function DayNote() {
   // }
 
   return (
-    <main className="font-SansPro bg-gray-300 min-h-screen w-screen">
+    <main className="font-SansPro bg-gray-200 min-h-screen w-screen">
         <Navbar />
-        <div className='mt-2 flex flex-col justify-center items-center'>
-          <div className='rounded-lg bg-gray-100 border-gray-300 border min-h-[100vh] mt-0 mb-32 w-[96%]'>
+          <div className='flex'>
+              <button onClick={() => toggleDateView('week')}
+                className='bg-gray-600 ml-2 mt-2 w-12 h-6 rounded-md font-thin text-white text-sm'  
+              >
+                Week
+              </button>
+              <button onClick={() => toggleDateView('month')}
+                className='bg-gray-600 ml-2 mt-2 w-12 h-6 rounded-md font-thin text-white text-sm'  
+              >
+                Month
+              </button>
+          </div>
+        <div className='mt-4 flex flex-col justify-center items-center'>
+          <div className='bg-white/80 border-gray-800 min-h-[100vh] mt-0 mb-32 w-[98%]'>
             {
               weekView ?
               <Weekly selectedDay={selectedDay} />
@@ -176,21 +187,9 @@ export default function DayNote() {
               :
               <div></div>
             }
-            <div className='flex'>
-              <button onClick={() => toggleDateView('week')}
-                className='bg-gray-600 ml-2 mt-2 w-12 h-6 rounded-md font-thin text-white text-sm'  
-              >
-                Week
-              </button>
-              <button onClick={() => toggleDateView('month')}
-                className='bg-gray-600 ml-2 mt-2 w-12 h-6 rounded-md font-thin text-white text-sm'  
-              >
-                Month
-              </button>
-            </div>
+            
             <div className='mb-16 flex flex-col justify-center items-center'>
-              <Today selectedDay={selectedDay} />
-              <PrevNextButtons selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
+              <DateHeader selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
               <TextEditorNoSSR setQuill={setQuill} />
             </div>
           </div>

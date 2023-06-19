@@ -13,9 +13,21 @@
 
 .container .ql-editor {
     width: 100%;
-    background-color: white;
     min-height: 500px;
     height: auto !important;
+}
+
+.ql-container {
+  background-color: white;
+  border: none;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid lightgray !important;
+}
+
+.ql-editor {
+  border: none;
 }
 
 .container .ql-container.ql-snow {
@@ -32,8 +44,15 @@
     position: sticky;
     top: 0; 
     z-index: 1;
-    background-color: rgb(226 232 240);
     border: none;
+}
+
+.ql-toolbar.ql-snow {
+  margin-bottom: 20px;
+  border-radius: 25px;
+  padding: 10px 12px !important;
+  border: none !important;
+  background-color: lightgreen;
 }
 
 @page {

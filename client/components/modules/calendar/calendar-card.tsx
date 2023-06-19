@@ -67,10 +67,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function CalendarCard() {
+export default function CalendarCard(props: any) {
   let today = startOfToday()
-  let [selectedDay, setSelectedDay] = useState(today)
-  let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+  let { parentDay } = props.selectedDay;
+  const [selectedDay, setSelectedDay] = useState(today)
+  const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
 
   let days = eachDayOfInterval({

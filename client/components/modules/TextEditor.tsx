@@ -42,11 +42,11 @@ export default function TextEditor(props: any){
     }, [])
 
     return (
-        <div className='shadow-lg w-[8.5in] h-[11in] bg-moduleHeaderBg pb-12'>
-            <div className='h-[11in] text-black font-light bg-moduleContentBg w-full'>
+        <div className='w-[8.5in] h-[11in] pb-12'>
+            <div className='h-[11in] text-black font-light w-full'>
                 <div ref={wrapperRef}
                 id="editor"
-                className="editorContainer bg-white w-full h-[11in]">
+                className="editorContainer w-full">
                 </div>
             </div>
         </div>
