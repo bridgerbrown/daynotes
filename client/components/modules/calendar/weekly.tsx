@@ -111,7 +111,7 @@ export default function Weekly(props: any) {
   return (
     <div className="">
       <div className="w-full bg-gray-100 shadow-inner flex justify-center md:divide-gray-200">
-        <div className="rounded-lg px-8 pt-8 pb-6 w-[7.5in] md:pr-14">
+        <div className="rounded-lg px-8 flex justify-center flex-col h-[240px] w-[7.5in] md:pr-14">
           <div className="flex items-center">
             <h2 className="flex-auto text-2xl font-regular text-black">
               {format((new Date(selectedDay)), 'MMMM yyyy')}

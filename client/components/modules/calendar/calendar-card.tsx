@@ -69,8 +69,7 @@ function classNames(...classes) {
 
 export default function CalendarCard(props: any) {
   let today = startOfToday()
-  let { parentDay } = props.selectedDay;
-  const [selectedDay, setSelectedDay] = useState(today)
+  let { selectedDay, setSelectedDay } = props;
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
 
@@ -95,17 +94,17 @@ export default function CalendarCard(props: any) {
 
   return (
     <div className="flex justify-center items-center">
-      <section className="w-full min-h-32 rounded-md">
+      <section className="w-full rounded-md">
         <div className="w-full flex justify-center items-center bg-gray-100 shadow-inner"> 
           <section className="pb-2 w-96">
-            <div className="pl-6 pt-6 flex items-center">
+            <div className="pl-0 pt-6 flex items-center">
               <h2 className="flex-auto text-2xl font-semibold text-moduleHeader/70">
                 {format(firstDayCurrentMonth, 'MMMM yyyy')}
               </h2>
               <button
                 type="button"
                 onClick={previousMonth}
-                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-700 hover:text-gray-500"
+                className="-my-0 flex flex-none items-center justify-center px-1.5 text-gray-700 hover:text-gray-500"
               >
                 <span className="sr-only">Previous month</span>
                 <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
@@ -113,13 +112,13 @@ export default function CalendarCard(props: any) {
               <button
                 onClick={nextMonth}
                 type="button"
-                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-700 hover:text-gray-500"
+                className="-my-0 -mr-1.5 ml-2 flex flex-none items-center justify-center px-1.5 text-gray-700 hover:text-gray-500"
               >
                 <span className="sr-only">Next month</span>
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="grid grid-cols-7 mt-6 text-lg leading-6 text-center text-gray-700">
+            <div className="grid grid-cols-7 mt-4 text-lg font-semibold leading-6 text-center text-gray-700">
               <div>S</div>
               <div>M</div>
               <div>T</div>
@@ -128,13 +127,13 @@ export default function CalendarCard(props: any) {
               <div>F</div>
               <div>S</div>
             </div>
-            <div className="grid grid-cols-7 mt-2 text-md">
+            <div className="grid grid-cols-7 my-2 text-md">
               {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
                   className={classNames(
                     dayIdx === 0 && colStartClasses[getDay(day)],
-                    'py-1'
+                    'py-0.25'
                   )}
                 >
                   <button

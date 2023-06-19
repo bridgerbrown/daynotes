@@ -32,7 +32,8 @@ const TOOLBAR_OPTIONS = [
 ]
 
 export default function DayNote() {
-  const toggleButtonCSS: string = `bg-gray-400 opacity-80 hover:opacity-100 transition-opacity ml-2 mt-2 w-14 h-7 rounded-md font-thin text-white text-sm`;
+  const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
+  const activeToggleButtonCSS: string = `text-white bg-gray-400 hover:bg-gray-500 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-sm`;
   const router = useRouter()
   let today = format(startOfDay(new Date()), 'MM-dd-yyyy')
   const [selectedDay, setSelectedDay] = useState<any>(format(startOfDay(new Date()), 'MM-dd-yyyy'))
@@ -166,12 +167,12 @@ export default function DayNote() {
           <div className='rounded-lg bg-white/80 border-gray-800 min-h-[100vh] mt-0 pb-12 mb-32 w-[98%]'>
             <div className='pb-2 flex'>
                 <button onClick={() => toggleDateView('week')}
-                  className={toggleButtonCSS} 
+                  className={weekView ? activeToggleButtonCSS : toggleButtonCSS} 
                 >
                   Week
                 </button>
                 <button onClick={() => toggleDateView('month')}
-                  className={toggleButtonCSS}  
+                  className={monthView ? activeToggleButtonCSS : toggleButtonCSS}  
                 >
                   Month
                 </button>
@@ -184,7 +185,7 @@ export default function DayNote() {
             }
             {
               monthView ?
-              <CalendarCard selectedDay={selectedDay} />
+              <CalendarCard selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }
