@@ -96,7 +96,7 @@ export default function CalendarCard(props: any) {
   return (
     <div className="flex justify-center items-center">
       <section className="w-full min-h-32 rounded-md">
-        <div className="w-full flex justify-center items-center bg-gray-200 shadow-inner"> 
+        <div className="w-full flex justify-center items-center bg-gray-100 shadow-inner"> 
           <section className="pb-2 w-96">
             <div className="pl-6 pt-6 flex items-center">
               <h2 className="flex-auto text-2xl font-semibold text-moduleHeader/70">

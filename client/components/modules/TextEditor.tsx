@@ -43,7 +43,7 @@ export default function TextEditor(props: any){
 
     return (
         <div className='w-[8.5in] h-[11in] pb-12'>
-            <div className='h-[11in] text-black font-light w-full'>
+            <div className='flex flex-col items-center h-[11in] text-black font-light w-full'>
                 <div ref={wrapperRef}
                 id="editor"
                 className="editorContainer w-full">
