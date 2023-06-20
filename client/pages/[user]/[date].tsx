@@ -163,9 +163,9 @@ export default function DayNote() {
   return (
     <main className="font-SansPro bg-gray-200 min-h-screen w-screen relative">
         <Navbar />
-        <div className='mt-4 pt-0 flex flex-col justify-center items-center'>
+        <div className='mt-0 pt-0 flex flex-col justify-center items-center'>
           <div className='rounded-lg bg-white/80 border-gray-800 min-h-[100vh] mt-0 pb-12 mb-32 w-[98%]'>
-            <div className='pb-2 flex'>
+            <div className='absolute pb-2 flex'>
                 <button onClick={() => toggleDateView('week')}
                   className={weekView ? activeToggleButtonCSS : toggleButtonCSS} 
                 >

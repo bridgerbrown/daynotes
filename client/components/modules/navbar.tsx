@@ -10,7 +10,7 @@ export default function Navbar(){
   const { user } = useUser()
 
   return(
-      <nav className="pt-6 pb-0 px-8 text-slate-900 flex justify-between">
+      <nav className="pt-4 pb-2 px-8 text-slate-900 flex justify-between items-center">
           <div className="flex justify-center items-center">
               {/* <h1 className="text-white text-xl border-4 border-[#ebc157] font-extrabold rounded-full px-2.5 py-0.5 mr-2 ">L</h1> */}
               <h1 className="text-black text-[32px] uppercase font-light tracking-wide">

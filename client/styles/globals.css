@@ -44,11 +44,10 @@
 }
 
 .ql-toolbar.ql-snow {
-  margin-bottom: 20px;
-  border-radius: 25px;
+  margin-bottom: 0px;
   padding: 10px 12px !important;
   border: none !important;
-  background-color: lightgreen;
+  background-color: lightgray;
 }
 
 @page {
