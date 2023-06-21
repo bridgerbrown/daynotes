@@ -1,5 +1,3 @@
-import { Menu, Transition } from '@headlessui/react'
-import { DotsVerticalIcon } from '@heroicons/react/outline'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
   add,
@@ -15,53 +13,11 @@ import {
   isToday,
   parse,
   parseISO,
+  startOfMonth,
   startOfToday,
   startOfWeek,
 } from 'date-fns'
 import { Fragment, useState } from 'react'
-
-const meetings = [
-  {
-    id: 1,
-    name: 'Leslie Alexander',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-06-11T13:00',
-    endDatetime: '2023-06-11T14:30',
-  },
-  {
-    id: 2,
-    name: 'Michael Foster',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-06-20T09:00',
-    endDatetime: '2023-07-20T11:30',
-  },
-  {
-    id: 3,
-    name: 'Dries Vincent',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-05-20T17:00',
-    endDatetime: '2022-05-20T18:30',
-  },
-  {
-    id: 4,
-    name: 'Leslie Alexander',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-06-09T13:00',
-    endDatetime: '2022-06-09T14:30',
-  },
-  {
-    id: 5,
-    name: 'Michael Foster',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2023-03-13T14:00',
-    endDatetime: '2023-03-13T14:30',
-  },
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -69,9 +25,9 @@ function classNames(...classes) {
 
 export default function Calendar(props: any) {
   let today = startOfToday()
-  let { selectedDay, setSelectedDay } = props;
+  let { usersNotes, selectedDay, setSelectedDay } = props;
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
-  let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
+  let firstDayCurrentMonth = startOfMonth(today);
 
   let days = eachDayOfInterval({
     start: startOfWeek(firstDayCurrentMonth),
@@ -87,10 +43,6 @@ export default function Calendar(props: any) {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
     setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
   }
-
-  let selectedDayMeetings = meetings.filter((meeting) =>
-    isSameDay(parseISO(meeting.startDatetime), selectedDay)
-  )
 
   return (
     <div className="flex justify-center items-center">
@@ -166,14 +118,6 @@ export default function Calendar(props: any) {
                       {format(day, 'd')}
                     </time>
                   </button>
-
-                  <div className="relative bottom-5 h-0 w-14 flex justify-center">
-                    {meetings.some((meeting) =>
-                      isSameDay(parseISO(meeting.startDatetime), day)
-                    ) && (
-                      <div className="relative w-2 h-2 rounded-full bg-green-500"></div>
-                    )}
-                  </div>
                 </div>
               ))}
             </div>
@@ -193,3 +137,5 @@ let colStartClasses = [
   'col-start-6',
   'col-start-7',
 ]
+
+

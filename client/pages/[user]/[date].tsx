@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import Navbar from '@/components/modules/navbar';
@@ -11,7 +11,6 @@ import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Calendar from '@/components/modules/calendar/Calendar';
-import Week from '@/components/modules/calendar/Week';
 
 interface Params extends ParsedUrl {
   slug: string;
@@ -44,6 +43,7 @@ export default function DayNote() {
   const [weekView, setWeekView] = useState<boolean>(false);
   const [monthView, setMonthView] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<string>('none');
+  const [usersNotes, setUsersNotes] = useState<any>([])
 
   const { user } = useUser();
   let usersEmail = user?.email;
@@ -77,15 +77,28 @@ export default function DayNote() {
   }
 
   async function getUserDocument(email: any){
-      let res = await fetch("http://localhost:3000/api/users")
-      const data = await res.json();
-      const arr = []
-      for(var i in data){
-        arr.push(data[i]);
-      }
-      const user = arr[1].filter((item: any) => item.email === email)
-      setUserId(user[0].userId)
+    let res = await fetch("http://localhost:3000/api/users")
+    const data = await res.json();
+    const arr = []
+    for(var i in data){
+      arr.push(data[i]);
     }
+    const user = arr[1].filter((item: any) => item.email === email)
+    setUserId(user[0].userId)
+    getUsersNotes(user[0].userId)
+  }
+
+  async function getUsersNotes(userId: string){
+    await fetch(`/api/notes?userId=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        setUsersNotes(data.data)
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   useEffect(() => {
     const s = io("http://localhost:3001")
@@ -172,7 +185,7 @@ export default function DayNote() {
             </div>
             {
               monthView ?
-              <Calendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <Calendar usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }
