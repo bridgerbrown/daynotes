@@ -92,24 +92,24 @@ export default function Calendar(props: any) {
                     type="button"
                     onClick={() => setSelectedDay(day)}
                     className={classNames(
-                      isEqual(day, selectedDay) && 'font-semibold',
+                      isSameDay(day, selectedDay) && 'font-semibold',
                       !isEqual(day, selectedDay) &&
                         isToday(day) &&
                         'bg-blue-100',
-                      !isEqual(day, selectedDay) &&
+                      !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-600',
-                      !isEqual(day, selectedDay) &&
+                      !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'bg-blue-200',
-                      isEqual(day, selectedDay) &&
+                      isSameDay(day, selectedDay) && isToday(day) && 'bg-blue-200',
+                      isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         'bg-gray-300',
-                      !isEqual(day, selectedDay) && 'hover:bg-gray-200/50',
-                      (isEqual(day, selectedDay) && isToday(day)) &&
+                      !isSameDay(day, selectedDay) && 'hover:bg-gray-200/50',
+                      (isSameDay(day, selectedDay) && isToday(day)) &&
                         'bg-blue-200 font-semibold',
                       'font-regular text-sm flex pb-5 h-14 w-14 border-[0.5px] border-gray-300 items-center justify-center'
                     )}
