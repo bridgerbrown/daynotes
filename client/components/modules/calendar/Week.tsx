@@ -69,7 +69,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Weekly(props: any) {
+export default function Week(props: any) {
   let today = startOfToday()
   const { selectedDay, setSelectedDay } = props
   let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))

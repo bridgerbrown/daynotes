@@ -7,13 +7,11 @@ import DateHeader from '@/components/modules/DateHeader';
 import { format, subDays, addDays, startOfDay } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
-import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Weekly from '@/components/modules/calendar/weekly';
-import Calendar from '../calendar';
-import CalendarCard from '@/components/modules/calendar/calendar-card';
+import Calendar from '@/components/modules/calendar/Calendar';
+import Week from '@/components/modules/calendar/Week';
 
 interface Params extends ParsedUrl {
   slug: string;
@@ -166,11 +164,6 @@ export default function DayNote() {
         <div className='mt-0 pt-0 flex flex-col justify-center items-center'>
           <div className='rounded-lg bg-white/80 border-gray-800 min-h-[100vh] mt-0 pb-12 mb-32 w-[98%]'>
             <div className='absolute pb-2 flex'>
-                <button onClick={() => toggleDateView('week')}
-                  className={weekView ? activeToggleButtonCSS : toggleButtonCSS} 
-                >
-                  Week
-                </button>
                 <button onClick={() => toggleDateView('month')}
                   className={monthView ? activeToggleButtonCSS : toggleButtonCSS}  
                 >
@@ -178,14 +171,8 @@ export default function DayNote() {
                 </button>
             </div>
             {
-              weekView ?
-              <Weekly selectedDay={selectedDay} />
-              :
-              <div></div>
-            }
-            {
               monthView ?
-              <CalendarCard selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <Calendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }

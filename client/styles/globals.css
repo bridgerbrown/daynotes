@@ -46,8 +46,11 @@
 .ql-toolbar.ql-snow {
   margin-bottom: 0px;
   padding: 10px 12px !important;
-  border: none !important;
-  background-color: lightgray;
+  border-top: 1px solid lightgray !important;
+  border-left: 1px solid lightgray !important;
+  border-right: 1px solid lightgray !important;
+  border-bottom: none !important;
+  background-color: white;
 }
 
 @page {
