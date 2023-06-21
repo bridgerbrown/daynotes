@@ -10,7 +10,7 @@ import { ParsedUrl } from 'query-string';
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Calendar from '@/components/modules/calendar/Calendar';
+import CalendarModule from '@/components/modules/calendar/CalendarModule';
 
 interface Params extends ParsedUrl {
   slug: string;
@@ -185,7 +185,7 @@ export default function DayNote() {
             </div>
             {
               monthView ?
-              <Calendar usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <CalendarModule usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }

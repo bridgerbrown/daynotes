@@ -23,9 +23,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Calendar(props: any) {
+export default function CalendarModule(props: any) {
   let today = startOfToday()
-  let { usersNotes, selectedDay, setSelectedDay } = props;
+  let { usersNotes, setSelectedDay } = props;
+  let selectedDay = parseISO(props.selectedDay)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   let firstDayCurrentMonth = startOfMonth(today);
 
