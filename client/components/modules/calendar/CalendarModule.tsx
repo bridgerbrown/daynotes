@@ -17,7 +17,7 @@ import {
   startOfToday,
   startOfWeek,
 } from 'date-fns'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -28,6 +28,7 @@ export default function CalendarModule(props: any) {
   let { usersNotes, setSelectedDay } = props;
   let selectedDay = parseISO(props.selectedDay)
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+  const [displayedSelectedDay, setDisplayedSelectedDay] = useState()
   let firstDayCurrentMonth = startOfMonth(today);
 
   let days = eachDayOfInterval({
@@ -93,10 +94,10 @@ export default function CalendarModule(props: any) {
                     type="button"
                     onClick={() => setSelectedDay(day)}
                     className={classNames(
-                      isSameDay(day, selectedDay) && 'font-semibold',
-                      !isEqual(day, selectedDay) &&
+                      isSameDay(day, selectedDay) && 'bg-gray-300 font-semibold',
+                      !isSameDay(day, selectedDay) &&
                         isToday(day) &&
-                        'bg-blue-100',
+                        'bg-blue-200',
                       !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&

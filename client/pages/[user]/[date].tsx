@@ -93,7 +93,6 @@ export default function DayNote() {
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
-        console.log(data.data)
       })
       .catch(error => {
         console.log(error)
@@ -119,7 +118,7 @@ export default function DayNote() {
     })
 
     socket.emit('get-document', userId, selectedDay)
-  }, [socket, quill, router.asPath, selectedDay])
+  }, [socket, quill, router.asPath, selectedDay, prevDay, nextDay])
 
   useEffect(() => {
     if (socket == null || quill == null) return
