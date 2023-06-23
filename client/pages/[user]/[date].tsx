@@ -32,8 +32,7 @@ export default function DayNote() {
   const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
   const activeToggleButtonCSS: string = `text-white bg-gray-400 hover:bg-gray-500 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-sm`;
   const router = useRouter()
-  let today = format(startOfDay(new Date()), 'MM-dd-yyyy')
-  const [selectedDay, setSelectedDay] = useState<any>(format(startOfDay(new Date()), 'MM-dd-yyyy'))
+  const [selectedDay, setSelectedDay] = useState<any>(startOfDay(new Date()), 'MM-dd-yyyy')
   const yesterday = format(subDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
   const tomorrow = format(addDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
   const [noteLoaded, setNoteLoaded] = useState<boolean>(false)

@@ -25,10 +25,9 @@ function classNames(...classes) {
 
 export default function CalendarModule(props: any) {
   let today = startOfToday()
-  let { usersNotes, setSelectedDay } = props;
-  let selectedDay = parseISO(props.selectedDay)
+  let { usersNotes, setSelectedDay, selectedDay } = props;
+  let sDay = parse(props.selectedDay, 'MM-dd-yyyy', new Date())
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
-  const [displayedSelectedDay, setDisplayedSelectedDay] = useState()
   let firstDayCurrentMonth = startOfMonth(today);
 
   let days = eachDayOfInterval({
@@ -45,6 +44,8 @@ export default function CalendarModule(props: any) {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
     setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
   }
+
+  console.log(props.selectedDay)
 
   return (
     <div className="flex justify-center items-center">
@@ -94,24 +95,24 @@ export default function CalendarModule(props: any) {
                     type="button"
                     onClick={() => setSelectedDay(day)}
                     className={classNames(
-                      isSameDay(day, selectedDay) && 'bg-gray-300 font-semibold',
-                      !isSameDay(day, selectedDay) &&
+                      isEqual(day, selectedDay) && 'bg-blue-300 font-semibold',
+                      !isEqual(day, selectedDay) &&
                         isToday(day) &&
                         'bg-blue-200',
-                      !isSameDay(day, selectedDay) &&
+                      !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-600',
-                      !isSameDay(day, selectedDay) &&
+                      !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-400',
-                      isSameDay(day, selectedDay) && isToday(day) && 'bg-blue-200',
-                      isSameDay(day, selectedDay) &&
+                      isEqual(day, selectedDay) && isToday(day) && 'font-semibold bg-blue-200',
+                      isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         'bg-gray-300',
-                      !isSameDay(day, selectedDay) && 'hover:bg-gray-200/50',
-                      (isSameDay(day, selectedDay) && isToday(day)) &&
+                      !isEqual(day, selectedDay) && 'hover:bg-gray-200/50',
+                      (isEqual(day, selectedDay) && isToday(day)) &&
                         'bg-blue-200 font-semibold',
                       'font-regular text-sm flex pb-5 h-14 w-14 border-[0.5px] border-gray-300 items-center justify-center'
                     )}
