@@ -2,22 +2,20 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
   add,
   eachDayOfInterval,
-  endOfISOWeek,
   endOfMonth,
   endOfWeek,
   format,
   getDay,
   isEqual,
-  isSameDay,
   isSameMonth,
   isToday,
-  parse,
-  parseISO,
   startOfMonth,
   startOfToday,
   startOfWeek,
+  parseISO,
+  isSameDay
 } from 'date-fns'
-import { Fragment, useEffect, useState } from 'react'
+import { useState } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -43,6 +41,11 @@ export default function CalendarModule(props: any) {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
     setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
   }
+
+
+  let userNotesDates = usersNotes.map((note: any) => note.date)
+
+  console.log(userNotesDates)
 
   return (
     <div className="flex justify-center items-center">
@@ -118,6 +121,15 @@ export default function CalendarModule(props: any) {
                       {format(day, 'd')}
                     </time>
                   </button>
+
+                  <div className="relative bottom-5 h-0 w-14 flex justify-center">
+                    {userNotesDates.some((date: Date) =>
+                      isSameDay(parseISO(date), day)
+                    ) && (
+                      <div className="relative w-2 h-2 rounded-full bg-green-500"></div>
+                    )}
+                  </div>
+
                 </div>
               ))}
             </div>

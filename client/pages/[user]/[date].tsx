@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import DateHeader from '@/components/modules/DateHeader';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { format, subDays, addDays, startOfDay, startOfToday } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
@@ -11,6 +12,7 @@ import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
 import CalendarModule from '@/components/modules/calendar/CalendarModule';
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 
 interface Params extends ParsedUrl {
   slug: string;
@@ -28,7 +30,7 @@ const TOOLBAR_OPTIONS = [
     ["clean"],
 ]
 
-export default function DayNote() {
+export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
   const activeToggleButtonCSS: string = `text-white bg-gray-400 hover:bg-gray-500 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-sm`;
   const router = useRouter()
@@ -41,11 +43,10 @@ export default function DayNote() {
   const [quill, setQuill] = useState<any>();
   const [weekView, setWeekView] = useState<boolean>(false);
   const [monthView, setMonthView] = useState<boolean>(false);
-  const [currentView, setCurrentView] = useState<string>('none');
   const [usersNotes, setUsersNotes] = useState<any>([])
 
   const { user } = useUser();
-  let usersEmail = user?.email;
+  const usersEmail = userCtxt.email;
 
   const prevDay = () => {
     setSelectedDay(yesterday)
@@ -76,18 +77,20 @@ export default function DayNote() {
   }
 
   async function getUserDocument(email: any){
-    let res = await fetch("http://localhost:3000/api/users")
-    const data = await res.json();
-    const arr = []
-    for(var i in data){
-      arr.push(data[i]);
-    }
-    const user = arr[1].filter((item: any) => item.email === email)
-    setUserId(user[0].userId)
-    getUsersNotes(user[0].userId)
+    await fetch("http://localhost:3000/api/users")
+      .then(response => response.json())
+      .then(data => {
+        const arr = []
+        for(var i in data){
+          arr.push(data[i]);
+        }
+        const user = arr[1].filter((item: any) => item.email === email)
+        setUserId(user[0].userId)
+        getUserNotes(user[0].userId)
+    })
   }
 
-  async function getUsersNotes(userId: string){
+  async function getUserNotes(userId: string){
     await fetch(`/api/notes?userId=${userId}`)
       .then(response => response.json())
       .then(data => {
@@ -99,7 +102,7 @@ export default function DayNote() {
   }
 
   useEffect(() => {
-    getUserDocument(user?.email)
+    getUserDocument(usersEmail)
   }, [])
 
   useEffect(() => {
@@ -186,7 +189,7 @@ export default function DayNote() {
             </div>
             {
               monthView ?
-              <CalendarModule usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <CalendarModule getUsersNotes={getUserNotes} usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }
@@ -224,3 +227,17 @@ export default function DayNote() {
 //   </div>
 // </div>
 // }
+//
+
+
+
+export const getServerSideProps: GetServerSideProps = withPageAuthRequired({
+  async getServerSideProps(ctx){
+    const session = await getSession(ctx.req, ctx.res);
+    return {
+      props: {
+        userCtxt: JSON.parse(JSON.stringify(session)).user
+      }
+    }
+  }
+})
