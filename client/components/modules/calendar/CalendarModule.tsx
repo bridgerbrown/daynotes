@@ -45,8 +45,6 @@ export default function CalendarModule(props: any) {
 
   let userNotesDates = usersNotes.map((note: any) => note.date)
 
-  console.log(userNotesDates)
-
   return (
     <div className="flex justify-center items-center">
       <section className="w-full rounded-md">
@@ -110,7 +108,7 @@ export default function CalendarModule(props: any) {
                       isEqual(day, selectedDay) && isToday(day) && 'font-semibold bg-blue-200',
                       isEqual(day, selectedDay) &&
                         !isToday(day) &&
-                        'bg-gray-300',
+                        'bg-blue-300',
                       !isEqual(day, selectedDay) && 'hover:bg-gray-200/50',
                       (isEqual(day, selectedDay) && isToday(day)) &&
                         'bg-blue-200 font-semibold',

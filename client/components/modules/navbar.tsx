@@ -30,7 +30,7 @@ export default function Navbar(){
                   }
                   {
                       user ?
-                      <li className={liStyle}><Link href={`/goals`}>Goals</Link></li>
+                      <li className={liStyle}><Link href={`/${user.email}/notes`}>Notes</Link></li>
 
                       :
                       <div></div>

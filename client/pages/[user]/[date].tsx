@@ -5,7 +5,7 @@ import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import DateHeader from '@/components/modules/DateHeader';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { format, subDays, addDays, startOfDay, startOfToday } from 'date-fns'
+import { parseISO, isSameDay, format, subDays, addDays, startOfDay, startOfToday } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
 import "quill/dist/quill.snow.css"
@@ -37,13 +37,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
-  const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
   const [weekView, setWeekView] = useState<boolean>(false);
   const [monthView, setMonthView] = useState<boolean>(false);
   const [usersNotes, setUsersNotes] = useState<any>([])
+  const [noteActivated, setNoteActivated] = useState<boolean>(false);
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
@@ -76,6 +76,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }
 
+  const checkNoteExists = (data: any) => {
+    const userNotesDates = data
+      .map((note: any) => parseISO(note.date))
+      .filter((date: any) => isSameDay(date, selectedDay));
+    userNotesDates.length ? setNoteActivated(true) : setNoteActivated(false);
+  }
+
   async function getUserDocument(email: any){
     await fetch("http://localhost:3000/api/users")
       .then(response => response.json())
@@ -95,7 +102,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
-      })
+        checkNoteExists(data.data)
+        })
       .catch(error => {
         console.log(error)
       })
@@ -109,6 +117,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     const s = io("http://localhost:3001")
     setSocket(s)
 
+    checkNoteExists(usersNotes)
+
     return () => {
         s.disconnect()
     }
@@ -116,6 +126,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     if (socket == null || quill == null) return
+    
+
 
     socket.once("load-document", (document: any) => {
         quill.setContents(document)
@@ -123,7 +135,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     })
 
     socket.emit('get-document', userId, selectedDay)
-  }, [socket, quill, router.asPath, selectedDay, prevDay, nextDay])
+  }, [socket, quill, router.asPath, selectedDay, prevDay, nextDay, noteActivated])
 
   useEffect(() => {
     if (socket == null || quill == null) return
@@ -196,7 +208,17 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             
             <div className='mb-32 flex flex-col justify-center items-center'>
               <DateHeader selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
-              <TextEditorNoSSR setQuill={setQuill} />
+              {
+                noteActivated ?
+                <TextEditorNoSSR setQuill={setQuill} />
+                :
+                <div className='h-[3in] flex justify-center items-center text-black font-light bg-moduleContentBg/60 w-full'>
+                  <button className='ml-2 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
+                    onClick={() => setNoteActivated(true)}
+                  > + 
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </div>

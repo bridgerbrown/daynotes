@@ -18,12 +18,12 @@ export default function User() {
     }, [user])
 
     return (
-        <main className='w-screen min-h-screen relative font-Hind bg-stone-100'>
+        <main className='font-SansPro bg-gray-200 min-h-screen w-screen relative'>
             <Navbar />
                 <section className='flex justify-center'>
                     {
                         user ?
-                        <section className="w-[700px] shadow-lg mt-6 pb-12 min-h-32 bg-moduleHeaderBg border-moduleBorder/20  pt-4 border border-[#383163] rounded-md">
+                        <section className="w-[99%] shadow-lg mt-6 pb-12 min-h-32 bg-moduleHeaderBg border-moduleBorder/20  pt-4 border border-[#383163] rounded-md">
                             <header className="pb-4 flex items-center px-6 border-b  border-moduleHeaderBorder/20">
                                 <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-base uppercase">
                                     Profile
