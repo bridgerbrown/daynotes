@@ -99,11 +99,12 @@ export default function DayNote() {
   }
 
   useEffect(() => {
+    getUserDocument(user?.email)
+  }, [])
+
+  useEffect(() => {
     const s = io("http://localhost:3001")
     setSocket(s)
-    getUserDocument(user?.email)
-
-    console.log(selectedDay)
 
     return () => {
         s.disconnect()
