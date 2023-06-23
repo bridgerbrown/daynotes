@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import DateHeader from '@/components/modules/DateHeader';
-import { format, subDays, addDays, startOfDay } from 'date-fns'
+import { format, subDays, addDays, startOfDay, startOfToday } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
 import "quill/dist/quill.snow.css"
@@ -32,9 +32,9 @@ export default function DayNote() {
   const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
   const activeToggleButtonCSS: string = `text-white bg-gray-400 hover:bg-gray-500 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-sm`;
   const router = useRouter()
-  const [selectedDay, setSelectedDay] = useState<any>(startOfDay(new Date()), 'MM-dd-yyyy')
-  const yesterday = format(subDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
-  const tomorrow = format(addDays(new Date(selectedDay), 1), 'MM-dd-yyyy')
+  const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
+  const yesterday = subDays(new Date(selectedDay), 1)
+  const tomorrow = addDays(new Date(selectedDay), 1)
   const [noteLoaded, setNoteLoaded] = useState<boolean>(false)
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
@@ -102,6 +102,8 @@ export default function DayNote() {
     const s = io("http://localhost:3001")
     setSocket(s)
     getUserDocument(user?.email)
+
+    console.log(selectedDay)
 
     return () => {
         s.disconnect()

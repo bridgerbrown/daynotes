@@ -26,7 +26,6 @@ function classNames(...classes) {
 export default function CalendarModule(props: any) {
   let today = startOfToday()
   let { usersNotes, setSelectedDay, selectedDay } = props;
-  let sDay = parse(props.selectedDay, 'MM-dd-yyyy', new Date())
   const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
   let firstDayCurrentMonth = startOfMonth(today);
 
@@ -44,8 +43,6 @@ export default function CalendarModule(props: any) {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
     setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
   }
-
-  console.log(props.selectedDay)
 
   return (
     <div className="flex justify-center items-center">
