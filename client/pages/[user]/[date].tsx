@@ -40,7 +40,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
-  const [weekView, setWeekView] = useState<boolean>(false);
   const [monthView, setMonthView] = useState<boolean>(false);
   const [usersNotes, setUsersNotes] = useState<any>([])
   const [noteActivated, setNoteActivated] = useState<boolean>(false);
@@ -100,14 +99,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }
 
   const toggleDateView = (type: string) => {
-    if (type == 'week'){
-      setWeekView(!weekView)
-      setMonthView(false)
-    } else {
-      setMonthView(!monthView)
-      setWeekView(false)
-    }
-  }
+    setMonthView(!monthView)
+  };
 
   const checkNoteExists = (data: any) => {
     const userNotesDates = data
@@ -150,10 +143,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     getDateDifference();
   }, [selectedDay])
 
+
   useEffect(() => {
     const s = io("http://localhost:3001")
     setSocket(s)
-
     checkNoteExists(usersNotes)
 
     return () => {
@@ -161,10 +154,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }, [router.asPath, selectedDay ])
 
-  useEffect(() => {
-    if (socket == null || quill == null) return
-    
 
+  useEffect(() => {
+    if (socket == null || quill == null) return;
+    if (!noteActivated) return;
 
     socket.once("load-document", (document: any) => {
         quill.setContents(document)
@@ -174,8 +167,9 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     socket.emit('get-document', userId, selectedDay)
   }, [socket, quill, router.asPath, selectedDay, prevDay, nextDay, noteActivated])
 
+
   useEffect(() => {
-    if (socket == null || quill == null) return
+    if (socket == null || quill == null) return;
 
     const interval = setInterval(() => {
         socket.emit('save-document', quill.getContents())
@@ -186,8 +180,9 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }, [socket, quill, router.asPath, selectedDay])
 
+
   useEffect(() => {
-    if (socket == null || quill == null) return
+    if (socket == null || quill == null) return;
 
     const handler = (delta: any) => {
         quill.updateContents(delta)
@@ -201,7 +196,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
 
   useEffect(() => {
-    if (socket == null || quill == null) return
+    if (socket == null || quill == null) return;
 
     const handler = (delta: any, oldDelta: any, source: any) => {
         if (source !== 'user') return
@@ -214,15 +209,24 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }, [socket, quill, router.asPath, selectedDay])
 
-  // const showToolbar = () => {
-  //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"
-  //     document.querySelector<HTMLElement>(".ql-editor")!.style.marginTop = "0px"
-  // }
 
-  // const hideToolbar = () => {
-  //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "none"
-  //     document.querySelector<HTMLElement>(".ql-editor")!.style.paddingTop = "40px"
-  // }
+  useEffect(() => {
+    if (socket == null || quill == null) return;
+
+    const disconnectHandler = () => {
+      socket.disconnect();
+    };
+
+    if (typeof window !== 'undefined'){
+      window.addEventListener("beforeunload", disconnectHandler);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined'){
+        window.removeEventListener("beforeunload", disconnectHandler);
+      }
+    }
+  }, [socket, quill]);
 
   return (
     <main className="font-SansPro bg-gray-200 min-h-screen w-screen relative">
@@ -244,13 +248,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             }
             
             <div className='mb-32 flex flex-col justify-center items-center'>
-              <DateHeader dateDifference={dateDifference} selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
+              <DateHeader noteActivated={noteActivated} dateDifference={dateDifference} selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
               {
                 noteActivated ?
                 <TextEditorNoSSR setQuill={setQuill} />
                 :
-                <div className='h-[3in] flex justify-center items-center text-black font-light bg-moduleContentBg/60 w-full'>
-                  <button className='ml-2 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
+                <div className='h-[3in] flex justify-center items-center text-black font-light w-full'>
+                  <button className='hover:text-blue-300 hover:border-blue-300 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
                     onClick={() => setNoteActivated(true)}
                   > + 
                   </button>
@@ -263,32 +267,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     </main>
   )
 }
-
-
-// {
-//   noteActivated ?
-//   <TextEditorNoSSR documentId={documentId} noteActivated={noteActivated} selectedDay={selectedDay} />
-//   :
-//   <div className='shadow-lg mt-6 w-full bg-moduleHeaderBg pt-4 pb-12 border border-moduleBorder/20 rounded-md'>
-//   <header className="bg-moduleHeaderBg flex items-center pb-4 px-6 border-b border-moduleHeaderBorder/20">
-//       <h2 className="text-moduleHeader/70 font-semibold tracking-wider text-xl uppercase">
-//           Notes
-//       </h2>
-//       <div className='text-moduleHeader/50 flex items-center'>
-//       </div>
-//   </header>
-//   <div className='h-[3in] flex justify-center items-center text-black font-light bg-moduleContentBg/60 w-full'>
-//       <button className='ml-2 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
-//         onClick={activateNote}
-//       >
-//           +
-//       </button>
-//   </div>
-// </div>
-// }
-//
-
-
 
 export const getServerSideProps: GetServerSideProps = withPageAuthRequired({
   async getServerSideProps(ctx){

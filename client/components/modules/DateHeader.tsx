@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import Image from 'next/image';
 
 export default function DateHeader(props: any) {
-  const { prevDay, nextDay, selectedDay, dateDifference } = props;
+  const { prevDay, nextDay, selectedDay, dateDifference, noteActivated } = props;
   const buttonDatesCSS: string = `text-black/60 text-sm font-thin`;
   const buttonCSS: string = `mb-2 bg-gray-400 font-thin text-white w-24 py-2.5 opacity-60 hover:opacity-100 transition-opacity rounded-md text-base`;
 
@@ -27,9 +27,17 @@ export default function DateHeader(props: any) {
           <div className='flex-col flex justify-center items-center'>
             <h2 className='opacity-60 font-thin text-sm'>
             </h2>
-            <h1 className='text-black font-light text-4xl'>
-                {format((new Date(selectedDay)), 'LLLL dd')}
-            </h1>
+            {
+              noteActivated
+              ?
+              <h1 className='text-black font-light text-4xl'>
+                  {format((new Date(selectedDay)), 'LLLL dd')}
+              </h1>
+              :
+              <h1 className='text-gray-400 font-light text-4xl'>
+                  {format((new Date(selectedDay)), 'LLLL dd')}
+              </h1>
+            }
           </div>
         </section>
         

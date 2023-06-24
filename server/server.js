@@ -2,6 +2,10 @@ require('dotenv').config()
 const { MongoClient } = require("mongodb")
 const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING)
 
+function isOnlyWhiteSpace(note){
+  return /^\s*$/.test(note);
+}
+
 const io = require('socket.io')(3001, {
   cors: {
       origin: "http://localhost:3000",
@@ -16,19 +20,21 @@ io.on("connection", socket => {
     socket.emit('load-document', document.data);
 
   socket.on("send-changes", delta => {
-    socket.broadcast.to(userId).emit("receive-changes", delta)
+      socket.broadcast.to(userId).emit("receive-changes", delta)
   })
 
   socket.on("save-document", async data => {
-    await client.connect()
-    const database = client.db('notes-db');
-    const notes = database.collection('notes');
+      await client.connect()
+      const database = client.db('notes-db');
+      const notes = database.collection('notes');
+      await notes.findOneAndUpdate({ userId: userId, date: date }, { $set: { data }})
+    })
 
-    if (!data || Object.keys(data).length === 0){
-        console.log("deleting note")
-        await notes.deleteOne({ userId: userId, date: date });
-      } else {
-        await notes.findOneAndUpdate({ userId: userId, date: date }, { $set: { data }})
+  socket.on("disconnect", async () => {
+      const note = await findDocument(userId, date);
+      const noteData = note.data.ops[0].insert;
+      if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
+        await deleteDocument(userId, date);
       }
     })
   })
@@ -36,13 +42,12 @@ io.on("connection", socket => {
 
 async function findOrCreateDocument(userId, date) {
   try {
-    await client.connect()
+    await client.connect();
     const database = client.db('notes-db');
     const notes = database.collection('notes');
     let note = await notes.findOne({ userId: userId, date: date })
     if (note) {
         console.log("note exists")
-        console.log(note.data)
         return note
     } else {
         console.log("note doesnt exist")
@@ -55,4 +60,27 @@ async function findOrCreateDocument(userId, date) {
   }
 }
 
+async function findDocument(userId, date){
+  try {
+    await client.connect();
+    const database = client.db('notes-db');
+    const notes = database.collection('notes');
+    const note = await notes.findOne({ userId: userId, date: date });
+    return note;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
+async function deleteDocument(userId, date){
+  try {
+    await client.connect();
+    const database = client.db('notes-db');
+    const notes = database.collection('notes');
+    await notes.deleteOne({ userId: userId, date: date });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

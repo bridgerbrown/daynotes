@@ -32,8 +32,8 @@ export default function CalendarModule(props: any) {
   const router = useRouter();
 
   let days = eachDayOfInterval({
-    start: startOfWeek(firstDayCurrentMonth),
-    end: endOfWeek(endOfMonth(firstDayCurrentMonth)),
+    start: startOfWeek(startOfMonth(currentMonth)),
+    end: endOfWeek(endOfMonth(currentMonth)),
   })
 
   function previousMonth() {
