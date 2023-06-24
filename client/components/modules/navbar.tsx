@@ -1,12 +1,12 @@
 import React, { useEffect } from "react"
 import Link from "next/link"
-import { startOfDay, format } from "date-fns"
+import { startOfDay, format, startOfToday } from "date-fns"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAuth } from "../context/AuthContext"
 
 export default function Navbar(){
   const liStyle: string = `pl-8 text-black opacity-60 hover:opacity-100 transition-opacity tracking-wide font-extralight pt-1 flex text-md`
-  const today = format(startOfDay(new Date()), 'MM-dd-yyyy')
+  const today = startOfToday();
   const { user } = useUser()
 
   return(

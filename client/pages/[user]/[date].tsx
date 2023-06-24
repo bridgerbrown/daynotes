@@ -5,7 +5,7 @@ import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import DateHeader from '@/components/modules/DateHeader';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { parseISO, isSameDay, format, subDays, addDays, startOfDay, startOfToday } from 'date-fns'
+import { isAfter, isBefore, parseISO, isSameDay, format, subDays, addDays, startOfDay, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths } from 'date-fns'
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import { ParsedUrl } from 'query-string';
 import "quill/dist/quill.snow.css"
@@ -44,12 +44,45 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [monthView, setMonthView] = useState<boolean>(false);
   const [usersNotes, setUsersNotes] = useState<any>([])
   const [noteActivated, setNoteActivated] = useState<boolean>(false);
+  const [dateDifference, setDateDifference] = useState<string>("Today");
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
 
+  const getDateDifference = () => {
+    const today = startOfToday();
+    const diffInDays = Math.abs(differenceInDays(today, selectedDay));
+    const diffInWeeks = Math.abs(differenceInWeeks(today, selectedDay));
+    const diffInMonths = Math.abs(differenceInMonths(today, selectedDay));
+
+    if(diffInDays == 0){
+      setDateDifference("Today");
+    } else if (diffInWeeks == 0) {
+        if(isAfter(selectedDay, today)) { 
+          diffInDays == 1 ? setDateDifference("1 day from now") : setDateDifference(`${diffInDays} days from now`);
+        }
+        else {
+          diffInDays == 1 ? setDateDifference("1 day ago") : setDateDifference(`${diffInDays} days ago`);
+        }
+    } else if (diffInWeeks >= 1 && diffInMonths == 0){
+        if(isAfter(selectedDay, today)) {
+          diffInWeeks == 1 ? setDateDifference("1 week from now") : setDateDifference(`${diffInWeeks} weeks from now`);
+        }
+        else if(isBefore(selectedDay, today)) {
+          diffInWeeks == 1 ? setDateDifference("1 week ago") : setDateDifference(`${diffInWeeks} weeks ago`);
+        }
+    } else if (diffInMonths >= 1) {
+        if(isAfter(selectedDay, today)) {
+          diffInMonths == 1 ? setDateDifference("1 month from now") : setDateDifference(`${diffInMonths} months from now`);
+        }
+        else if(isBefore(selectedDay, today)) {
+          diffInMonths == 1 ? setDateDifference("1 month ago") : setDateDifference(`${diffInMonths} months ago`);
+        }
+    }
+  };
+
   const prevDay = () => {
-    setSelectedDay(yesterday)
+    setSelectedDay(yesterday);
     {
       user !== undefined && (
         router.push(`/${usersEmail}/${yesterday}`)
@@ -58,7 +91,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }
 
   const nextDay = () => {
-    setSelectedDay(tomorrow)
+    setSelectedDay(tomorrow);
     {
       user !== undefined && (
         router.push(`/${usersEmail}/${tomorrow}`)
@@ -114,6 +147,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
+    getDateDifference();
+  }, [selectedDay])
+
+  useEffect(() => {
     const s = io("http://localhost:3001")
     setSocket(s)
 
@@ -122,7 +159,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return () => {
         s.disconnect()
     }
-  }, [router.asPath, selectedDay])
+  }, [router.asPath, selectedDay ])
 
   useEffect(() => {
     if (socket == null || quill == null) return
@@ -201,13 +238,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             </div>
             {
               monthView ?
-              <CalendarModule getUsersNotes={getUserNotes} usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <CalendarModule usersEmail={usersEmail} getDateDifference={getDateDifference} getUsersNotes={getUserNotes} usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }
             
             <div className='mb-32 flex flex-col justify-center items-center'>
-              <DateHeader selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
+              <DateHeader dateDifference={dateDifference} selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
               {
                 noteActivated ?
                 <TextEditorNoSSR setQuill={setQuill} />

@@ -13,8 +13,11 @@ import {
   startOfToday,
   startOfWeek,
   parseISO,
-  isSameDay
+  isSameDay,
+  addMonths,
+  subMonths
 } from 'date-fns'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 function classNames(...classes) {
@@ -22,10 +25,11 @@ function classNames(...classes) {
 }
 
 export default function CalendarModule(props: any) {
-  let today = startOfToday()
-  let { usersNotes, setSelectedDay, selectedDay } = props;
-  const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+  let today = startOfToday();
+  let { usersNotes, setSelectedDay, selectedDay, usersEmail } = props;
+  const [currentMonth, setCurrentMonth] = useState(today);
   let firstDayCurrentMonth = startOfMonth(today);
+  const router = useRouter();
 
   let days = eachDayOfInterval({
     start: startOfWeek(firstDayCurrentMonth),
@@ -33,13 +37,14 @@ export default function CalendarModule(props: any) {
   })
 
   function previousMonth() {
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+    let firstDayNextMonth = subMonths(currentMonth, 1 );
+    setCurrentMonth(firstDayNextMonth);
   }
 
   function nextMonth() {
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+    let firstDayNextMonth = addMonths(currentMonth, 1 );
+    setCurrentMonth(firstDayNextMonth);
+    console.log(currentMonth)
   }
 
 
@@ -52,7 +57,7 @@ export default function CalendarModule(props: any) {
           <section className="pb-2">
             <div className="pl-0 pt-6 flex items-center">
               <h2 className="flex-auto text-2xl font-regular text-black">
-                {format(firstDayCurrentMonth, 'MMMM yyyy')}
+                {format(currentMonth, 'MMMM yyyy')}
               </h2>
               <button
                 type="button"
@@ -91,7 +96,10 @@ export default function CalendarModule(props: any) {
                 >
                   <button
                     type="button"
-                    onClick={() => setSelectedDay(day)}
+                    onClick={() => { 
+                      setSelectedDay(day)
+                      router.push(`/${usersEmail}/${day}`)
+                    }}
                     className={classNames(
                       isEqual(day, selectedDay) && 'bg-blue-300 font-semibold',
                       !isEqual(day, selectedDay) &&

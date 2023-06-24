@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { format } from 'date-fns'
 import Image from 'next/image';
 
 export default function DateHeader(props: any) {
-  const { prevDay, nextDay, selectedDay } = props;
+  const { prevDay, nextDay, selectedDay, dateDifference } = props;
   const buttonDatesCSS: string = `text-black/60 text-sm font-thin`;
   const buttonCSS: string = `mb-2 bg-gray-400 font-thin text-white w-24 py-2.5 opacity-60 hover:opacity-100 transition-opacity rounded-md text-base`;
 
@@ -48,7 +48,7 @@ export default function DateHeader(props: any) {
 
       <div>
         <p className='text-gray-400 text-sm font-thin'>
-          TODAY
+          {dateDifference}
         </p>
       </div>
 
