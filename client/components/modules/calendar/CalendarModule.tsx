@@ -29,7 +29,7 @@ export default function CalendarModule(props: any) {
   let today = startOfToday();
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
-  const [currentMonth, setCurrentMonth] = useState(today);
+  const [currentMonth, setCurrentMonth] = useState(selectedDay);
 
   let days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(currentMonth)),

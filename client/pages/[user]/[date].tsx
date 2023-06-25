@@ -13,22 +13,13 @@ import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
 import CalendarModule from '@/components/modules/calendar/CalendarModule';
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import Image from 'next/image';
 
 interface Params extends ParsedUrl {
   slug: string;
-}
+};
 
-const SAVE_INTERVAL_MS = 1000
-const TOOLBAR_OPTIONS = [
-    [{ header: [1, 2, 3, 4, false] }],
-    [{ font: [] }],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["bold", "italic", "underline"],
-    [{ color: [] }, { background: [] }],
-    [{ align: [] }],
-    ["image", "blockquote", "code-block"],
-    ["clean"],
-]
+
 
 export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
@@ -37,6 +28,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
+  const SAVE_INTERVAL_MS = 1000;
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
@@ -44,6 +36,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [usersNotes, setUsersNotes] = useState<any>([]);
   const [noteActivated, setNoteActivated] = useState<boolean>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
+  const [savingStatus, setSavingStatus] = useState<string>("");
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
@@ -52,7 +45,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     setNoteActivated(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
     getUserNotes(userId);
-  }
+  };
+
+  const savingStatusOnDelta = async () => {
+    setSavingStatus("Saving...");
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    setSavingStatus("Saved");
+  };
 
   const getDateDifference = () => {
     const today = startOfToday();
@@ -206,6 +205,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     const handler = (delta: any, oldDelta: any, source: any) => {
         if (source !== 'user') return
         socket.emit("send-changes", delta)
+        savingStatusOnDelta();
     }
     quill.on('text-change', handler)
 
@@ -238,12 +238,29 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
         <Navbar />
         <div className='mt-0 pt-0 flex flex-col justify-center items-center'>
           <div className='rounded-lg bg-white/80 border-gray-800 min-h-[100vh] mt-0 pb-12 mb-32 w-[98%]'>
-            <div className='absolute pb-2 flex'>
-                <button onClick={() => toggleDateView('month')}
-                  className={monthView ? activeToggleButtonCSS : toggleButtonCSS}  
-                >
-                  Month
-                </button>
+            <div className='px-4 pt-3 pb-2 flex justify-between'>
+              <div className='flex'>
+                <Image
+                  src={'/calendar.png'}
+                  width={448}
+                  height={512}
+                  alt="Calendar menu icon"
+                  className='cursor-pointer w-5 mr-4 h-fit opacity-40 hover:opacity-60 transition-opacity'
+                  onClick={() => toggleDateView('month')}
+                />
+                <p className='transition pt-0.5 text-sm font-light text-gray-500'>
+                  {savingStatus}
+                </p>
+              </div>
+              <div className='cursor-pointer opacity-40 hover:opacity-60 transition-opacity'>
+                <Image
+                  src={'/trash-can.png'}
+                  width={448}
+                  height={512}
+                  alt="Note menu"
+                  className='w-4 h-fit'
+                />
+              </div>
             </div>
             {
               monthView ?

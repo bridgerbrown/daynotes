@@ -10,6 +10,12 @@ export default function DateHeader(props: any) {
   return (
     <section className='flex flex-col items-center w-[8.5in] pt-8 pb-6'>
 
+      <div>
+        <p className='text-gray-500 text-sm font-light'>
+          {dateDifference}
+        </p>
+      </div>
+
       <div className='flex justify-between items-center'>
         <div className='mt-8 flex flex-col justify-center items-center'>
           <button onClick={prevDay}>
@@ -52,12 +58,6 @@ export default function DateHeader(props: any) {
             />
           </button>
         </div>
-      </div>
-
-      <div>
-        <p className='text-gray-400 text-sm font-thin'>
-          {dateDifference}
-        </p>
       </div>
 
     </section>
