@@ -48,9 +48,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const { user } = useUser();
   const usersEmail = userCtxt.email;
 
-  const activateNote = () => {
+  const activateNote = async () => {
     setNoteActivated(true);
-    setTimeout(() => { getUserNotes(userId) }, 2000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    getUserNotes(userId);
   }
 
   const getDateDifference = () => {
