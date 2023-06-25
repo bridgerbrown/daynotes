@@ -37,6 +37,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [noteActivated, setNoteActivated] = useState<boolean>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [savingStatus, setSavingStatus] = useState<string>("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
@@ -245,22 +246,51 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                   width={448}
                   height={512}
                   alt="Calendar menu icon"
-                  className='cursor-pointer w-5 mr-4 h-fit opacity-40 hover:opacity-60 transition-opacity'
+                  className='cursor-pointer w-5 mr-4 h-fit opacity-40 hover:opacity-70 transition-opacity'
                   onClick={() => toggleDateView('month')}
                 />
                 <p className='transition pt-0.5 text-sm font-light text-gray-500'>
                   {savingStatus}
                 </p>
               </div>
-              <div className='cursor-pointer opacity-40 hover:opacity-60 transition-opacity'>
-                <Image
-                  src={'/trash-can.png'}
-                  width={448}
-                  height={512}
-                  alt="Note menu"
-                  className='w-4 h-fit'
-                />
-              </div>
+              {
+                noteActivated ?
+                  deleteConfirmation ?
+                  <div className='mr-1 flex justify-center items-center space-x-4'>
+                    <p className='text-gray-500 font-thin text-sm'>
+                      Are you sure?
+                    </p>
+                    <Image
+                      src={'/check.png'}
+                      width={448}
+                      height={304}
+                      alt="Confirmation icon"
+                      className='w-5 h-fit cursor-pointer opacity-40 hover:opacity-70 transition-opacity'
+                      onClick={() => setDeleteConfirmation(false)}
+                    />
+                    <Image
+                      src={'/x.png'}
+                      width={448}
+                      height={448}
+                      alt="Cancellation icon"
+                      className='w-4 h-fit cursor-pointer opacity-40 hover:opacity-70 transition-opacity'
+                      onClick={() => setDeleteConfirmation(false)}
+                    />
+                  </div>
+                  :
+                  <div className='cursor-pointer opacity-40 hover:opacity-70 transition-opacity'>
+                    <Image
+                      src={'/trash-can.png'}
+                      width={448}
+                      height={512}
+                      alt="Delete note icon, trashcan"
+                      className='w-[1.1rem] h-fit'
+                      onClick={() => setDeleteConfirmation(true)}
+                    />
+                  </div>
+                :
+                <div></div>
+              }
             </div>
             {
               monthView ?

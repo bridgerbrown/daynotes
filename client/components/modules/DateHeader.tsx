@@ -24,7 +24,7 @@ export default function DateHeader(props: any) {
               width={124}
               height={224}
               alt="Arrow"
-              className='scale-75 invert h-6 w-4 opacity-60 rotate-180'
+              className='scale-75 invert h-6 w-4 opacity-40 hover:opacity-70 transition-opacity rotate-180'
             />
           </button>
         </div>
@@ -54,7 +54,7 @@ export default function DateHeader(props: any) {
               width={124}
               height={224}
               alt="Arrow"
-              className='scale-75 invert h-6 w-4 opacity-60'
+              className='scale-75 invert h-6 w-4 opacity-40 hover:opacity-70 transition-opacity'
             />
           </button>
         </div>
