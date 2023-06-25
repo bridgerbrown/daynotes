@@ -47,10 +47,8 @@ async function findOrCreateDocument(userId, date) {
     const notes = database.collection('notes');
     let note = await notes.findOne({ userId: userId, date: date })
     if (note) {
-        console.log("note exists")
         return note
     } else {
-        console.log("note doesnt exist")
         note = await notes.insertOne({ userId: userId, date: date, data: {}})
         return note
     }

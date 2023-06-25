@@ -41,12 +41,17 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
   const [monthView, setMonthView] = useState<boolean>(false);
-  const [usersNotes, setUsersNotes] = useState<any>([])
+  const [usersNotes, setUsersNotes] = useState<any>([]);
   const [noteActivated, setNoteActivated] = useState<boolean>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
+
+  const activateNote = () => {
+    setNoteActivated(true);
+    setTimeout(() => { getUserNotes(userId) }, 2000);
+  }
 
   const getDateDifference = () => {
     const today = startOfToday();
@@ -141,8 +146,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     getDateDifference();
-  }, [selectedDay])
-
+  }, [selectedDay ])
 
   useEffect(() => {
     const s = io("http://localhost:3001")
@@ -242,7 +246,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             </div>
             {
               monthView ?
-              <CalendarModule usersEmail={usersEmail} getDateDifference={getDateDifference} getUsersNotes={getUserNotes} usersNotes={usersNotes} selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <CalendarModule 
+                usersEmail={usersEmail} 
+                getDateDifference={getDateDifference} 
+                getUsersNotes={getUserNotes} 
+                usersNotes={usersNotes} 
+                selectedDay={selectedDay} 
+                setSelectedDay={setSelectedDay} />
               :
               <div></div>
             }
@@ -255,7 +265,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 :
                 <div className='h-[3in] flex justify-center items-center text-black font-light w-full'>
                   <button className='hover:text-blue-300 hover:border-blue-300 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
-                    onClick={() => setNoteActivated(true)}
+                    onClick={() => activateNote()}
                   > + 
                   </button>
                 </div>

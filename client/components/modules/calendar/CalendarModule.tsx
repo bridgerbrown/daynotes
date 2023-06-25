@@ -18,18 +18,18 @@ import {
   subMonths
 } from 'date-fns'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function CalendarModule(props: any) {
-  let today = startOfToday();
   let { usersNotes, setSelectedDay, selectedDay, usersEmail } = props;
-  const [currentMonth, setCurrentMonth] = useState(today);
+  let today = startOfToday();
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
+  const [currentMonth, setCurrentMonth] = useState(today);
 
   let days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(currentMonth)),
@@ -48,7 +48,7 @@ export default function CalendarModule(props: any) {
   }
 
 
-  let userNotesDates = usersNotes.map((note: any) => note.date)
+  const userNotesDates = usersNotes.map((note: any) => note.date);
 
   return (
     <div className="flex justify-center items-center">
