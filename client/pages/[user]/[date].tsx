@@ -38,20 +38,21 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [savingStatus, setSavingStatus] = useState<string>("");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
+  const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
 
   const activateNote = async () => {
+    setDeleteConfirmed(false);
     setNoteActivated(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
     getUserNotes(userId);
   };
 
-  const savingStatusOnDelta = async () => {
-    setSavingStatus("Saving...");
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setSavingStatus("Saved");
+  const deleteNote = async () => {
+    await socket.emit("delete-note", userId, selectedDay);
+    setNoteActivated(false);
   };
 
   const getDateDifference = () => {
@@ -147,7 +148,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     getDateDifference();
-  }, [selectedDay ])
+  }, [selectedDay])
 
   useEffect(() => {
     const s = io("http://localhost:3001")
@@ -206,7 +207,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     const handler = (delta: any, oldDelta: any, source: any) => {
         if (source !== 'user') return
         socket.emit("send-changes", delta)
-        savingStatusOnDelta();
     }
     quill.on('text-change', handler)
 
@@ -215,6 +215,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }, [socket, quill, router.asPath, selectedDay])
 
+  useEffect(() => {
+    if(deleteConfirmed){
+      deleteNote();
+      setDeleteConfirmed(false);
+    }
+
+  }, [deleteConfirmed])
 
   useEffect(() => {
     if (socket == null || quill == null) return;
@@ -266,7 +273,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                       height={304}
                       alt="Confirmation icon"
                       className='w-5 h-fit cursor-pointer opacity-40 hover:opacity-70 transition-opacity'
-                      onClick={() => setDeleteConfirmation(false)}
+                      onClick={() => {
+                        setDeleteConfirmation(false);
+                        setDeleteConfirmed(true);
+                      }}
                     />
                     <Image
                       src={'/x.png'}

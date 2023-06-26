@@ -30,6 +30,10 @@ io.on("connection", socket => {
       await notes.findOneAndUpdate({ userId: userId, date: date }, { $set: { data }})
     })
 
+  socket.on("delete-note", async (userId, date) => {
+      await deleteDocument(userId, date);
+    })
+
   socket.on("disconnect", async () => {
       const note = await findDocument(userId, date);
       const noteData = note.data.ops[0].insert;
