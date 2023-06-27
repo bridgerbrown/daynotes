@@ -35,13 +35,6 @@ export default function Navbar(){
                       :
                       <div></div>
                   }
-                  {
-                      user ?
-                      <li className={liStyle}><Link href={`/calendar`}>Calendar</Link></li>
-
-                      :
-                        <div></div>
-                    }
                 <li className={liStyle}>
                     {
                         user ?

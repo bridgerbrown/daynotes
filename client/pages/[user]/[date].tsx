@@ -36,7 +36,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [usersNotes, setUsersNotes] = useState<any>([]);
   const [noteActivated, setNoteActivated] = useState<boolean>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
-  const [savingStatus, setSavingStatus] = useState<string>("");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
 
@@ -53,6 +52,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const deleteNote = async () => {
     await socket.emit("delete-note", userId, selectedDay);
     setNoteActivated(false);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    getUserNotes(userId);
   };
 
   const getDateDifference = () => {
@@ -177,8 +178,12 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     if (socket == null || quill == null) return;
 
+    const saveDocument = async () => {
+        await socket.emit('save-document', quill.getContents())
+    }
+
     const interval = setInterval(() => {
-        socket.emit('save-document', quill.getContents())
+        saveDocument();
     }, SAVE_INTERVAL_MS)
 
     return () => {
@@ -257,7 +262,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                   onClick={() => toggleDateView('month')}
                 />
                 <p className='transition pt-0.5 text-sm font-light text-gray-500'>
-                  {savingStatus}
                 </p>
               </div>
               {
@@ -265,7 +269,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                   deleteConfirmation ?
                   <div className='mr-1 flex justify-center items-center space-x-4'>
                     <p className='text-gray-500 font-thin text-sm'>
-                      Are you sure?
+                      Delete note?
                     </p>
                     <Image
                       src={'/check.png'}
@@ -316,7 +320,16 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             }
             
             <div className='mb-32 flex flex-col justify-center items-center'>
-              <DateHeader noteActivated={noteActivated} dateDifference={dateDifference} selectedDay={selectedDay} prevDay={prevDay} nextDay={nextDay} yesterday={yesterday} tomorrow={tomorrow} />
+              <DateHeader 
+                toggleDateView={toggleDateView} 
+                noteActivated={noteActivated} 
+                dateDifference={dateDifference} 
+                selectedDay={selectedDay} 
+                prevDay={prevDay} 
+                nextDay={nextDay} 
+                yesterday={yesterday} 
+                tomorrow={tomorrow} 
+              />
               {
                 noteActivated ?
                 <TextEditorNoSSR setQuill={setQuill} />
