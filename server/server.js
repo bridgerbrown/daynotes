@@ -36,9 +36,13 @@ io.on("connection", socket => {
 
   socket.on("disconnect", async () => {
       const note = await findDocument(userId, date);
-      const noteData = note.data.ops[0].insert;
-      if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
-        await deleteDocument(userId, date);
+      if (note) {
+        const noteData = note.data.ops[0].insert;
+        if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
+          await deleteDocument(userId, date);
+        } else {
+          console.log("valid note")
+        }
       }
     })
   })
