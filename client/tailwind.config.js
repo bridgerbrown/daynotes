@@ -15,17 +15,12 @@ module.exports = {
         'gameCard': '40rem'
       },
       colors: {
-        'gameWin': '#222a5c',
-        'gameWin-hover': '#1c2249',
-        'mainBg': 'rgb(229 231 235)',
-        'button': '#000000',
-        'moduleHeaderBg': 'rgb(229 231 235)',
-        'moduleContentBg': '#ffffff',
-        'pageHeader': '',
-        'moduleHeader': '#000000',
-        'moduleBorder': '#000000',
-        'moduleHeaderBorder': '#000000',
-        'moduleSubheader': ''
+        'boxBg': '#f8f8f8',
+        'pageBg': '#e9e7e6',
+        'boxBorder': '#ececec',
+        'headerBorder': '#e6e7e5',
+        'blackHeading': '#303234',
+        'grayHeading': '#a7a7a9',
       },
       fontFamily: {
         SansPro: ['Source_Sans_Pro', 'sans-serif']

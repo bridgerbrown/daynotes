@@ -5,15 +5,15 @@ import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAuth } from "../context/AuthContext"
 
 export default function Navbar(){
-  const liStyle: string = `pl-8 text-black opacity-60 hover:opacity-100 transition-opacity tracking-wide font-extralight pt-1 flex text-md`
+  const liStyle: string = `pl-8 text-grayHeading hover:text-blackHeading tracking-wide font-light pt-1 flex text-md`
   const today = startOfToday();
   const { user } = useUser()
 
   return(
-      <nav className="pt-4 pb-2 px-8 text-slate-900 flex justify-between items-center">
+      <nav className="pt-4 pb-2 px-12 text-slate-900 flex justify-between items-center">
           <div className="flex justify-center items-center">
               {/* <h1 className="text-white text-xl border-4 border-[#ebc157] font-extrabold rounded-full px-2.5 py-0.5 mr-2 ">L</h1> */}
-              <h1 className="text-black text-[32px] uppercase font-light tracking-wide">
+              <h1 className="text-blackHeading text-[32px] uppercase font-regular tracking-wide">
                   <span className="">g-Notes</span>
               </h1>
           </div>
