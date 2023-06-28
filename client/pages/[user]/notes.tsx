@@ -5,9 +5,10 @@ import NotePreview from '@/components/modules/notes/NotePreview'
 import Image from 'next/image';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { compareAsc, compareDesc, parseISO } from 'date-fns';
 
 export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const sortItemsCSS: string = `hover:text-blackHeading cursor-pointer text-sm text-grayHeading font-light`;
+  const sortItemsCSS: string = `cursor-pointer text-sm text-blackHeading font-light`;
   const [userId, setUserId] = useState<string>("");
   const [usersNotes, setUsersNotes] = useState<any>([]);
   const usersEmail = userCtxt.email;
@@ -37,6 +38,9 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
       })
   }
 
+  const sortedNotesAscDates = usersNotes.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
+  const sortedNotesDescDates = usersNotes.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
+
   useEffect(() => {
     getUserDocument(usersEmail)
   }, [])
@@ -50,19 +54,29 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
             <h2 className='text-2xl font-regular text-blackHeading'>
               Notes
             </h2>
-            
           </header>
           <div className='flex justify-between items-center mx-8 mt-4 mb-4'>
-            <div className='flex space-x-4'>
-              <h3 className='text-sm text-blackHeading font-light'>
+            <div className='flex'>
+              <h3 className='mr-4 text-sm text-blackHeading font-light'>
                 Sort by:
               </h3>
-              <h3 className={sortItemsCSS}>
-                Date
-              </h3>
-              <h3 className={sortItemsCSS}>
-                Last Updated 
-              </h3>
+              <div className='hover:opacity-100 opacity-60 flex cursor-pointer'>
+                <h3 className={sortItemsCSS}>
+                  Date
+                </h3>
+                <Image
+                  src={"/arrow-down.png"}
+                  alt="Date sorting ascending or descending arrow"
+                  width={384}
+                  height={448}
+                  className='cursor-pointer ml-2 mr-4 mt-0.5 w-3 opacity-70 h-fit'
+                />
+              </div>
+              <div className='hover:opacity-100 opacity-60 flex cursor-pointer'>
+                <h3 className={sortItemsCSS}>
+                  Last Updated 
+                </h3>
+              </div>
             </div>
             <input 
               type='search'
@@ -79,7 +93,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
           <div className='mx-8 my-10 flex flex-wrap'>
            {
             usersNotes ?
-            usersNotes.map((note: any) => <NotePreview note={note} />)
+            sortedNotesDescDates.map((note: any) => <NotePreview note={note} />)
             :
             <div></div>
             } 
