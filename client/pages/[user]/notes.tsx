@@ -8,7 +8,10 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { compareAsc, compareDesc, parseISO } from 'date-fns';
 
 export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const sortItemsCSS: string = `cursor-pointer text-sm text-blackHeading font-light`;
+  const inactiveSortItemCSS: string = `opacity-50 hover:opacity-100 flex cursor-pointer`;
+  const activeSortItemCSS: string = `opacity-100 flex cursor-pointer`;
+  const arrowDescendingCss: string = `cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
+  const arrowAscendingCss: string = `rotate-180 cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
   const [userId, setUserId] = useState<string>("");
   const [usersNotes, setUsersNotes] = useState<any>([]);
   const [sortedType, setSortedType] = useState<string>("date");
@@ -62,8 +65,8 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   return (
     <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
       <Navbar />
-      <div className='mx-8 mt-0 pt-0 flex flex-col justify-center items-center'>
-        <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-boxBg height-min mt-0 pb-20 mb-32 w-full'>
+      <div className='mx-8 flex flex-col justify-center items-center'>
+        <div className='min-h-[85vh] border-boxBorder border drop-shadow-lg rounded-lg bg-boxBg pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-8'>
             <h2 className='text-2xl font-regular text-blackHeading'>
               Notes
@@ -74,10 +77,15 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
               <h3 className='mr-4 text-sm text-blackHeading font-light'>
                 Sort by:
               </h3>
-              <div className='hover:opacity-100 opacity-60 flex cursor-pointer'
-                onClick={() => sortByDate()}
+              <div className={sortedType == "date" ? activeSortItemCSS : inactiveSortItemCSS}
+                onClick={() => {
+                  sortedType == "date" ?
+                    setDateAscending(!dateAscending)
+                    :
+                    setSortedType("date");
+                }}
               >
-                <h3 className={sortItemsCSS}>
+                <h3 className="cursor-pointer text-sm text-blackHeading font-light">
                   Date
                 </h3>
                 <Image
@@ -85,11 +93,14 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                   alt="Date sorting ascending or descending arrow"
                   width={384}
                   height={448}
-                  className='cursor-pointer ml-2 mr-4 mt-0.5 w-3 opacity-70 h-fit'
+                  className={dateAscending ? arrowAscendingCss : arrowDescendingCss}
                 />
               </div>
-              <div className='hover:opacity-100 opacity-60 flex cursor-pointer'>
-                <h3 className={sortItemsCSS}>
+              <div 
+                className={sortedType == "last-updated" ? activeSortItemCSS : inactiveSortItemCSS}
+                onClick={() => setSortedType("last-updated")}
+              >
+                <h3 className="cursor-pointer text-sm text-blackHeading font-light">
                   Last Updated 
                 </h3>
               </div>
@@ -111,13 +122,17 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
             usersNotes ?
               sortedType == "date" ?
                   dateAscending ?
-                    sortedNotesAscDates.map((note: any) => <NotePreview note={note} />)
+                    sortedNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} />)
                     :
-                    sortedNotesDescDates.map((note: any) => <NotePreview note={note} />)
+                    sortedNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} />)
                   :
-                  console.log("nope")
+                  null
               :
-              <div></div>
+              <div className='w-full flex justify-center items-center my-12'>
+                <h2 className='text-2xl font-thin text-blackHeading animate-pulse'>
+                    Loading...
+                </h2>
+              </div>
             } 
           </div>
         </div>
