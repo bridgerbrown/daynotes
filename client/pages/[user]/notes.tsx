@@ -29,6 +29,8 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
     })
   }
 
+  console.log(usersNotes)
+
   async function getUserNotes(userId: string){
     await fetch(`/api/notes?userId=${userId}`)
       .then(response => response.json())
