@@ -42,6 +42,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const { user } = useUser();
   const usersEmail = userCtxt.email;
 
+
   const activateNote = async () => {
     setDeleteConfirmed(false);
     setNoteActivated(true);
@@ -137,6 +138,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(data => {
         setUsersNotes(data.data)
         checkNoteExists(data.data)
+        console.log(data.data)
         })
       .catch(error => {
         console.log(error)

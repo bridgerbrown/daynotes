@@ -12,7 +12,7 @@ export default function NotePreview(props: any){
     if(noteObj){
       noteText = noteObj.slice('[{"insert":"'.length, -'\\n"}]'.length);
     } else {
-      noteText = "hhhhhhhhhhhhhhhhhhhhhhhhhhhphhhhhh hhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhphhhhhh hhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhphhhhhh hhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhphhhhhh hhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhphhhhhh hhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhh hhhhhhhhh";
+      noteText = "EMPTY NOTE";
     } 
     return noteText;
   };

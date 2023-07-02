@@ -11,6 +11,8 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const sortItemsCSS: string = `cursor-pointer text-sm text-blackHeading font-light`;
   const [userId, setUserId] = useState<string>("");
   const [usersNotes, setUsersNotes] = useState<any>([]);
+  const [sortedType, setSortedType] = useState<string>("date");
+  const [dateAscending, setDateAscending] = useState<boolean>(false);
   const usersEmail = userCtxt.email;
 
   async function getUserDocument(email: any){
@@ -38,11 +40,21 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
       })
   }
 
-  const sortedNotesAscDates = usersNotes.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
-  const sortedNotesDescDates = usersNotes.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
+  const sortByDate = () => {
+    sortedType == "date" ?
+      setDateAscending(!dateAscending)
+      :
+      setSortedType("date");
+    console.log(dateAscending)
+  };
+
+  const sortedNotesAscDates = [...usersNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
+  const sortedNotesDescDates = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
 
   useEffect(() => {
     getUserDocument(usersEmail)
+    console.log(sortedNotesAscDates);
+    console.log(sortedNotesDescDates);
   }, [])
 
   return (
@@ -60,7 +72,9 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
               <h3 className='mr-4 text-sm text-blackHeading font-light'>
                 Sort by:
               </h3>
-              <div className='hover:opacity-100 opacity-60 flex cursor-pointer'>
+              <div className='hover:opacity-100 opacity-60 flex cursor-pointer'
+                onClick={() => sortByDate()}
+              >
                 <h3 className={sortItemsCSS}>
                   Date
                 </h3>
@@ -93,9 +107,15 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
           <div className='mx-8 my-10 flex flex-wrap'>
            {
             usersNotes ?
-            sortedNotesDescDates.map((note: any) => <NotePreview note={note} />)
-            :
-            <div></div>
+              sortedType == "date" ?
+                  dateAscending ?
+                    sortedNotesAscDates.map((note: any) => <NotePreview note={note} />)
+                    :
+                    sortedNotesDescDates.map((note: any) => <NotePreview note={note} />)
+                  :
+                  console.log("nope")
+              :
+              <div></div>
             } 
           </div>
         </div>
