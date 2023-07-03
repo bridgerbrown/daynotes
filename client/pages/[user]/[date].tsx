@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
-import Navbar from '@/components/modules/navbar';
-import Footer from '@/components/modules/footer';
-import DateHeader from '@/components/modules/DateHeader';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { isAfter, isBefore, parseISO, isSameDay, format, subDays, addDays, startOfDay, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths } from 'date-fns'
-const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
+import { isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths } from 'date-fns'
 import { ParsedUrl } from 'query-string';
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
@@ -14,6 +10,11 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import CalendarModule from '@/components/modules/calendar/CalendarModule';
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Image from 'next/image';
+
+const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
+import Navbar from '@/components/modules/navbar';
+import Footer from '@/components/modules/footer';
+import DateHeader from '@/components/modules/DateHeader';
 
 interface Params extends ParsedUrl {
   slug: string;
@@ -41,7 +42,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   const { user } = useUser();
   const usersEmail = userCtxt.email;
-
 
   const activateNote = async () => {
     setDeleteConfirmed(false);
@@ -138,7 +138,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(data => {
         setUsersNotes(data.data)
         checkNoteExists(data.data)
-        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
@@ -154,14 +153,14 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [selectedDay])
 
   useEffect(() => {
-    const s = io("http://localhost:3001")
-    setSocket(s)
-    checkNoteExists(usersNotes)
+    const s = io("http://localhost:3001");
+    setSocket(s);
+    checkNoteExists(usersNotes);
 
     return () => {
         s.disconnect()
     }
-  }, [router.asPath, selectedDay ])
+  }, [router.asPath, selectedDay])
 
 
   useEffect(() => {

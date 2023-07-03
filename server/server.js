@@ -15,11 +15,13 @@ const io = require('socket.io')(3001, {
 
 io.on("connection", socket => {
   socket.on("get-document", async (userId, date) => {
+    console.log("getting document...")
     const document = await findOrCreateDocument(userId, date);
     socket.join(userId);
     socket.emit('load-document', document.data);
 
   socket.on("send-changes", delta => {
+      console.log("sending changes...")
       socket.broadcast.to(userId).emit("receive-changes", delta)
   })
 
@@ -34,7 +36,7 @@ io.on("connection", socket => {
       await deleteDocument(userId, date);
     })
 
-  socket.on("disconnect", async () => {
+  socket.on("disconnect", async (userId, date) => {
       const note = await findDocument(userId, date);
       if (note) {
         const noteData = note.data.ops[0].insert;
@@ -55,9 +57,16 @@ async function findOrCreateDocument(userId, date) {
     const notes = database.collection('notes');
     let note = await notes.findOne({ userId: userId, date: date })
     if (note) {
+        console.log("note exists")
         return note
     } else {
-        note = await notes.insertOne({ userId: userId, date: date, data: {}})
+        console.log("note doesnt exist")
+        await notes.updateOne(
+          { userId: userId, date: date },
+          { $set: { data: {} } },
+          { upsert: true }
+        );
+        note = await notes.findOne({ userId: userId, date: date });
         return note
     }
   } catch {
