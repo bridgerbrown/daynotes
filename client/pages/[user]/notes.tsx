@@ -16,6 +16,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const [usersNotes, setUsersNotes] = useState<any>([]);
   const [sortedType, setSortedType] = useState<string>("date");
   const [dateAscending, setDateAscending] = useState<boolean>(false);
+  const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const usersEmail = userCtxt.email;
 
   async function getUserDocument(email: any){
@@ -44,7 +45,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
         console.log(error)
       })
   }
-
+  
   const sortByDate = () => {
     sortedType == "date" ?
       setDateAscending(!dateAscending)
@@ -61,6 +62,15 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
     console.log(sortedNotesAscDates);
     console.log(sortedNotesDescDates);
   }, [])
+
+  useEffect(() => {
+    if(deleteConfirmed){
+      getUserNotes(userId)
+      setDeleteConfirmed(false);
+    }
+
+  }, [deleteConfirmed])
+ 
 
   return (
     <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
@@ -122,9 +132,9 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
             usersNotes ?
               sortedType == "date" ?
                   dateAscending ?
-                    sortedNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} />)
+                    sortedNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} />)
                     :
-                    sortedNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} />)
+                    sortedNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} />)
                   :
                   null
               :
