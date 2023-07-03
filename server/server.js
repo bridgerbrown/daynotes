@@ -15,26 +15,22 @@ const io = require('socket.io')(3001, {
 
 io.on("connection", socket => {
   socket.on("get-document", async (userId, date) => {
-    console.log("getting document...")
     const document = await findOrCreateDocument(userId, date);
     socket.join(userId);
     socket.emit('load-document', document.data);
 
-  socket.on("send-changes", delta => {
-      console.log("sending changes...")
-      socket.broadcast.to(userId).emit("receive-changes", delta)
+  socket.on("send-changes", async (userId, date, delta) => {
+    socket.broadcast.to(userId).emit("receive-changes", delta)
+    await updateLastUpdated(userId, date);
   })
 
-  socket.on("save-document", async data => {
-      await client.connect()
-      const database = client.db('notes-db');
-      const notes = database.collection('notes');
-      await notes.findOneAndUpdate({ userId: userId, date: date }, { $set: { data }})
-    })
+  socket.on("save-document", async (userId, date, data) => {
+    await updateDocument(userId, date, data)
+  })
 
   socket.on("delete-note", async (userId, date) => {
-      await deleteDocument(userId, date);
-    })
+    await deleteDocument(userId, date);
+  })
 
   socket.on("disconnect", async (userId, date) => {
       const note = await findDocument(userId, date);
@@ -55,24 +51,44 @@ async function findOrCreateDocument(userId, date) {
     await client.connect();
     const database = client.db('notes-db');
     const notes = database.collection('notes');
-    let note = await notes.findOne({ userId: userId, date: date })
-    if (note) {
-        console.log("note exists")
-        return note
+    const existingNote = await notes.findOne({ userId: userId, date: date })
+
+    if (existingNote) {
+        return existingNote
     } else {
         console.log("note doesnt exist")
         await notes.updateOne(
-          { userId: userId, date: date },
-          { $set: { data: {} } },
+          { userId: userId, date: date, lastUpdated: new Date() },
+          { $set: { data: {} }},
           { upsert: true }
         );
-        note = await notes.findOne({ userId: userId, date: date });
-        return note
-    }
+        let note = await notes.findOne({ userId: userId, date: date });
+        return note;
+    };
   } catch {
     await client.close()
     console.log("error")
-  }
+  };
+};
+
+async function updateLastUpdated(userId, date) {
+  await client.connect();
+  const database = client.db('notes-db');
+  const notes = database.collection('notes');
+  await notes.updateOne(
+    { userId, date },
+    { $set: { lastUpdated: new Date() } }
+  );
+}
+
+async function updateDocument(userId, date, data) {
+  await client.connect();
+  const database = client.db('notes-db');
+  const notes = database.collection('notes');
+  await notes.updateOne(
+    { userId, date },
+    { $set: { data } }
+  );
 }
 
 async function findDocument(userId, date){
@@ -85,7 +101,7 @@ async function findDocument(userId, date){
   } catch (error) {
     console.log(error);
     throw error;
-  }
+  };
 };
 
 async function deleteDocument(userId, date){

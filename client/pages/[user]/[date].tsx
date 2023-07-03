@@ -26,10 +26,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
   const activeToggleButtonCSS: string = `text-white bg-gray-400 hover:bg-gray-500 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-sm`;
   const router = useRouter()
+
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
-  const yesterday = subDays(new Date(selectedDay), 1)
-  const tomorrow = addDays(new Date(selectedDay), 1)
-  const SAVE_INTERVAL_MS = 1000;
   const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
@@ -39,9 +37,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
-
+  
+  const yesterday = subDays(new Date(selectedDay), 1)
+  const tomorrow = addDays(new Date(selectedDay), 1)
+  const SAVE_INTERVAL_MS = 1000;
   const { user } = useUser();
   const usersEmail = userCtxt.email;
+
 
   const activateNote = async () => {
     setDeleteConfirmed(false);
@@ -180,7 +182,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     if (socket == null || quill == null) return;
 
     const saveDocument = async () => {
-        await socket.emit('save-document', quill.getContents())
+        await socket.emit('save-document', userId, selectedDay, quill.getContents())
     }
 
     const interval = setInterval(() => {
@@ -212,7 +214,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
     const handler = (delta: any, oldDelta: any, source: any) => {
         if (source !== 'user') return
-        socket.emit("send-changes", delta)
+        socket.emit("send-changes", userId, selectedDay, delta)
     }
     quill.on('text-change', handler)
 

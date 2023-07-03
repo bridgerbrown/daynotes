@@ -1,11 +1,21 @@
-import React from "react"
+import React from "react";
+import Image from "next/image";
 
 export default function Footer(){
     return(
-        <footer className="py-12 px-8 text-slate-900 absolute bottom-0 w-screen flex justify-center">
-            <h1 className="text-lg font-light tracking-wide">
-                G-NOTES
+        <footer className="opacity-60 py-12 px-8 text-slate-900 absolute bottom-0 w-screen flex justify-center">
+          <div className="flex justify-center items-center">
+            <Image
+              src={"/note.png"}
+              alt="Note icon"
+              width={448}
+              height={448}
+              className="w-5 mr-2 opacity-80"
+            />
+            <h1 className="text-blackHeading text-xl font-regular tracking-wide">
+                <span className="">DayNotes</span>
             </h1>
+          </div>
         </footer>
     )
 }

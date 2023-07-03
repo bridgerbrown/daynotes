@@ -27,12 +27,11 @@ export default function NotePreview(props: any){
       },
       body: JSON.stringify({userId, date}),
     })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Failed to delete note")
-      } else {
-        console.log("Note deleted")
-      }
+    .then(() => {
+      console.log("Note deleted")
+    })
+    .catch((error) => {
+      console.log(error)
     })
   }
 
