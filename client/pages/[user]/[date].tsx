@@ -101,7 +101,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }
 
-  const checkNoteExists = (data: any) => {
+
+ const checkNoteExists = (data: any) => {
     const userNotesDates = data
       .map((note: any) => parseISO(note.date))
       .filter((date: any) => isSameDay(date, selectedDay));
@@ -115,13 +116,29 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
         if (data.status === 200) {
           setUserId(data.data.userId);
           setUsersNotes(data.data.usersNotes);
-          console.log(data.data.usersNotes)
-          checkNoteExists(data.data.usersNotes);
         } else {
           console.log(data.message);
         };
     });
   };
+
+  async function getUserId(email: any){
+    await fetch(`http://localhost:3000/api/users?email=${email}`)
+      .then(response => response.json())
+      .then(data => { setUserId(data.data) })
+  }
+
+  async function getUsersNotes(userId: string){
+    await fetch(`/api/notes?userId=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        setUsersNotes(data.data)
+        checkNoteExists(data.data)
+        })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   useEffect(() => {
     getUserIdAndNotes(usersEmail);

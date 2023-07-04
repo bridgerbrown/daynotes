@@ -2,7 +2,6 @@ require('dotenv').config()
 const { MongoClient } = require("mongodb")
 const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING)
 
-const newDate = new Date();
 let database
 async function connectToDatabase() {
   if (!database) {
@@ -44,15 +43,7 @@ io.on("connection", socket => {
     })
 
   socket.on("disconnect", async (userId, date) => {
-      const note = await findDocument(userId, date);
-      if (note) {
-        const noteData = note.data.ops[0].insert;
-        if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
-          await deleteDocument(userId, date);
-        } else {
-          console.log("valid note")
-        }
-      }
+      await deleteBlankDocument(userId, date);
     })
   })
 })
@@ -77,25 +68,36 @@ async function findOrCreateDocument(userId, date) {
   }
 }
 
-async function findDocument(userId, date){
+async function deleteBlankDocument(userId, date){
   try {
     const database = await connectToDatabase();
     const notes = database.collection('notes');
     const note = await notes.findOne({ userId: userId, date: date });
-    return note;
+      if (note) {
+        const noteData = note.data.ops[0].insert;
+        if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
+          await notes.deleteOne({ userId: userId, date: date });
+        } else {
+          console.log("valid note")
+        }
+      }
   } catch (error) {
     console.log(error);
     throw error;
   }
-};
+}
 
 async function deleteDocument(userId, date){
   try {
     const database = await connectToDatabase();
     const notes = database.collection('notes');
-    await notes.deleteOne({ userId: userId, date: date });
+    const note = await notes.findOne({ userId: userId, date: date });
+      if (note) {
+        await notes.deleteOne({ userId: userId, date: date });
+      }
   } catch (error) {
     console.log(error);
     throw error;
-  }
-};
+  };
+}
+

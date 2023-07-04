@@ -1,16 +1,25 @@
 import clientPromise from "../../lib/mongodb"
 
 export default async function handler(req:any, res:any) {
+  try { 
     const client = await clientPromise;
-    const database = client.db('users-db');
-    switch (req.method) {
-      case "POST":
-        let bodyObject = JSON.parse(req.body);
-        let newUser = await database.collection('users').insertOne(bodyObject);
-        break;
-      case "GET":
-        const allUsers = await database.collection("users").find({}).toArray();
-          res.json({ status: 200, data: allUsers })
-        break;
+    const usersDb= client.db('users-db');
+
+    if (req.method === "GET"){
+      const { userEmail } = req.query;
+      const userDoc = await usersDb.collection("users").findOne({ email: userEmail });
+      const userId = userDoc?.userId;
+
+      if (userId) {
+        res.json({ status: 200, data: userId })
+      } else {
+        res.status(404).json({ status: 404, message: "User not found" });
+      }
+    } else {
+      res.status(405).json({ status: 405, message: "Method not allowed" });
     }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ status: 500, message: "Internal server error" });
+  }
 }
