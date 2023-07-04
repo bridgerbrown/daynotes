@@ -3,9 +3,7 @@ import { format } from 'date-fns'
 import Image from 'next/image';
 
 export default function DateHeader(props: any) {
-  const { tomorrow, yesterday, toggleDateView, prevDay, nextDay, selectedDay, dateDifference, noteActivated } = props;
-  const buttonDatesCSS: string = `text-black/60 text-sm font-thin`;
-  const buttonCSS: string = `mb-2 bg-gray-400 font-thin text-white w-24 py-2.5 opacity-60 hover:opacity-100 transition-opacity rounded-md text-base`;
+  const { tomorrow, yesterday, monthView, setMonthView, prevDay, nextDay, selectedDay, dateDifference, noteActivated } = props;
 
   return (
     <section className='flex flex-col items-center w-[8.5in] pt-8 pb-3'>
@@ -38,13 +36,13 @@ export default function DateHeader(props: any) {
               noteActivated
               ?
               <h1 className='cursor-pointer text-black font-light text-4xl'
-                onClick={() => toggleDateView()}
+                onClick={() => setMonthView(!monthView)}
               >
                   {format((new Date(selectedDay)), 'LLLL dd')}
               </h1>
               :
               <h1 className='cursor-pointer text-gray-400 font-light text-4xl'
-                onClick={() => toggleDateView()}
+                onClick={() => setMonthView(!monthView)}
               >
                   {format((new Date(selectedDay)), 'LLLL dd')}
               </h1>

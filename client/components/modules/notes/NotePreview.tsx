@@ -17,8 +17,6 @@ export default function NotePreview(props: any){
     return noteText;
   };
 
-  console.log(note)
-
   async function deleteSelectedNote(userId: string, date: string){
     await fetch("/api/notes", {
       method: "DELETE",

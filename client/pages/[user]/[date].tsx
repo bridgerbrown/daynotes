@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -23,8 +23,6 @@ interface Params extends ParsedUrl {
 
 
 export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const toggleButtonCSS: string = `bg-transparent border border-gray-400 hover:bg-gray-400 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-gray-400 text-sm`;
-  const activeToggleButtonCSS: string = `text-white bg-gray-400 hover:bg-gray-500 hover:text-white ml-2 mt-2 w-14 h-7 rounded-md font-thin text-sm`;
   const router = useRouter()
 
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
@@ -59,7 +57,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     getUserNotes(userId);
   };
 
-  const getDateDifference = () => {
+  const getDateDifference = useMemo(() => {
     const today = startOfToday();
     const diffInDays = Math.abs(differenceInDays(today, selectedDay));
     const diffInWeeks = Math.abs(differenceInWeeks(today, selectedDay));
@@ -89,7 +87,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
           diffInMonths == 1 ? setDateDifference("1 month ago") : setDateDifference(`${diffInMonths} months ago`);
         }
     }
-  };
+  }, [selectedDay]);
 
   const prevDay = () => {
     setSelectedDay(yesterday);
@@ -109,15 +107,18 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }
 
-  const toggleDateView = (type: string) => {
-    setMonthView(!monthView)
-  };
-
   const checkNoteExists = (data: any) => {
     const userNotesDates = data
       .map((note: any) => parseISO(note.date))
       .filter((date: any) => isSameDay(date, selectedDay));
     userNotesDates.length ? setNoteActivated(true) : setNoteActivated(false);
+  };
+
+  const getUserIdAndNotes(email: string){
+    await fetch(`/api/notes?userEmail=${email}`)
+      .then(res => res.json())
+      .then(data => {
+    })
   }
 
   async function getUserDocument(email: any){
@@ -151,10 +152,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
-    getDateDifference();
-  }, [selectedDay])
-
-  useEffect(() => {
     const s = io("http://localhost:3001");
     setSocket(s);
     checkNoteExists(usersNotes);
@@ -182,7 +179,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     if (socket == null || quill == null) return;
 
     const saveDocument = async () => {
-        await socket.emit('save-document', userId, selectedDay, quill.getContents())
+        await socket.emit('save-document', quill.getContents())
     }
 
     const interval = setInterval(() => {
@@ -214,7 +211,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
     const handler = (delta: any, oldDelta: any, source: any) => {
         if (source !== 'user') return
-        socket.emit("send-changes", userId, selectedDay, delta)
+        socket.emit("send-changes", delta)
     }
     quill.on('text-change', handler)
 
@@ -262,7 +259,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                   height={512}
                   alt="Calendar menu icon"
                   className='cursor-pointer w-5 mr-4 h-fit opacity-40 hover:opacity-70 transition-opacity'
-                  onClick={() => toggleDateView('month')}
+                  onClick={() => setMonthView(true)}
                 />
                 <p className='transition pt-0.5 text-sm font-light text-gray-500'>
                 </p>
@@ -324,7 +321,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             
             <div className='mb-32 flex flex-col justify-center items-center'>
               <DateHeader 
-                toggleDateView={toggleDateView} 
+                monthView={monthView}
+                setMonthView={setMonthView} 
                 noteActivated={noteActivated} 
                 dateDifference={dateDifference} 
                 selectedDay={selectedDay} 
