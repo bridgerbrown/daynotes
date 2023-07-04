@@ -40,7 +40,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const activateNote = async () => {
     setDeleteConfirmed(false);
     setNoteActivated(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 100));
     getUsersNotes(userId);
   };
 
@@ -231,10 +231,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [socket, quill]);
 
   return (
-    <main className="font-SansPro bg-gray-200 min-h-screen w-screen relative">
+    <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
         <Navbar />
         <div className='mx-8 mt-0 pt-0 flex flex-col justify-center items-center'>
-          <div className='rounded-lg bg-white/80 border-gray-800 min-h-[100vh] mt-0 pb-12 mb-32 w-full'>
+          <div className='rounded-lg bg-boxBg border-boxBorder border drop-shadow-lg min-h-[100vh] mt-0 pb-12 mb-32 w-full'>
             <div className='px-4 pt-3 pb-2 flex justify-between'>
               <div className='flex'>
                 <Image
@@ -317,8 +317,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 noteActivated ?
                 <TextEditorNoSSR setQuill={setQuill} />
                 :
-                <div className='h-[3in] flex justify-center items-center text-black font-light w-full'>
-                  <button className='hover:text-blue-300 hover:border-blue-300 text-gray-400 text-sm flex items-center justify-center text-center w-12 h-12 pb-0.5 rounded-full border-2 font-bold border-gray-400'
+                <div className='h-[5in] flex justify-center items-center text-black font-light w-full'>
+                  <button className='hover:text-gray-700 hover:border-gray-700 text-gray-400 text-sm flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-2 font-bold border-gray-400'
                     onClick={() => activateNote()}
                   > + 
                   </button>

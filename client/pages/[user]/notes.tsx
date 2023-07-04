@@ -52,7 +52,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
 
   useEffect(() => {
     if(deleteConfirmed){
-      getUserIdAndNotes(userId)
+      getUsersNotes(userId)
       setDeleteConfirmed(false);
     }
   }, [deleteConfirmed])
