@@ -44,7 +44,7 @@ io.on("connection", socket => {
 
   socket.on("disconnect", async () => {
       const note = await findDocument(userId, date);
-      if (note.data.ops) {
+      if (note && note.data.ops) {
         const noteData = note.data.ops[0].insert;
         if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
           await deleteDocument(userId, date);
