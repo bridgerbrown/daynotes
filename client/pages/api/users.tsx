@@ -6,8 +6,8 @@ export default async function handler(req:any, res:any) {
     const usersDb= client.db('users-db');
 
     if (req.method === "GET"){
-      const { userEmail } = req.query;
-      const userDoc = await usersDb.collection("users").findOne({ email: userEmail });
+      const { email } = req.query;
+      const userDoc = await usersDb.collection("users").findOne({ email: email });
       const userId = userDoc?.userId;
 
       if (userId) {

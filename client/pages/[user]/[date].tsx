@@ -48,7 +48,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     await socket.emit("delete-note", userId, selectedDay);
     setNoteActivated(false);
     await new Promise(resolve => setTimeout(resolve, 500));
-    getUserIdAndNotes(usersEmail);
+    getUsersNotes(userId);
   };
 
   const getDateDifference = useMemo(() => {
@@ -109,23 +109,14 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     userNotesDates.length ? setNoteActivated(true) : setNoteActivated(false);
   };
 
-  const getUserIdAndNotes = async (email: string) => {
-    await fetch(`/api/notes?userEmail=${email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 200) {
-          setUserId(data.data.userId);
-          setUsersNotes(data.data.usersNotes);
-        } else {
-          console.log(data.message);
-        };
-    });
-  };
-
-  async function getUserId(email: any){
+  async function getUserIdAndNotes(email: any){
     await fetch(`http://localhost:3000/api/users?email=${email}`)
       .then(response => response.json())
-      .then(data => { setUserId(data.data) })
+      .then(data => { 
+        setUserId(data.data) 
+        getUsersNotes(data.data)
+        console.log(data.data)
+    })
   }
 
   async function getUsersNotes(userId: string){
