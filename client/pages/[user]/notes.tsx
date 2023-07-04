@@ -21,19 +21,26 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
 
   console.log(usersNotes)
 
-  const getUserIdAndNotes = async (email: string) => {
-    await fetch(`/api/notes?userEmail=${email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 200) {
-          const { userId, usersNotes } = data.data;
-          setUserId(userId);
-          setUsersNotes(usersNotes);
-        } else {
-          console.log(data.message);
-        };
-    });
-  };
+  async function getUserIdAndNotes(email: any){
+    await fetch(`http://localhost:3000/api/users?email=${email}`)
+      .then(response => response.json())
+      .then(data => { 
+        setUserId(data.data) 
+        getUsersNotes(data.data)
+        console.log(data.data)
+    })
+  }
+
+  async function getUsersNotes(userId: string){
+    await fetch(`/api/notes?userId=${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        setUsersNotes(data.data)
+        })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   const sortedNotesAscDates = [...usersNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedNotesDescDates = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));

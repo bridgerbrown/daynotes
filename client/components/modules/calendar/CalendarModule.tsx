@@ -47,8 +47,10 @@ export default function CalendarModule(props: any) {
     console.log(currentMonth)
   }
 
-
-  const userNotesDates = usersNotes.map((note: any) => note.date);
+  const userNotesDates: any = [];
+  for (const note of usersNotes) {
+    userNotesDates.push(note.date);
+  }
 
   return (
     <div className="flex justify-center items-center">

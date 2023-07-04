@@ -41,7 +41,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     setDeleteConfirmed(false);
     setNoteActivated(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    getUserIdAndNotes(usersEmail);
+    getUsersNotes(userId);
   };
 
   const deleteNote = async () => {
@@ -136,6 +136,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
+    getUsersNotes(userId)
+  }, [selectedDay])
+
+  useEffect(() => {
     const s = io("http://localhost:3001");
     setSocket(s);
     checkNoteExists(usersNotes);
@@ -161,13 +165,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     if (socket == null || quill == null) return;
 
-    const saveDocument = async () => {
-        await socket.emit('save-document', quill.getContents())
-    }
-
     const interval = setInterval(() => {
-        saveDocument();
+        socket.emit('save-document', quill.getContents())
     }, SAVE_INTERVAL_MS)
+
 
     return () => {
         clearInterval(interval)

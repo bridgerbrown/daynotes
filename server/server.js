@@ -42,8 +42,14 @@ io.on("connection", socket => {
       await deleteDocument(userId, date);
     })
 
-  socket.on("disconnect", async (userId, date) => {
-      await deleteBlankDocument(userId, date);
+  socket.on("disconnect", async () => {
+      const note = await findDocument(userId, date);
+      if (note.data.ops) {
+        const noteData = note.data.ops[0].insert;
+        if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
+          await deleteDocument(userId, date);
+        }
+      }
     })
   })
 })
@@ -67,25 +73,17 @@ async function findOrCreateDocument(userId, date) {
     console.log("error")
   }
 }
-
-async function deleteBlankDocument(userId, date){
+async function findDocument(userId, date){
   try {
     const database = await connectToDatabase();
     const notes = database.collection('notes');
     const note = await notes.findOne({ userId: userId, date: date });
-      if (note) {
-        const noteData = note.data.ops[0].insert;
-        if (noteData.length == 1 || isOnlyWhiteSpace(noteData)){
-          await notes.deleteOne({ userId: userId, date: date });
-        } else {
-          console.log("valid note")
-        }
-      }
+    return note;
   } catch (error) {
     console.log(error);
     throw error;
   }
-}
+};
 
 async function deleteDocument(userId, date){
   try {
