@@ -19,54 +19,35 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const usersEmail = userCtxt.email;
 
-  async function getUserDocument(email: any){
-    await fetch("http://localhost:3000/api/users")
-      .then(response => response.json())
-      .then(data => {
-        const arr = []
-        for(var i in data){
-          arr.push(data[i]);
-        }
-        const user = arr[1].filter((item: any) => item.email === email)
-        setUserId(user[0].userId)
-        getUserNotes(user[0].userId)
-    })
-  }
+  console.log(usersNotes)
 
-  async function getUserNotes(userId: string){
-    await fetch(`/api/notes?userId=${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        setUsersNotes(data.data)
-        })
-      .catch(error => {
-        console.log(error)
-      })
-  }
-  
-  const sortByDate = () => {
-    sortedType == "date" ?
-      setDateAscending(!dateAscending)
-      :
-      setSortedType("date");
-    console.log(dateAscending)
+  const getUserIdAndNotes = async (email: string) => {
+    await fetch(`/api/notes?userEmail=${email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          const { userId, usersNotes } = data.data;
+          setUserId(userId);
+          setUsersNotes(usersNotes);
+        } else {
+          console.log(data.message);
+        };
+    });
   };
 
   const sortedNotesAscDates = [...usersNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedNotesDescDates = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
+  const sortedNotesLastUpdated = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));
 
   useEffect(() => {
-    getUserDocument(usersEmail)
-    console.log(sortedNotesAscDates);
-    console.log(sortedNotesDescDates);
+    getUserIdAndNotes(usersEmail)
   }, [])
 
   useEffect(() => {
     if(deleteConfirmed){
-      getUserNotes(userId)
+      getUserIdAndNotes(userId)
       setDeleteConfirmed(false);
     }
-
   }, [deleteConfirmed])
  
 
@@ -134,7 +115,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                     :
                     sortedNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} />)
                   :
-                  null
+                  sortedNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} />)
               :
               <div className='w-full flex justify-center items-center my-12'>
                 <h2 className='text-2xl font-thin text-blackHeading animate-pulse'>

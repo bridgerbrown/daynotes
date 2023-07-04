@@ -16,12 +16,6 @@ import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import DateHeader from '@/components/modules/DateHeader';
 
-interface Params extends ParsedUrl {
-  slug: string;
-};
-
-
-
 export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
 
@@ -47,14 +41,14 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     setDeleteConfirmed(false);
     setNoteActivated(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    getUserNotes(userId);
+    getUserIdAndNotes(usersEmail);
   };
 
   const deleteNote = async () => {
     await socket.emit("delete-note", userId, selectedDay);
     setNoteActivated(false);
     await new Promise(resolve => setTimeout(resolve, 500));
-    getUserNotes(userId);
+    getUserIdAndNotes(usersEmail);
   };
 
   const getDateDifference = useMemo(() => {
@@ -114,41 +108,23 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     userNotesDates.length ? setNoteActivated(true) : setNoteActivated(false);
   };
 
-  const getUserIdAndNotes(email: string){
+  const getUserIdAndNotes = async (email: string) => {
     await fetch(`/api/notes?userEmail=${email}`)
-      .then(res => res.json())
-      .then(data => {
-    })
-  }
-
-  async function getUserDocument(email: any){
-    await fetch("http://localhost:3000/api/users")
-      .then(response => response.json())
-      .then(data => {
-        const arr = []
-        for(var i in data){
-          arr.push(data[i]);
-        }
-        const user = arr[1].filter((item: any) => item.email === email)
-        setUserId(user[0].userId)
-        getUserNotes(user[0].userId)
-    })
-  }
-
-  async function getUserNotes(userId: string){
-    await fetch(`/api/notes?userId=${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        setUsersNotes(data.data)
-        checkNoteExists(data.data)
-        })
-      .catch(error => {
-        console.log(error)
-      })
-  }
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          setUserId(data.data.userId);
+          setUsersNotes(data.data.usersNotes);
+          console.log(data.data.usersNotes)
+          checkNoteExists(data.data.usersNotes);
+        } else {
+          console.log(data.message);
+        };
+    });
+  };
 
   useEffect(() => {
-    getUserDocument(usersEmail)
+    getUserIdAndNotes(usersEmail);
   }, [])
 
   useEffect(() => {
@@ -163,8 +139,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
 
   useEffect(() => {
-    if (socket == null || quill == null) return;
-    if (!noteActivated) return;
+    if (socket == null || quill == null || !noteActivated) return;
 
     socket.once("load-document", (document: any) => {
         quill.setContents(document)
@@ -213,6 +188,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
         if (source !== 'user') return
         socket.emit("send-changes", delta)
     }
+
     quill.on('text-change', handler)
 
     return () => {
@@ -225,7 +201,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       deleteNote();
       setDeleteConfirmed(false);
     }
-
   }, [deleteConfirmed])
 
   useEffect(() => {
@@ -259,7 +234,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                   height={512}
                   alt="Calendar menu icon"
                   className='cursor-pointer w-5 mr-4 h-fit opacity-40 hover:opacity-70 transition-opacity'
-                  onClick={() => setMonthView(true)}
+                  onClick={() => setMonthView(!monthView)}
                 />
                 <p className='transition pt-0.5 text-sm font-light text-gray-500'>
                 </p>
@@ -310,8 +285,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
               monthView ?
               <CalendarModule 
                 usersEmail={usersEmail} 
-                getDateDifference={getDateDifference} 
-                getUsersNotes={getUserNotes} 
                 usersNotes={usersNotes} 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} />

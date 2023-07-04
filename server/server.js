@@ -2,6 +2,7 @@ require('dotenv').config()
 const { MongoClient } = require("mongodb")
 const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING)
 
+const newDate = new Date();
 let database
 async function connectToDatabase() {
   if (!database) {
@@ -35,7 +36,7 @@ io.on("connection", socket => {
   socket.on("save-document", async data => {
       const database = await connectToDatabase();
       const notes = database.collection('notes');
-      await notes.findOneAndUpdate({ userId: userId, date: date }, { $set: { data }})
+      await notes.findOneAndUpdate({ userId: userId, date: date }, { $set: { data, lastUpdated: new Date() }})
     })
 
   socket.on("delete-note", async (userId, date) => {
@@ -66,7 +67,7 @@ async function findOrCreateDocument(userId, date) {
     } else {
        let note = await notes.findOneAndUpdate(
         { userId: userId, date: date },
-        { $setOnInsert: { data: {} } },
+        { $setOnInsert: { data: {}, lastUpdated: new Date() } },
         { upsert: true, returnOriginal: false });
       return note;
     }
