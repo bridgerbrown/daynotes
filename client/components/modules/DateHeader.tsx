@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { format } from 'date-fns'
 import Image from 'next/image';
 
@@ -35,10 +35,10 @@ export default function DateHeader(props: any) {
             {
               noteActivated
               ?
-              <h1 className='cursor-pointer text-black font-light text-4xl'
+              <h1 className='cursor-pointer text-black font-light text-3xl'
                 onClick={() => setMonthView(!monthView)}
               >
-                  {format((new Date(selectedDay)), 'LLLL dd')}
+                  {format((new Date(selectedDay)), 'LLLL d')}
               </h1>
               :
               <h1 className='cursor-pointer text-gray-400 font-light text-4xl'

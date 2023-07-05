@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths } from 'date-fns'
+import { parse, isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths, toDate } from 'date-fns'
 import { ParsedUrl } from 'query-string';
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
@@ -36,6 +36,12 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const { user } = useUser();
   const usersEmail = userCtxt.email;
 
+  const parseDateFromUrl = (url: string) => {
+    const splitUrl = url.split('/');
+    const date = splitUrl[2];
+    const decodedDateString = new Date(decodeURIComponent(date));
+    return decodedDateString
+  }
 
   const activateNote = async () => {
     setDeleteConfirmed(false);
@@ -138,6 +144,14 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     getUsersNotes(userId)
   }, [selectedDay])
+
+  useEffect(() => {
+    const urlDate = parseDateFromUrl(router.asPath);
+    if(urlDate !== selectedDay){
+      setSelectedDay(urlDate);
+      console.log("Navigated successfully")
+    }
+  }, [])
 
   useEffect(() => {
     const s = io("http://localhost:3001");

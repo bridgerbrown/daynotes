@@ -4,7 +4,7 @@ import "quill/dist/quill.snow.css"
 
 const SAVE_INTERVAL_MS = 1000
 const TOOLBAR_OPTIONS = [
-    [{ header: [1, 2, 3, 4, false] }],
+    [{ header: [1, 2, 3, false] }],
     [{ font: [] }],
     [{ list: "ordered" }, { list: "bullet" }],
     ["bold", "italic", "underline"],
