@@ -55,11 +55,11 @@ export default function User() {
                                     </div>
                                 </div>
                                 <div className='w-full flex justify-end pr-8'>
-                                    <a className='text-sm font-semibold px-4 py-2 rounded-md bg-gray-200'
-                                        href='/api/auth/logout'
+                                    <button className='hover:bg-gray-300 transition text-sm font-semibold px-4 py-2 rounded-md bg-gray-200'
+                                      onClick={() => router.push("/api/auth/logout")} 
                                     >
                                         LOG OUT
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </section>
