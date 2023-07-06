@@ -54,7 +54,7 @@ export default function NotePreview(props: any){
               alt="Delete note icon"
               width={512}
               height={512}
-              className="hover:opacity-70 opacity-40 cursor-pointer group-hover:block relative hidden w-6 h-6 z-30 bottom-2.5 left-[185px] rounded-full"
+              className="hover:opacity-100 opacity-80 cursor-pointer group-hover:block relative hidden w-6 h-6 z-30 bottom-2.5 left-[185px] rounded-full"
               onClick={() => setDeleteConfirmation(true)}
             />
             <div className="group-hover:block relative hidden bg-boxBg rounded-full bottom-[34px] z-20 left-[185px] w-6 h-6">
@@ -102,7 +102,7 @@ export default function NotePreview(props: any){
         </div>
       </Link>
       <div className="h-10 mx-1 flex justify-center items-center">
-        <h3 className="text-blackHeading font-light">
+        <h3 className="text-blackHeading font-medium">
           {format(( new Date(note.date)), 'LLLL d, yyyy')}
         </h3>
       </div>

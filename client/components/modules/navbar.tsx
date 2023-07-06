@@ -15,18 +15,20 @@ export default function Navbar(){
 
   return(
     <nav className="pt-4 pb-2 px-12 text-slate-900 flex justify-between items-center">
-      <div className="flex justify-center items-center">
-        <Image
-          src={"/note.png"}
-          alt="Note icon"
-          width={448}
-          height={448}
-          className="w-8 mr-2 opacity-80"
-        />
-        <h1 className="text-blackHeading text-[32px] font-regular tracking-wide">
-            <span className="">DayNotes</span>
-        </h1>
-      </div>
+      <Link href={`/`}>
+        <div className="cursor-pointer flex justify-center items-center">
+          <Image
+            src={"/note.png"}
+            alt="Note icon"
+            width={448}
+            height={448}
+            className="w-8 mr-2 opacity-80"
+          />
+          <h1 className="text-blackHeading text-[32px] font-regular tracking-wide">
+              <span className="">DayNotes</span>
+          </h1>
+        </div>
+      </Link>
       <ul className="flex">
         <li className={router.route == "/" ? activeLiStyle : liStyle}>
           <Link href={`/`}>Home</Link>
