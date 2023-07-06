@@ -14,6 +14,10 @@ export default async function handler(req:any, res:any) {
       } else {
         res.status(404).json({ status: 404, message: "User not found" });
       }
+    } else if (req.method === "PATCH") {
+      const { email, newImage } = req.query;
+      await usersDb.collection("users").findOneAndUpdate({ email: email}, {$set: { userImage: newImage } });
+
     } else {
       res.status(405).json({ status: 405, message: "Method not allowed" });
     }
