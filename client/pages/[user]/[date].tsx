@@ -46,7 +46,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const activateNote = async () => {
     setDeleteConfirmed(false);
     setNoteActivated(true);
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 300));
     getUsersNotes(userId);
   };
 
@@ -108,11 +108,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }
 
 
- const checkNoteExists = (data: any) => {
-    const userNotesDates = data
-      .map((note: any) => parseISO(note.date))
-      .filter((date: any) => isSameDay(date, selectedDay));
-    userNotesDates.length ? setNoteActivated(true) : setNoteActivated(false);
+ const checkNoteExists = (notes: any[], selectedDay: Date) => {
+    if (notes) {
+      const userNotesDates = notes
+        .map((note: any) => parseISO(note.date))
+        .filter((date: any) => isSameDay(date, selectedDay));
+      return userNotesDates.length > 0;
+    }
   };
 
   async function getUserIdAndNotes(email: any){
@@ -129,7 +131,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
-        checkNoteExists(data.data)
         })
       .catch(error => {
         console.log(error)
@@ -145,6 +146,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [selectedDay])
 
   useEffect(() => {
+    const noteExists = checkNoteExists(usersNotes, selectedDay);
+    setNoteActivated(noteExists);
+  }, [usersNotes, selectedDay])
+
+  useEffect(() => {
     const urlDate = parseDateFromUrl(router.asPath);
     if(urlDate !== selectedDay){
       setSelectedDay(urlDate);
@@ -155,7 +161,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     const s = io("http://localhost:3001");
     setSocket(s);
-    checkNoteExists(usersNotes);
+    checkNoteExists(usersNotes, selectedDay);
 
     return () => {
         s.disconnect()

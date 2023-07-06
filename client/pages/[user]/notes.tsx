@@ -120,6 +120,18 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                 </h3>
               </div>
             </div>
+            <div className='flex justify-center items-center'>
+              <p className='mr-4 font-light text-grayHeading'>
+                {
+                  usersNotes ?
+                   usersNotes.length == 1 ?
+                    "1 note made"
+                    :
+                    usersNotes.length + " notes made"
+                  :
+                  "0"
+                }
+              </p>
             <input 
               type='search'
               placeholder='Search notes...'
@@ -134,10 +146,11 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
               height={512}
               className='w-4 fixed right-72 opacity-60'
             />
+            </div>
           </div>
           <div className='mx-8 my-10 flex flex-wrap'>
            {
-            usersNotes ?
+            usersNotes.length ?
               filteredNotes ?
                 sortedType == "date" ?
                     dateAscending ?
@@ -155,9 +168,9 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                     :
                     sortedNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
             :
-            <div className='w-full flex justify-center items-center my-36'>
-              <h2 className='text-3xl font-thin text-blackHeading animate-pulse'>
-                  Loading...
+            <div className='w-full flex justify-center items-center mt-48'>
+              <h2 className='text-2xl font-thin text-grayHeading'>
+                  No notes made yet!
               </h2>
             </div>
             } 

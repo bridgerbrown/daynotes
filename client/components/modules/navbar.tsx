@@ -4,11 +4,14 @@ import { startOfDay, format, startOfToday } from "date-fns"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAuth } from "../context/AuthContext"
 import Image from "next/image"
+import { useRouter } from "next/router"
 
 export default function Navbar(){
   const liStyle: string = `pl-8 text-grayHeading hover:text-blackHeading tracking-wide font-light pt-1 flex text-md`
+  const activeLiStyle: string = `pl-8 text-blackHeading tracking-wide font-medium pt-1 flex text-md`
   const today = startOfToday();
-  const { user } = useUser()
+  const { user } = useUser();
+  const router = useRouter();
 
   return(
     <nav className="pt-4 pb-2 px-12 text-slate-900 flex justify-between items-center">
@@ -25,24 +28,26 @@ export default function Navbar(){
         </h1>
       </div>
       <ul className="flex">
-        <li className={liStyle}>
+        <li className={router.route == "/" ? activeLiStyle : liStyle}>
           <Link href={`/`}>Home</Link>
         </li>
             {
                 user !== undefined && (
-                <li className={liStyle}>
+                <li className={router.route == "/[user]/[date]" ? activeLiStyle : liStyle}>
                     <Link href={`/${user.email}/${today}`}>Today</Link>
                 </li>
                 )
             }
             {
                 user ?
-                <li className={liStyle}><Link href={`/${user.email}/notes`}>Notes</Link></li>
+                <li className={router.route == "/[user]/notes" ? activeLiStyle : liStyle}>
+                  <Link href={`/${user.email}/notes`}>Notes</Link>
+                </li>
 
                 :
                 <div></div>
             }
-          <li className={liStyle}>
+          <li className={router.route == "/[user]" ? activeLiStyle : liStyle}>
               {
                   user ?
                   <Link href={`/${user.nickname}`}>User</Link>

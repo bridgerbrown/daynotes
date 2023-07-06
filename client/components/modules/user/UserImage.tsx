@@ -17,14 +17,19 @@ function UserImage(props: any){
 
   return (
     <div className={editImage ? editImageCss : imageCss}>
-      <Image
-        src={`/user-icons${image}`}
-        alt="User image"
-        width={448}
-        height={512}
-        className='w-1/2 opacity-100 invert'
-        onClick={submitImage}
-      />
+      {
+        image ?
+          <Image
+            src={`/user-icons${image}`}
+            alt="User image"
+            width={448}
+            height={512}
+            className='w-1/2 opacity-100 invert'
+            onClick={submitImage}
+          />
+          :
+          <div></div>
+      }
     </div>
   )
 };
