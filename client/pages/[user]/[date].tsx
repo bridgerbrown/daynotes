@@ -119,9 +119,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     await fetch(`http://localhost:3000/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
-        setUserId(data.data) 
-        getUsersNotes(data.data)
-        console.log(data.data)
+        setUserId(data.data.userId) 
+        getUsersNotes(data.data.userId)
     })
   }
 

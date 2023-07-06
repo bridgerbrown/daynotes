@@ -8,10 +8,9 @@ export default async function handler(req:any, res:any) {
     if (req.method === "GET"){
       const { email } = req.query;
       const userDoc = await usersDb.collection("users").findOne({ email: email });
-      const userId = userDoc?.userId;
 
-      if (userId) {
-        res.json({ status: 200, data: userId })
+      if (userDoc) {
+        res.json({ status: 200, data: userDoc })
       } else {
         res.status(404).json({ status: 404, message: "User not found" });
       }

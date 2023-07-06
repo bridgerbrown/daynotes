@@ -2,7 +2,7 @@ import React from "react"
 import Image from "next/image"
 
 function UserImage(props: any){
-  const { image, editImage } = props;
+  const { image, editImage, setEditImage } = props;
   const imageCss: string = `mx-2 bg-gray-900 hover:opacity-100 opacity-90 transition-opacity cursor-pointer drop-shadow-md w-[125px] h-[125px] rounded-full flex justify-center items-center`;
   const editImageCss: string = `mb-4 mx-2 bg-gray-900 hover:opacity-100 opacity-90 transition-opacity cursor-pointer drop-shadow-md w-[75px] h-[75px] rounded-full flex justify-center items-center`;
 
@@ -14,6 +14,7 @@ function UserImage(props: any){
         width={448}
         height={512}
         className='w-1/2 opacity-100 invert'
+        onClick={editImage ? null : setEditImage(false)}
       />
     </div>
   )

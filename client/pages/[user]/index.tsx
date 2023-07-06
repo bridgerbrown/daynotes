@@ -1,14 +1,17 @@
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import Image from 'next/image';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import UserImage from '@/components/modules/user/UserImage';
+import { format } from 'date-fns';
 
 export default function NoteIndex() {
   const { user } = useUser();
   const [editImage, setEditImage] = useState<boolean>(false);
+  const [userDoc, setUserDoc] = useState<any>([]);
+  const [memberSinceDate, setMemberSinceDate] = useState<any>();
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -19,7 +22,23 @@ export default function NoteIndex() {
     "/user-robot.png",
     "/user-shakespeare.png",
   ]
-  
+
+  async function getUserDoc(email: any){
+    await fetch(`http://localhost:3000/api/users?email=${email}`)
+      .then(response => response.json())
+      .then(data => { 
+        setUserDoc(data.data);
+        const memberSince = format(new Date(data.data.memberSince), 'LLLL d, yyyy') + "."
+        setMemberSinceDate(memberSince)
+    })
+  }
+
+  useEffect(() => {
+    if (user){
+      getUserDoc(user?.email)
+    }
+  }, [])
+
   return (
     <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
       <Navbar />
@@ -44,16 +63,22 @@ export default function NoteIndex() {
                           {imageOptions.map((image: string) => <UserImage editImage={editImage} image={image} /> )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
-                          <button className='bg-gray-200 hover:bg-gray-400 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full'>
+                          <button 
+                            className='bg-gray-200 hover:bg-gray-300 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full'
+                            onClick={() => setEditImage(false)}
+                          >
                             Cancel 
                           </button>
                         </div>
                       </div>
                       :
                       <div className='flex flex-col justify-center items-center'>
-                        <UserImage editImage={editImage} image={user.image} />
+                        <UserImage editImage={editImage} setEditImage={setEditImage} image={userDoc.userImage} />
                         <div className='w-[125px] flex justify-end'>
-                          <p className='hover:opacity-90 transition-opacity cursor-pointer text-xs font-medium opacity-50'>
+                          <p 
+                            className='hover:opacity-90 transition-opacity cursor-pointer text-xs font-medium opacity-50'
+                            onClick={() => setEditImage(true)}
+                          >
                             Edit
                           </p>
                         </div>
@@ -76,11 +101,11 @@ export default function NoteIndex() {
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since May 2023 
+                              Member since {memberSinceDate}
                             </p>
                           </div>
                         </div>
-                          <a className='hover:bg-gray-300 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full bg-gray-200'
+                          <a className='bg-gray-200 hover:bg-gray-300 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full'
                               href='/api/auth/logout'
                           >
                               LOG OUT

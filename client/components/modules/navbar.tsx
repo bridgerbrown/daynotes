@@ -45,7 +45,7 @@ export default function Navbar(){
           <li className={liStyle}>
               {
                   user ?
-                  <Link href={`/user/${user.nickname}`}>User</Link>
+                  <Link href={`/${user.nickname}`}>User</Link>
 
                   :
                   <Link href={`/api/auth/login`}
