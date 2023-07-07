@@ -6,7 +6,7 @@ import Image from 'next/image'
 export default function Home() {
 
   return (
-    <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
+    <main className="font-SansPro bg-gray-100 min-h-screen w-screen relative">
       <Head>
         <title>gNotes</title>
         <meta name="description" content="gNotes" />
@@ -14,7 +14,7 @@ export default function Home() {
       </Head>
       <Navbar />
       <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
-        <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-boxBg pb-20 w-full'>
+        <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-gray-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-8'>
             <h2 className='text-2xl font-regular text-blackHeading'>
               Home 

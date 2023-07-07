@@ -55,7 +55,7 @@ export default function CalendarModule(props: any) {
   return (
     <div className="flex justify-center items-center">
       <section className="w-full rounded-md">
-        <div className="w-full flex justify-center items-center bg-gray-100 shadow-inner"> 
+        <div className="w-full flex justify-center items-center bg-[#eef2fa] shadow-inner"> 
           <section className="pt-1 pb-7">
             <div className="pl-3 pt-6 flex items-center">
               <h2 className="flex-auto text-2xl font-regular text-blackHeading">

@@ -15,11 +15,11 @@ module.exports = {
         'gameCard': '40rem'
       },
       colors: {
-        'boxBg': '#f8f8f8',
+        'boxBg': '#fafbfd',
         'pageBg': '#e9e7e6',
         'boxBorder': '#ececec',
         'headerBorder': '#e6e7e5',
-        'blackHeading': '#303234',
+        'blackHeading': 'rgb(17 24 39)',
         'grayHeading': '#a7a7a9',
       },
       fontFamily: {
