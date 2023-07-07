@@ -20,7 +20,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const usersEmail = userCtxt.email;
-
+/*
   async function getUserIdAndNotes(email: any){
     await fetch(`http://localhost:3000/api/users?email=${email}`)
       .then(response => response.json())
@@ -40,7 +40,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
         console.log(error)
       })
   }
-
+*/
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
@@ -65,7 +65,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const sortedFilteredNotesAscDates = [...filteredNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedFilteredNotesDescDates = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
   const sortedFilteredNotesLastUpdated = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));
-
+/*
   useEffect(() => {
     getUserIdAndNotes(usersEmail)
   }, [])
@@ -76,18 +76,18 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
       setDeleteConfirmed(false);
     }
   }, [deleteConfirmed])
-
+*/
   return (
     <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
       <Navbar />
-      <div className='mx-8 flex flex-col justify-center items-center'>
+      <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='min-h-[85vh] border-boxBorder border drop-shadow-lg rounded-lg bg-boxBg pb-20 w-full'>
-          <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-8'>
+          <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
             <h2 className='text-2xl font-regular text-blackHeading'>
               Notes
             </h2>
           </header>
-          <div className='flex justify-between items-center mx-8 mt-4 mb-4'>
+          <div className='flex justify-between items-center mx-4 sm:mx-8 mt-4 mb-4'>
             <div className='flex'>
               <h3 className='mr-4 text-sm text-blackHeading font-light'>
                 Sort by:
@@ -120,8 +120,8 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                 </h3>
               </div>
             </div>
-            <div className='flex justify-center items-center'>
-              <p className='mr-4 text-sm font-light text-grayHeading'>
+            <div className='flex sm:flex-row flex-col-reverse justify-center items-end sm:items-center'>
+              <p className='mt-2 sm:mt-0 mr-2 sm:mr-4 text-xs sm:text-sm font-light text-grayHeading'>
                 {
                   usersNotes ?
                    usersNotes.length == 1 ?
@@ -132,20 +132,22 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                   "0 notes made"
                 }
               </p>
-            <input 
-              type='search'
-              placeholder='Search notes...'
-              id='searchInput'
-              onChange={handleSearch}
-              className='text-sm pl-10 pr-4 font-light border-grayHeading border rounded-full h-10 w-72'
-            />
-            <Image
-              src={"/search.png"}
-              alt="search icon, magnifying glass"
-              width={512}
-              height={512}
-              className='w-4 fixed right-72 opacity-60'
-            />
+              <div className='w-min h-10'>
+                <input 
+                  type='search'
+                  placeholder='Search notes...'
+                  id='searchInput'
+                  onChange={handleSearch}
+                  className='text-sm pl-10 pr-4 font-light border-grayHeading border rounded-full h-10 w-48 md:w-72'
+                />
+                <Image
+                  src={"/search.png"}
+                  alt="search icon, magnifying glass"
+                  width={512}
+                  height={512}
+                  className='w-4 relative left-[13px] md:left-[14px] bottom-[27px] opacity-60'
+                />
+              </div>
             </div>
           </div>
           <div className='mx-8 my-10 flex flex-wrap'>

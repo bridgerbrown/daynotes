@@ -14,7 +14,7 @@ export default function DateHeader(props: any) {
         </p>
       </div>
 
-      <div className='w-[8.5in] flex justify-between items-center'>
+      <div className='w-[78vw] lg:w-[8.5in] flex justify-between items-center'>
         <div className='mt-4 flex flex-col justify-center items-start'>
           <button onClick={prevDay}>
             <Image

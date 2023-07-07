@@ -17,16 +17,6 @@ const TOOLBAR_OPTIONS = [
 export default function TextEditor(props: any){
   const { setQuill } = props;
 
-    // const showToolbar = () => {
-    //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "flex"
-    //     document.querySelector<HTMLElement>(".ql-editor")!.style.marginTop = "0px"
-    // }
-
-    // const hideToolbar = () => {
-    //     document.querySelector<HTMLElement>(".ql-toolbar")!.style.display = "none"
-    //     document.querySelector<HTMLElement>(".ql-editor")!.style.paddingTop = "40px"
-    // }
-    
     const wrapperRef: any = useCallback((wrapper: any) => {
         if (wrapper == null) return
 
@@ -37,12 +27,10 @@ export default function TextEditor(props: any){
         q.disable()
         q.setText('Loading...')
         setQuill(q)
-        // document.getElementById("editor")?.addEventListener("mouseover", showToolbar)
-        // document.getElementById("editor")?.addEventListener("mouseleave", hideToolbar)
     }, [])
 
     return (
-        <div className='w-[8.5in] h-[11in] pb-12'>
+        <div className='w-[93vw] sm:w-[85vw] lg:w-[8.5in] h-[11in] pb-12'>
             <div className='flex flex-col items-center h-[11in] text-black font-light w-full'>
                 <div ref={wrapperRef}
                 id="editor"
