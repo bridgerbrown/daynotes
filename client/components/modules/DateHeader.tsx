@@ -18,11 +18,11 @@ export default function DateHeader(props: any) {
         <div className='mt-4 flex flex-col justify-center items-start'>
           <button onClick={prevDay}>
             <Image
-              src={"/arrow.png"}
-              width={124}
-              height={224}
+              src={"/angle-left.png"}
+              width={210}
+              height={369}
               alt="Arrow"
-              className='scale-75 invert h-6 w-4 opacity-40 hover:opacity-70 transition-opacity rotate-180'
+              className='scale-75 h-6 w-4 opacity-50 hover:opacity-70 transition-opacity '
             />
           </button>
           <p className='w-max mt-2 text-gray-500 text-xs font-light'>
@@ -41,7 +41,7 @@ export default function DateHeader(props: any) {
                   {format((new Date(selectedDay)), 'LLLL d')}
               </h1>
               :
-              <h1 className='cursor-pointer text-gray-400 font-light text-4xl'
+              <h1 className='cursor-pointer text-gray-400 font-light text-3xl'
                 onClick={() => setMonthView(!monthView)}
               >
                   {format((new Date(selectedDay)), 'LLLL d')}
@@ -53,11 +53,11 @@ export default function DateHeader(props: any) {
         <div className='mt-4 flex flex-col justify-center items-end'>
           <button onClick={nextDay}>
             <Image
-              src={"/arrow.png"}
-              width={124}
-              height={224}
+              src={"/angle-left.png"}
+              width={210}
+              height={369}
               alt="Arrow"
-              className='scale-75 invert h-6 w-4 opacity-40 hover:opacity-70 transition-opacity'
+              className='scale-75 h-6 w-4 opacity-50 hover:opacity-70 transition-opacity rotate-180'
             />
           </button>
           <p className='mt-2 w-max text-gray-500 text-xs font-light'>

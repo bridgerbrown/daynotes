@@ -57,8 +57,8 @@ export default function CalendarModule(props: any) {
       <section className="w-full rounded-md">
         <div className="w-full flex justify-center items-center bg-gray-100 shadow-inner"> 
           <section className="pt-1 pb-7">
-            <div className="pl-0 pt-6 flex items-center">
-              <h2 className="flex-auto text-xl font-regular text-blackHeading">
+            <div className="pl-3 pt-6 flex items-center">
+              <h2 className="flex-auto text-2xl font-regular text-blackHeading">
                 {format(currentMonth, 'MMMM yyyy')}
               </h2>
               <button
@@ -78,7 +78,7 @@ export default function CalendarModule(props: any) {
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="tracking-wider text-blackHeading grid grid-cols-7 mt-4 text-sm font-medium leading-6 text-center">
+            <div className="tracking-wider text-gray-600 grid grid-cols-7 mt-4 text-sm font-medium leading-4 text-center">
               <div>SUN</div>
               <div>MON</div>
               <div>TUE</div>
@@ -87,7 +87,7 @@ export default function CalendarModule(props: any) {
               <div>FRI</div>
               <div>SAT</div>
             </div>
-            <div className="font-light border-[1px] bg-white/50 border-gray-300 rounded-sm grid grid-cols-7 my-2 text-md">
+            <div className="font-light border-[2px] drop-shadow-sm bg-[#f9fbfa] border-gray-300 rounded-lg grid grid-cols-7 my-2 text-md">
               {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
@@ -103,10 +103,10 @@ export default function CalendarModule(props: any) {
                       router.push(`/${usersEmail}/${day}`)
                     }}
                     className={classNames(
-                      isEqual(day, selectedDay) && 'bg-blue-100',
+                      isEqual(day, selectedDay) && 'bg-green-100',
                       !isEqual(day, selectedDay) &&
                         isToday(day) &&
-                        'bg-blue-200 font-semibold',
+                        'bg-green-200 font-semibold',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
@@ -115,11 +115,11 @@ export default function CalendarModule(props: any) {
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'font-semibold bg-blue-300',
+                      isEqual(day, selectedDay) && isToday(day) && 'font-semibold bg-green-300',
                       isEqual(day, selectedDay) &&
                         !isToday(day) &&
-                        'bg-blue-300',
-                      !isEqual(day, selectedDay) && 'hover:bg-gray-100',
+                        'bg-green-300',
+                      !isEqual(day, selectedDay) && 'hover:bg-gray-100 transition-colors',
                       (isEqual(day, selectedDay) && isToday(day)) &&
                         'bg-blue-200 font-semibold',
                       'font-regular text-sm flex pb-5 h-14 w-14 border-[0.5px] border-gray-300 items-center justify-center'
