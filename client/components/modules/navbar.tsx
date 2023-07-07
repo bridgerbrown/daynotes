@@ -7,14 +7,14 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 
 export default function Navbar(){
-  const liStyle: string = `pl-8 text-grayHeading hover:text-blackHeading tracking-wide font-light pt-1 flex text-md`
-  const activeLiStyle: string = `pl-8 text-blackHeading tracking-wide font-medium pt-1 flex text-md`
+  const liStyle: string = `pl-4 sm:pl-6 text-grayHeading hover:text-blackHeading tracking-wide font-light pt-1 flex text-sm sm:text-base`;
+  const activeLiStyle: string = `pl-4 sm:pl-6 text-blackHeading tracking-wide font-medium pt-1 flex text-sm sm:text-base`;
   const today = startOfToday();
   const { user } = useUser();
   const router = useRouter();
 
   return(
-    <nav className="pt-4 pb-2 px-12 text-slate-900 flex justify-between items-center">
+    <nav className="pt-4 pb-2 px-4 sm:px-12 text-slate-900 flex justify-between items-center">
       <Link href={`/`}>
         <div className="cursor-pointer flex justify-center items-center">
           <Image
@@ -22,9 +22,9 @@ export default function Navbar(){
             alt="Note icon"
             width={448}
             height={448}
-            className="w-8 mr-2 opacity-80"
+            className="w-6 sm:w-8 mr-2 opacity-80"
           />
-          <h1 className="text-blackHeading text-[32px] font-regular tracking-wide">
+          <h1 className="text-blackHeading text-2xl sm:text-[32px] font-regular tracking-wide">
               <span className="">DayNotes</span>
           </h1>
         </div>

@@ -20,7 +20,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const usersEmail = userCtxt.email;
-/*
+
   async function getUserIdAndNotes(email: any){
     await fetch(`http://localhost:3000/api/users?email=${email}`)
       .then(response => response.json())
@@ -40,7 +40,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
         console.log(error)
       })
   }
-*/
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
@@ -65,7 +65,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const sortedFilteredNotesAscDates = [...filteredNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedFilteredNotesDescDates = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
   const sortedFilteredNotesLastUpdated = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));
-/*
+
   useEffect(() => {
     getUserIdAndNotes(usersEmail)
   }, [])
@@ -76,7 +76,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
       setDeleteConfirmed(false);
     }
   }, [deleteConfirmed])
-*/
+
   return (
     <main className="font-SansPro bg-pageBg min-h-screen w-screen relative">
       <Navbar />
@@ -87,9 +87,9 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
               Notes
             </h2>
           </header>
-          <div className='flex justify-between items-center mx-4 sm:mx-8 mt-4 mb-4'>
-            <div className='flex'>
-              <h3 className='mr-4 text-sm text-blackHeading font-light'>
+          <section className='flex justify-between items-start sm:items-center mx-4 sm:mx-8 mt-4 mb-4'>
+            <div className='text-sm mt-2 sm:mt-0 flex'>
+              <h3 className=' mr-4 text-blackHeading font-light'>
                 Sort by:
               </h3>
               <div className={sortedType == "date" ? activeSortItemCSS : inactiveSortItemCSS}
@@ -100,7 +100,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                     setSortedType("date");
                 }}
               >
-                <h3 className="cursor-pointer text-sm text-blackHeading font-light">
+                <h3 className=":text-sm cursor-pointer text-blackHeading font-light">
                   Date
                 </h3>
                 <Image
@@ -115,7 +115,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                 className={sortedType == "last-updated" ? activeSortItemCSS : inactiveSortItemCSS}
                 onClick={() => setSortedType("last-updated")}
               >
-                <h3 className="cursor-pointer text-sm text-blackHeading font-light">
+                <h3 className="cursor-pointer text-blackHeading font-light">
                   Last Updated 
                 </h3>
               </div>
@@ -149,7 +149,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                 />
               </div>
             </div>
-          </div>
+          </section>
           <div className='mx-8 my-10 flex flex-wrap'>
            {
             usersNotes.length ?
@@ -171,7 +171,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                     sortedNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
             :
             <div className='w-full flex justify-center items-center mt-48'>
-              <h2 className='text-2xl font-thin text-grayHeading'>
+              <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
                   No notes made yet!
               </h2>
             </div>
