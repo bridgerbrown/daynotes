@@ -121,7 +121,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
               </div>
             </div>
             <div className='flex justify-center items-center'>
-              <p className='mr-4 font-light text-grayHeading'>
+              <p className='mr-4 text-sm font-light text-grayHeading'>
                 {
                   usersNotes ?
                    usersNotes.length == 1 ?
@@ -129,7 +129,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
                     :
                     usersNotes.length + " notes made"
                   :
-                  "0"
+                  "0 notes made"
                 }
               </p>
             <input 

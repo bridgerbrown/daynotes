@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import Image from 'next/image';
 import {
   add,
   eachDayOfInterval,
@@ -64,18 +64,30 @@ export default function CalendarModule(props: any) {
               <button
                 type="button"
                 onClick={previousMonth}
-                className="-my-0 flex flex-none items-center justify-center px-1.5 text-gray-700 hover:text-gray-500"
+                className="flex items-center justify-center px-1.5 text-gray-700 hover:text-gray-500"
               >
                 <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                <Image
+                  src={"/angle-left.png"}
+                  width={210}
+                  height={369}
+                  alt="Arrow"
+                  className='h-3 w-2 opacity-60 hover:opacity-80 transition-opacity'
+                />
               </button>
               <button
                 onClick={nextMonth}
                 type="button"
-                className="-my-0 -mr-1.5 ml-2 flex flex-none items-center justify-center px-1.5 text-gray-700 hover:text-gray-500"
+                className="ml-2 flex flex-none items-center justify-center px-1.5 text-gray-700 hover:text-gray-500"
               >
                 <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                <Image
+                  src={"/angle-left.png"}
+                  width={210}
+                  height={369}
+                  alt="Arrow"
+                  className='h-3 w-2 opacity-60 hover:opacity-80 transition-opacity rotate-180'
+                />
               </button>
             </div>
             <div className="tracking-wider text-gray-600 grid grid-cols-7 mt-4 text-sm font-medium leading-4 text-center">
@@ -87,7 +99,7 @@ export default function CalendarModule(props: any) {
               <div>FRI</div>
               <div>SAT</div>
             </div>
-            <div className="font-light border-[2px] drop-shadow-sm bg-[#f9fbfa] border-gray-300 rounded-lg grid grid-cols-7 my-2 text-md">
+            <div className="font-light border-[1px] drop-shadow-sm bg-[#f9fbfa] border-gray-300 grid grid-cols-7 my-2 text-md">
               {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}

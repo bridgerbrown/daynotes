@@ -2,9 +2,11 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function NotePreview(props: any){
   const { usersEmail, note, setDeleteConfirmed } = props;
+  const router = useRouter();
   const noteObj = JSON.stringify(note.data.ops);
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
 
@@ -54,18 +56,18 @@ export default function NotePreview(props: any){
               alt="Delete note icon"
               width={512}
               height={512}
-              className="hover:opacity-100 opacity-80 cursor-pointer group-hover:block relative hidden w-6 h-6 z-30 bottom-2.5 left-[185px] rounded-full"
+              className="hover:opacity-90 opacity-70 cursor-pointer group-hover:block relative hidden w-6 h-6 z-30 bottom-2.5 left-[185px] rounded-full"
               onClick={() => setDeleteConfirmation(true)}
             />
             <div className="group-hover:block relative hidden bg-boxBg rounded-full bottom-[34px] z-20 left-[185px] w-6 h-6">
             </div>
           </div>
         }
-      <Link href={`/${usersEmail}/${note.date}`}>
         <div 
           className="w-[200px] h-[275px] opacity-100 hover:opacity-100 bg-white hover:drop-shadow-md drop-shadow-sm cursor-pointer hover:border-gray-500 border-gray-400 border rounded-md"
+          onClick={() => deleteConfirmation ? null : router.push(`/${usersEmail}/${note.date}`)}
         >
-          <p className="h-[250px] text-ellipsis overflow-hidden overflow-y-hidden text-blackHeading text-sm font-light py-3 px-3">
+          <p className="h-[250px] text-ellipsis overflow-hidden overflow-y-hidden opacity-70 hover:opacity-100 transition-opacity text-blackHeading text-sm font-light py-3 px-3">
             {
               deleteConfirmation ?
               <div className='flex flex-col mt-12 justify-start items-center'>
@@ -100,9 +102,8 @@ export default function NotePreview(props: any){
             }
           </p>
         </div>
-      </Link>
       <div className="h-10 mx-1 flex justify-center items-center">
-        <h3 className="text-blackHeading font-medium">
+        <h3 className="text-blackHeading font-light">
           {format(( new Date(note.date)), 'LLLL d, yyyy')}
         </h3>
       </div>
