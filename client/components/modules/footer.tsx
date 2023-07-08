@@ -10,9 +10,9 @@ export default function Footer(){
               alt="Note icon"
               width={448}
               height={448}
-              className="w-4 sm:w-5 mr-2 opacity-80"
+              className="w-4 sm:w-5 mr-2 opacity-90"
             />
-            <h1 className="text-blackHeading text-lg sm:text-xl font-regular tracking-wide">
+            <h1 className="text-blackHeading text-lg sm:text-xl font-semibold">
                 <span className="">DayNotes</span>
             </h1>
           </div>

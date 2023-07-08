@@ -250,10 +250,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [socket, quill]);
 
   return (
-    <main className="font-SansPro bg-gray-100 min-h-screen w-screen relative">
+    <main className="font-SansPro bg-gray-50 min-h-screen w-screen relative">
         <Navbar />
         <div className='mx-2 sm:mx-8 mt-0 pt-0 flex flex-col justify-center items-center'>
-          <div className='rounded-lg bg-gray-50 border-boxBorder border drop-shadow-lg min-h-[100vh] mt-0 mb-32 w-full'>
+          <div className='rounded-lg bg-slate-50 border-boxBorder border drop-shadow-lg min-h-[100vh] mt-0 mb-32 w-full'>
             <div className='px-4 pt-3 pb-2 flex justify-between'>
               <div className='flex'>
                 <Image

@@ -35,13 +35,13 @@ export default function DateHeader(props: any) {
             {
               noteActivated
               ?
-              <h1 className='cursor-pointer text-black font-light text-3xl'
+              <h1 className='cursor-pointer text-black font-light text-4xl'
                 onClick={() => setMonthView(!monthView)}
               >
                   {format((new Date(selectedDay)), 'LLLL d')}
               </h1>
               :
-              <h1 className='cursor-pointer text-gray-400 font-light text-3xl'
+              <h1 className='cursor-pointer text-gray-400 font-light text-4xl'
                 onClick={() => setMonthView(!monthView)}
               >
                   {format((new Date(selectedDay)), 'LLLL d')}

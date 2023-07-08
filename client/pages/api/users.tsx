@@ -17,7 +17,7 @@ export default async function handler(req:any, res:any) {
     } else if (req.method === "PATCH") {
       const { email, newImage } = req.query;
       await usersDb.collection("users").findOneAndUpdate({ email: email}, {$set: { userImage: newImage } });
-
+      res.json({ status: 200, message: "Image changed"})
     } else {
       res.status(405).json({ status: 405, message: "Method not allowed" });
     }

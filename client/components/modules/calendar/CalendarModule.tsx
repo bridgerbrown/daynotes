@@ -55,10 +55,10 @@ export default function CalendarModule(props: any) {
   return (
     <div className="flex justify-center items-center">
       <section className="w-full rounded-md">
-        <div className="w-full flex justify-center items-center bg-[#eef2fa] shadow-inner"> 
+        <div className="w-full flex justify-center items-center bg-gray-100/80 shadow-inner"> 
           <section className="pt-1 pb-7">
             <div className="pl-3 pt-6 flex items-center">
-              <h2 className="flex-auto text-2xl font-regular text-blackHeading">
+              <h2 className="flex-auto text-2xl font-light text-blackHeading">
                 {format(currentMonth, 'MMMM yyyy')}
               </h2>
               <button
@@ -90,7 +90,7 @@ export default function CalendarModule(props: any) {
                 />
               </button>
             </div>
-            <div className="tracking-wider text-gray-600 grid grid-cols-7 mt-4 text-sm font-medium leading-4 text-center">
+            <div className="tracking-wider text-gray-900 grid grid-cols-7 mt-4 text-sm font-medium leading-4 text-center">
               <div>SUN</div>
               <div>MON</div>
               <div>TUE</div>
@@ -115,22 +115,22 @@ export default function CalendarModule(props: any) {
                       router.push(`/${usersEmail}/${day}`)
                     }}
                     className={classNames(
-                      isEqual(day, selectedDay) && 'bg-green-100',
+                      isEqual(day, selectedDay) && 'bg-blue-100',
                       !isEqual(day, selectedDay) &&
                         isToday(day) &&
-                        'bg-green-200 font-semibold',
+                        'bg-blue-200 font-semibold',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-600',
+                        'text-gray-700',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'font-semibold bg-green-300',
+                      isEqual(day, selectedDay) && isToday(day) && 'font-semibold bg-blue-300',
                       isEqual(day, selectedDay) &&
                         !isToday(day) &&
-                        'bg-green-300',
+                        'bg-blue-300',
                       !isEqual(day, selectedDay) && 'hover:bg-gray-100 transition-colors',
                       (isEqual(day, selectedDay) && isToday(day)) &&
                         'bg-blue-200 font-semibold',
@@ -146,7 +146,7 @@ export default function CalendarModule(props: any) {
                     {userNotesDates.some((date: Date) =>
                       isSameDay(parseISO(date), day)
                     ) && (
-                      <div className="relative w-2 h-2 rounded-full bg-green-500"></div>
+                      <div className="relative w-2 h-2 rounded-full bg-blue-500"></div>
                     )}
                   </div>
 

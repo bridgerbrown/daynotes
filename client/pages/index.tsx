@@ -6,62 +6,26 @@ import Image from 'next/image'
 export default function Home() {
 
   return (
-    <main className="font-SansPro bg-gray-100 min-h-screen w-screen relative">
+    <main className="font-SansPro bg-gray-50 min-h-screen w-screen relative">
       <Head>
         <title>gNotes</title>
         <meta name="description" content="gNotes" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
-      <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
-        <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-gray-50 pb-20 w-full'>
-          <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-8'>
-            <h2 className='text-2xl font-regular text-blackHeading'>
-              Home 
-            </h2>
-          </header>
-          <section className='flex w-full px-8 py-8'>
-            <div className='w-3/4 mr-16'>
-              <h1 className='pb-4 text-3xl'>
-                Welcome to DayNotes!
-              </h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pellentesque quis odio sed porta. Integer sollicitudin dictum egestas. Morbi efficitur, tortor non viverra lacinia, felis lorem porta ex, vitae tempus justo nisl ac nulla. Sed quis leo at sapien vestibulum vulputate. Ut et orci finibus, luctus elit eu, ornare dolor. Vestibulum vel lectus ultricies, vehicula velit sit amet, feugiat nulla. Cras non leo et tortor viverra venenatis non sit amet dolor.
-              </p>
-            </div>
-            <div className='w-1/4 pr-2 pt-4'>
-              <Image
-                src={"/note.png"}
-                alt="Demo of website 1"
-                width={500}
-                height={500}
-                className='opacity-90'
-              />
-            </div>
-          </section>
-
-          <section className='flex w-full px-8 py-8'>
-            <div className='w-1/4 pl-2 pt-4'>
-              <Image
-                src={"/note.png"}
-                alt="Demo of website 1"
-                width={500}
-                height={500}
-                className='opacity-90'
-              />
-            </div>
-            <div className='w-3/4 ml-16'>
-              <h1 className='pb-4 text-xl'>
-                A note a day keeps the.. uhhhh....
-              </h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In pellentesque quis odio sed porta. Integer sollicitudin dictum egestas. Morbi efficitur, tortor non viverra lacinia, felis lorem porta ex, vitae tempus justo nisl ac nulla. Sed quis leo at sapien vestibulum vulputate. Ut et orci finibus, luctus elit eu, ornare dolor. Vestibulum vel lectus ultricies, vehicula velit sit amet, feugiat nulla. Cras non leo et tortor viverra venenatis non sit amet dolor.
-              </p>
-            </div>
-
-          </section>
+      <section className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
+        <div className='mt-48 w-full flex flex-col justify-center items-center'>
+          <h1 className='mb-10 text-6xl font-semibold text-gray-900'>
+            Daily notes, made easy
+          </h1>
+          <p className='mb-24 text-gray-500 text-2xl font-light'>
+            Bring your daily notes to the next level with calendar-based organization.
+          </p>
+          <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b px-8 py-4 text-lg text-white font-semibold rounded-lg'>
+            Sign Up
+          </button>
         </div>
-      </div>
+      </section>
       <Footer />
     </main>
   )

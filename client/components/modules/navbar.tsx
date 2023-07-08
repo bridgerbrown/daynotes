@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { startOfDay, format, startOfToday } from "date-fns"
 import { useUser } from "@auth0/nextjs-auth0/client"
@@ -7,10 +7,23 @@ import Image from "next/image"
 import { useRouter } from "next/router"
 
 export default function Navbar(){
-  const liStyle: string = `cursor-pointer ml-0 pl-5 sm:pl-7 py-2 flex justify-center items-center hover:bg-gray-200/70 transition-colors rounded-lg text-gray-900 tracking-wide font-regular mt-1 flex text-sm`;
+  const liStyle: string = `cursor-pointer ml-2 px-3 sm:px-3 py-2 flex justify-center items-center hover:bg-gray-200/70 transition-colors rounded-lg text-gray-900 tracking-wide font-regular mt-1 flex text-sm`;
   const today = startOfToday();
   const { user } = useUser();
-  const router = useRouter();
+  const [userDoc, setUserDoc] = useState<any>([]);
+
+  async function getUserDoc(email: any){
+    await fetch(`http://localhost:3000/api/users?email=${email}`)
+      .then(response => response.json())
+      .then(data => { 
+        setUserDoc(data.data);
+        console.log(userDoc)
+    })
+  }
+
+  useEffect(() => {
+    getUserDoc(user?.email)
+  }, [])
 
   return(
     <nav className="pt-4 pb-3 px-6 sm:px-12 flex justify-between items-center">
@@ -21,45 +34,62 @@ export default function Navbar(){
             alt="Note icon"
             width={448}
             height={448}
-            className="w-6 sm:w-7 mr-2 opacity-80"
+            className="w-6 sm:w-7 mr-2 opacity-90"
           />
-          <h1 className="text-gray-900 text-xl sm:text-2xl font-regular tracking-wide">
+          <h1 className="text-gray-900 text-xl sm:text-2xl font-semibold">
               <span className="">DayNotes</span>
           </h1>
         </div>
       </Link>
       <ul className="flex">
-        <li className={liStyle}>
-          <Link href={`/`}>Home</Link>
-        </li>
-            {
-                user !== undefined && (
-                <li className={liStyle}>
-                    <Link href={`/${user.email}/${today}`}>Today</Link>
-                </li>
-                )
-            }
-            {
-                user ?
-                <li className={liStyle}>
-                  <Link href={`/${user.email}/notes`}>Notes</Link>
-                </li>
-
-                :
-                <div></div>
-            }
+        <Link href={`/`}>
           <li className={liStyle}>
-              {
-                  user ?
-                  <Link href={`/${user.nickname}`}>User</Link>
-
-                  :
-                  <Link href={`/api/auth/login`}
-                      data-testid="login"
-                  >Log In</Link>
-              }
+            Home
           </li>
-        </ul>
-      </nav>
-    )
-}
+        </Link>
+        {
+          user !== undefined && (
+            <Link href={`/${user.email}/${today}`}>
+              <li className={liStyle}>
+                Today
+              </li>
+            </Link>
+          )
+        }
+        {
+          user ?
+            <Link href={`/${user.email}/notes`}>
+              <li className={liStyle}>
+                Notes
+              </li>
+            </Link>
+          :
+          <div></div>
+        }
+        {
+          user && userDoc ?
+          <Link href={`/${user.nickname}`}>
+            <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
+              <div className="hover:drop-shadow-md bg-gray-900 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
+                <Image
+                  src={`/user-icons${userDoc.userImage}`}
+                  alt="User profile icon"
+                  width={448}
+                  height={512}
+                  className="w-1/2 invert"
+                />
+              </div>
+            </li>
+          </Link>
+
+          :
+          <Link href={`/api/auth/login`} data-testid="login">
+            <li className={liStyle}>  
+              User
+            </li>
+          </Link>
+        }
+      </ul>
+    </nav>
+  )
+};
