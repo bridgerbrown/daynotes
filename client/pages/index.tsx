@@ -15,7 +15,7 @@ export default function Home() {
       </Head>
       <Navbar />
       <section className='mx-2 mb-96 sm:mx-8 flex flex-col justify-center items-center'>
-        <div className='mt-48 w-full flex flex-col justify-center items-center'>
+        <div className='mt-72 w-full flex flex-col justify-center items-center'>
           <h1 className='mb-10 text-6xl font-semibold text-gray-900'>
             Daily notes, made easy
           </h1>
@@ -34,11 +34,11 @@ export default function Home() {
           <div className='mt-12 sm:mt-16 lg:col-start-1 lg:mt-0'>
             <div className='flex justify-center px-6 md:px-12 lg:relative lg:m-0 lg:h-full lg:px-0'>
               <Image
-                src={"/calendar.png"}
+                src={"/note-sample.png"}
                 alt="Product preview"
                 width={1880}
                 height={1080}
-                className='w-full max-w-[640px] lg:absolute lg:-right-24 lg:h-[540px] lg:w-auto lg:max-w-none'
+                className='w-full max-w-[640px] lg:absolute lg:-right-36 lg:h-[540px] lg:w-auto lg:max-w-none'
               />
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function Home() {
           <div className='mt-12 sm:mt-16 lg:col-start-2 lg:mt-0'>
             <div className='flex justify-center px-6 md:px-12 lg:relative lg:m-0 lg:h-full lg:px-0'>
               <Image
-                src={"/calendar.png"}
+                src={"/calendar-sample.png"}
                 alt="Product preview"
                 width={1880}
                 height={1080}

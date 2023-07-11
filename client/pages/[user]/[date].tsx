@@ -46,7 +46,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const activateNote = async () => {
     setDeleteConfirmed(false);
     setNoteActivated(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 500));
     getUsersNotes(userId);
   };
 
