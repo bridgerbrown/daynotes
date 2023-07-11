@@ -32,7 +32,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
-  const SAVE_INTERVAL_MS = 1000;
+  const SAVE_INTERVAL_MS = 500;
   const { user } = useUser();
   const usersEmail = userCtxt.email;
 
@@ -46,7 +46,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const activateNote = async () => {
     setDeleteConfirmed(false);
     setNoteActivated(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 700));
     getUsersNotes(userId);
   };
 
@@ -178,7 +178,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     })
 
     socket.emit('get-document', userId, selectedDay)
-  }, [socket, quill, router.asPath, selectedDay, prevDay, nextDay, noteActivated])
+  }, [socket, quill, noteActivated])
 
 
   useEffect(() => {
@@ -192,7 +192,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return () => {
         clearInterval(interval)
     }
-  }, [socket, quill, router.asPath, selectedDay])
+  }, [socket, quill])
 
 
   useEffect(() => {
@@ -206,7 +206,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return () => {
         socket.off('receive-changes', handler)
     }
-  }, [socket, quill, router.asPath, selectedDay])
+  }, [socket, quill])
 
 
   useEffect(() => {
@@ -222,7 +222,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return () => {
         quill.off('text-change', handler)
     }
-  }, [socket, quill, router.asPath, selectedDay])
+  }, [socket, quill])
 
   useEffect(() => {
     if(deleteConfirmed){

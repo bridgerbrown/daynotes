@@ -10,20 +10,22 @@ export default function NotePreview(props: any){
   const noteObj = JSON.stringify(note.data.ops);
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
 
-  function extractNoteData(inputString: string): string {
-    const pattern = /"insert":"([^"]*?)(?:\\n"|\\n})|[^"]*?"insert":"([^"]*)"/g;
-    const matches = inputString.match(pattern);
-    const extractedText: string[] = [];
-    if (matches) {
-      for (const match of matches) {
-        const capturedText = match.match(/"insert":"([^"]*)/);
-        if (capturedText) {
-          const text = capturedText[1].replace(/\\n/g, '');
-          extractedText.push(text);
+  function extractNoteData(inputString: string): any {
+    if (inputString) {
+      const pattern = /"insert":"([^"]*?)(?:\\n"|\\n})|[^"]*?"insert":"([^"]*)"/g;
+      const matches = inputString.match(pattern);
+      const extractedText: string[] = [];
+      if (matches) {
+        for (const match of matches) {
+          const capturedText = match.match(/"insert":"([^"]*)/);
+          if (capturedText) {
+            const text = capturedText[1].replace(/\\n/g, '');
+            extractedText.push(text);
+          }
         }
       }
+      return extractedText.join(' ');
     }
-    return extractedText.join(' ');
   }
   console.log(extractNoteData(noteObj))
   console.log(noteObj)
