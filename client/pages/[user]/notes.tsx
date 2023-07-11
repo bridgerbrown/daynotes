@@ -156,11 +156,32 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
               filteredNotes ?
                 sortedType == "date" ?
                     dateAscending ?
-                      sortedFilteredNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                      sortedFilteredNotesAscDates.length ?
+                        sortedFilteredNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                        :
+                        <div className='w-full flex justify-center items-center mt-48'>
+                          <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
+                              No search results...
+                          </h2>
+                        </div>
                       :
-                      sortedFilteredNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                      sortedFilteredNotesDescDates.length ?
+                        sortedFilteredNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                        :
+                        <div className='w-full flex justify-center items-center mt-48'>
+                          <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
+                              No search results...
+                          </h2>
+                        </div>
                     :
-                    sortedFilteredNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                    sortedFilteredNotesLastUpdated.length ?
+                      sortedFilteredNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                      :
+                      <div className='w-full flex justify-center items-center mt-48'>
+                        <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
+                            No search results...
+                        </h2>
+                      </div>
                 :
                 sortedType == "date" ?
                     dateAscending ?

@@ -7,9 +7,11 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import UserImage from '@/components/modules/user/UserImage';
 import { format } from 'date-fns';
+import { useAuth } from '@/components/context/AuthContext';
 
 export default function User({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user } = useUser();
+  const { userData, setUserData } = useAuth();
   const usersEmail = userCtxt.email;
   const [editImage, setEditImage] = useState<boolean>(false);
   const [userDoc, setUserDoc] = useState<any>([]);
@@ -31,6 +33,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
       .then(response => response.json())
       .then(data => { 
         setUserDoc(data.data);
+        setUserData(data.data);
         const memberSince = format(new Date(data.data.memberSince), 'LLLL d, yyyy') + ".";
         setMemberSinceDate(memberSince);
         setIsLoading(false);
@@ -50,19 +53,12 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
   }
 
   useEffect(() => {
-    getUserDoc(usersEmail)
+    getUserDoc(usersEmail);
   }, [updateUserImage])
-
-  useEffect(() => {
-    imageOptions.forEach((image) => {
-      const img = new Image();
-      img.src = `/user-icons${image}`;
-    });
-  }, [])
 
   return (
     <main className="font-SansPro bg-gray-50 min-h-screen w-screen relative">
-      <Navbar />
+      <Navbar userDoc={userDoc} />
       <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>

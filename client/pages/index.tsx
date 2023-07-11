@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Navbar from '@/components/modules/navbar'
 import Footer from '@/components/modules/footer'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
 
@@ -21,9 +22,11 @@ export default function Home() {
           <p className='mb-24 text-gray-500 text-2xl font-light'>
             Bring your daily notes to the next level with calendar-based organization.
           </p>
-          <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b px-8 py-4 text-lg text-white font-semibold rounded-lg'>
-            Sign Up
-          </button>
+          <Link href={`/api/auth/login`}>
+            <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b px-8 py-4 text-lg text-white font-semibold rounded-lg'>
+              Sign Up
+            </button>
+          </Link>
         </div>
       </section>
       <Footer />

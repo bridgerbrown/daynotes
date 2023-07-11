@@ -6,24 +6,28 @@ import { useAuth } from "../context/AuthContext"
 import Image from "next/image"
 import { useRouter } from "next/router"
 
-export default function Navbar(){
+export default function Navbar(props: any){
   const liStyle: string = `cursor-pointer ml-2 px-3 sm:px-3 py-2 flex justify-center items-center hover:bg-gray-200/70 transition-colors rounded-lg text-gray-900 tracking-wide font-regular mt-1 flex text-sm`;
   const today = startOfToday();
   const { user } = useUser();
-  const [userDoc, setUserDoc] = useState<any>([]);
+  const { userData, setUserData } = useAuth();
+  const { userDoc } = props;
+
+  useEffect(() => {
+    if (user && !userData){
+      getUserDoc(user.email)
+    }
+  }, [user, userData])
+
+  useEffect(() => {}, [userDoc])
 
   async function getUserDoc(email: any){
     await fetch(`http://localhost:3000/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
-        setUserDoc(data.data);
-        console.log(userDoc)
+        setUserData(data.data);
     })
   }
-
-  useEffect(() => {
-    getUserDoc(user?.email)
-  }, [])
 
   return(
     <nav className="pt-4 pb-3 px-6 sm:px-12 flex justify-between items-center">
@@ -67,12 +71,12 @@ export default function Navbar(){
           <div></div>
         }
         {
-          user && userDoc ?
+          user && userData ?
           <Link href={`/${user.nickname}`}>
             <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
               <div className="hover:drop-shadow-md bg-gray-900 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
                 <Image
-                  src={`/user-icons${userDoc.userImage}`}
+                  src={`/user-icons${userData.userImage}`}
                   alt="User profile icon"
                   width={448}
                   height={512}
@@ -84,8 +88,10 @@ export default function Navbar(){
 
           :
           <Link href={`/api/auth/login`} data-testid="login">
-            <li className={liStyle}>  
-              User
+            <li className="ml-3 mt-1">
+              <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 transition-all bg-gradient-to-b px-3 py-2 text-sm text-white font-semibold rounded-md'>
+                Sign Up
+              </button>
             </li>
           </Link>
         }
