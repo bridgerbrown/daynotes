@@ -2,8 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { parse, isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths, toDate } from 'date-fns'
-import { ParsedUrl } from 'query-string';
+import { isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths } from 'date-fns'
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";

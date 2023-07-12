@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { format } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function NotePreview(props: any){

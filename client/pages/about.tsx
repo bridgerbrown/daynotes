@@ -1,12 +1,9 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/modules/navbar';
 import Footer from '@/components/modules/footer';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import UserImage from '@/components/modules/user/UserImage';
-import { format } from 'date-fns';
 import { useAuth } from '@/components/context/AuthContext';
 import Image from 'next/image';
 

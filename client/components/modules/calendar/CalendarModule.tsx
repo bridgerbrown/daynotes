@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import {
-  add,
   eachDayOfInterval,
   endOfMonth,
   endOfWeek,
@@ -18,9 +17,9 @@ import {
   subMonths
 } from 'date-fns'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-function classNames(...classes) {
+function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -143,7 +142,7 @@ export default function CalendarModule(props: any) {
                   </button>
 
                   <div className="relative bottom-5 h-0 w-14 flex justify-center">
-                    {userNotesDates.some((date: Date) =>
+                    {userNotesDates.some((date: any) =>
                       isSameDay(parseISO(date), day)
                     ) && (
                       <div className="relative w-2 h-2 rounded-full bg-blue-500"></div>

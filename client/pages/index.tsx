@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Navbar from '@/components/modules/navbar'
 import Footer from '@/components/modules/footer'
 import Image from 'next/image'
