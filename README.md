@@ -1,4 +1,4 @@
-![DayNotes Logo](/client/public/daynotes-logo.png)
+<img src="/client/public/daynotes-logo.png" alt="DayNotes logo" width="740" height="149">
 
 ## DayNotes
 #### Date-based note taking platform with seamless synchronization 
