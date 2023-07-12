@@ -8,11 +8,6 @@ export default function Home() {
 
   return (
     <main className="overflow-hidden font-SansPro bg-gray-50 min-h-screen w-screen relative">
-      <Head>
-        <title>gNotes</title>
-        <meta name="description" content="gNotes" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
       <Navbar />
       <section className='mx-2 mb-96 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='mt-72 w-full flex flex-col justify-center items-center'>

@@ -34,15 +34,12 @@ export default function Navbar(props: any){
       <Link href={`/`}>
         <div className="cursor-pointer flex justify-center items-center">
           <Image
-            src={"/note.png"}
-            alt="Note icon"
-            width={448}
-            height={448}
-            className="w-6 sm:w-7 mr-2 opacity-90"
+            src={"/daynotes-logo.png"}
+            alt="DayNotes logo"
+            width={740}
+            height={149}
+            className="mt-2 w-[125px] sm:w-[150px]"
           />
-          <h1 className="text-gray-900 text-xl sm:text-2xl font-semibold">
-              <span className="">DayNotes</span>
-          </h1>
         </div>
       </Link>
       <ul className="flex">

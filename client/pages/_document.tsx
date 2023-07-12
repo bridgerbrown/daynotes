@@ -4,6 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <title>DayNotes</title>
+        <meta name="description" content="gNotes" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="DayNotes"/>
         <meta property="og:image" content={"/note-sample.png"}/>
         <meta property="og:description" content="DayNotes date-based note taking platform"/>
