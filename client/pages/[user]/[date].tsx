@@ -24,7 +24,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [quill, setQuill] = useState<any>();
   const [monthView, setMonthView] = useState<boolean>(false);
   const [usersNotes, setUsersNotes] = useState<any[]>([]);
-  const [noteActivated, setNoteActivated] = useState<boolean>(false);
+  const [noteActivated, setNoteActivated] = useState<boolean | undefined>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
