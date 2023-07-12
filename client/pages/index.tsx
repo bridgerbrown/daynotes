@@ -7,7 +7,7 @@ import Link from 'next/link'
 export default function Home() {
 
   return (
-    <main className="font-SansPro bg-gray-50 min-h-screen w-screen relative">
+    <main className="overflow-hidden font-SansPro bg-gray-50 min-h-screen w-screen relative">
       <Head>
         <title>gNotes</title>
         <meta name="description" content="gNotes" />

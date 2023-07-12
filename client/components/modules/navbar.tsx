@@ -70,11 +70,16 @@ export default function Navbar(props: any){
           :
           <div></div>
         }
+        <Link href={"/about"}>
+          <li className={liStyle}>
+            About
+          </li>
+        </Link>
         {
           user && userData ?
           <Link href={`/${user.nickname}`}>
             <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
-              <div className="hover:drop-shadow-md bg-gray-900 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
+              <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
                 <Image
                   src={`/user-icons${userData.userImage}`}
                   alt="User profile icon"
