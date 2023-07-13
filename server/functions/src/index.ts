@@ -1,10 +1,13 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 import {MongoClient, Db, Collection} from "mongodb";
-import * as express from "express";
+import express from "express";
 import {createServer} from "http";
 import {Server, Socket} from "socket.io";
-import * as configs from "../runtimeconfig.json";
+import * as dotenv from "dotenv";
+import * as serviceAccount from "../daynotes-sdk.json";
+
+dotenv.config();
 
 interface DeltaStatic {
   ops: {
@@ -28,10 +31,10 @@ interface Note {
 }
 
 admin.initializeApp({
-  credential: admin.credential.cert(configs.firebase_config),
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
 });
-
-const client = new MongoClient(configs.mongodb.connection_string);
+const mongodbstring = "mongodb+srv://admin:dZqY5Jcv4sLDlZs6@league-notes.yqp1oo6.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(mongodbstring);
 
 let database: Db | undefined;
 
@@ -126,8 +129,8 @@ io.on("connection", (socket: Socket) => {
  * @param {string} documentId - The document ID
  * @param {string} userId - The user ID
  * @param {string} date - The date
- * @return {Promise<Note>} A promise that resolves to the found or created 
- * document
+ * @return {Promise<Note>} A promise that resolves to the found or created
+ *  document
  */
 async function findOrCreateDocument(
   documentId: string,
@@ -141,12 +144,13 @@ async function findOrCreateDocument(
     if (note) {
       return note;
     } else {
-      const emptyDelta: DeltaStatic = { ops: [] };
-      note = await notes.findOneAndUpdate(
+      const emptyDelta: DeltaStatic = {ops: []};
+      const updateResult = await notes.findOneAndUpdate(
         {documentId: documentId, userId: userId, date: date},
         {$setOnInsert: {data: emptyDelta, lastUpdated: new Date()}},
-        {upsert: true, returnOriginal: false}
+        {upsert: true, returnDocument: "after"}
       );
+      note = updateResult.value as Note;
       return note;
     }
   } catch (error) {
@@ -182,7 +186,8 @@ async function findDocument(documentId: string): Promise<Note> {
  * @param {string} documentId - The document ID
  * @param {any} data - The document data to save
  */
-async function saveDocument(documentId: string, data: DeltaStatic): Promise<void> {
+async function saveDocument(
+  documentId: string, data: DeltaStatic ): Promise<void> {
   const database = await connectToDatabase();
   const notes: Collection<Note> = database.collection("notes");
   await notes.findOneAndUpdate(

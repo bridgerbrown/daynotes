@@ -7,11 +7,12 @@
     "sourceMap": true,
     "strict": false,
     "target": "es2017",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true
   },
   "compileOnSave": true,
   "include": [
-    "src",
-    "../runtimeconfig.json"
+    "src"
   ]
 }
