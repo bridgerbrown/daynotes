@@ -1,15 +1,16 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import { MongoClient } from 'mongodb';
-import * as express from 'express';
-import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import {MongoClient} from "mongodb";
+import * as express from "express";
+import {createServer} from "http";
+import {Server, Socket} from "socket.io";
+import * as configs from "../runtimeconfig.json";
 
-admin.initializeApp();
+admin.initializeApp({
+  credential: admin.credential.cert(configs.firebase_config),
+});
 
-require('dotenv').config()
-
-const client = new MongoClient(process.env.MONGODB_CONNECTION_STRING!);
+const client = new MongoClient(configs.mongodb.connection_string);
 
 let database: any;
 
@@ -31,7 +32,7 @@ exports.api = functions.https.onRequest(app);
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-      origin: "https://daynotes-ebon.vercel.app/",
+      origin: "https://daynotes-ebon.vercel.app",
       methods: ["GET", "POST"]
   }
 });
