@@ -33,7 +33,7 @@ interface Note {
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
 });
-const mongodbstring = "mongodb+srv://admin:dZqY5Jcv4sLDlZs6@league-notes.yqp1oo6.mongodb.net/?retryWrites=true&w=majority";
+const mongodbstring = process.env.MONGODB_CONNECTION_STRING;
 const client = new MongoClient(mongodbstring);
 
 let database: Db | undefined;
