@@ -25,7 +25,7 @@ export default function Navbar(props: any){
       .then(response => response.json())
       .then(data => { 
         setUserData(data.data);
-    })
+    });
   }
 
   return(
