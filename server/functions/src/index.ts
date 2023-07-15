@@ -65,7 +65,7 @@ exports.api = functions.https.onRequest(app);
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://us-central1-daynotes-9d9d8.cloudfunctions.net/api",
+    origin: "https://us-central1-daynotes-9d9d8.cloudfunctions.net/socket",
     methods: ["GET", "POST"],
   },
 });
