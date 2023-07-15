@@ -130,6 +130,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
+        console.log("Fetched users notes")
         })
       .catch(error => {
         console.log(error)
@@ -153,7 +154,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     const urlDate = parseDateFromUrl(router.asPath);
     if(urlDate !== selectedDay){
       setSelectedDay(urlDate);
-      console.log("Navigated successfully")
     }
   }, [])
 

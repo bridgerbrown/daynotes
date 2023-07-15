@@ -60,15 +60,16 @@ function isOnlyWhiteSpace(note: string): boolean {
 }
 
 const app = express();
-exports.api = functions.https.onRequest(app);
-
 const server = createServer(app);
+
 const io = new Server(server, {
   cors: {
     origin: "https://us-central1-daynotes-9d9d8.cloudfunctions.net/socket",
     methods: ["GET", "POST"],
   },
 });
+
+server.listen();
 
 /**
  * Handle socket connection
@@ -214,4 +215,8 @@ async function deleteDocument(documentId: string): Promise<void> {
   }
 }
 
-exports.socket = functions.https.onRequest(app);
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
+
+exports.api = functions.https.onRequest(app);
