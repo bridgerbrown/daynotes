@@ -3,7 +3,7 @@ import clientPromise from "../../lib/mongodb"
 export default async function handler(req:any, res:any) {
   try { 
     const client = await clientPromise;
-    const db= client.db('daynotes');
+    const db = client.db('daynotes');
 
     if (req.method === "GET"){
       const { email } = req.query;

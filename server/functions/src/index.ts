@@ -45,7 +45,7 @@ let database: Db | undefined;
 async function connectToDatabase(): Promise<Db> {
   if (!database) {
     await client.connect();
-    database = client.db("notes-db");
+    database = client.db("daynotes");
   }
   return database;
 }
