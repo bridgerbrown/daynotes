@@ -3,11 +3,11 @@ import clientPromise from "../../lib/mongodb"
 export default async function handler(req:any, res:any) {
   try { 
     const client = await clientPromise;
-    const usersDb= client.db('users-db');
+    const db= client.db('daynotes');
 
     if (req.method === "GET"){
       const { email } = req.query;
-      const userDoc = await usersDb.collection("users").findOne({ email: email });
+      const userDoc = await db.collection("users").findOne({ email: email });
 
       if (userDoc) {
         res.json({ status: 200, data: userDoc })
@@ -16,7 +16,7 @@ export default async function handler(req:any, res:any) {
       }
     } else if (req.method === "PATCH") {
       const { email, newImage } = req.query;
-      await usersDb.collection("users").findOneAndUpdate({ email: email}, {$set: { userImage: newImage } });
+      await db.collection("users").findOneAndUpdate({ email: email}, {$set: { userImage: newImage } });
       res.json({ status: 200, message: "Image changed"})
     } else {
       res.status(405).json({ status: 405, message: "Method not allowed" });

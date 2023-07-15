@@ -22,7 +22,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const usersEmail = userCtxt.email;
 
   async function getUserIdAndNotes(email: any){
-    await fetch(`http://localhost:3000/api/users?email=${email}`)
+    await fetch(`https://daynotes-ebon.vercel.app/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
         setUserId(data.data.userId) 
