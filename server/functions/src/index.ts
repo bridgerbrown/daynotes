@@ -84,6 +84,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("get-document", async (userId: string, date: string) => {
     const documentId = `${userId}-${date}`;
     const document: Note = await findOrCreateDocument(documentId, userId, date);
+    console.log("Socket event received:", documentId)
     socket.join(documentId);
     socket.emit("load-document", document.data);
 

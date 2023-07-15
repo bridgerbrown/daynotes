@@ -121,6 +121,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => { 
         setUserId(data.data.userId) 
+        console.log(data.data.userId)
         getUsersNotes(data.data.userId)
     })
   }
@@ -160,6 +161,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     const s = io("https://us-central1-daynotes-9d9d8.cloudfunctions.net/socket");
     setSocket(s);
+    console.log("Setting up socket connection...")
     checkNoteExists(usersNotes, selectedDay);
 
     return () => {
@@ -174,6 +176,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     socket.once("load-document", (document: any) => {
         quill.setContents(document)
         quill.enable()
+        console.log("Loading document...")
     })
 
     socket.emit('get-document', userId, selectedDay)
