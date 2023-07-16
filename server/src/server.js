@@ -6,37 +6,16 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-interface DeltaStatic {
-  ops: {
-    attributes: {
-      underline: boolean;
-      italic: boolean;
-      color: string;
-      background: string;
-      bold: boolean;
-    };
-    insert: string;
-  }[];
-}
-
-interface Note {
-  documentId: string;
-  userId: string;
-  date: string;
-  data: DeltaStatic;
-  lastUpdated: Date;
-}
-
 const mongodbstring = process.env.MONGODB_CONNECTION_STRING;
 const client = new MongoClient(mongodbstring);
 
-let database: Db | undefined;
+let database;
 
 /**
  * Connect to the MongoDB database
  * @return {Promise<Db>} A promise that resolves to the database connection
  */
-async function connectToDatabase(): Promise<Db> {
+async function connectToDatabase() {
   if (!database) {
     await client.connect();
     database = client.db("daynotes");
@@ -49,7 +28,7 @@ async function connectToDatabase(): Promise<Db> {
  * @param {string} note - The note to check
  * @return {boolean} true if the note contains only whitespace, false otherwise
  */
-function isOnlyWhiteSpace(note: string): boolean {
+function isOnlyWhiteSpace(note) {
   return /^\s*$/.test(note);
 }
 
@@ -71,15 +50,15 @@ httpServer.listen(3000, () => {
  * Handle socket connection
  * @param {Socket} socket - The socket connection
  */
-io.on("connection", (socket: Socket) => {
+io.on("connection", (socket) => {
   /**
    * Handle "get-document" event
    * @param {string} userId - The user ID
    * @param {string} date - The date
    */
-  socket.on("get-document", async (userId: string, date: string) => {
+  socket.on("get-document", async (userId, date) => {
     const documentId = `${userId}-${date}`;
-    const document: Note = await findOrCreateDocument(documentId, userId, date);
+    const document = await findOrCreateDocument(documentId, userId, date);
     console.log("Socket event received:", documentId);
     socket.join(documentId);
     socket.emit("load-document", document.data);
@@ -88,7 +67,7 @@ io.on("connection", (socket: Socket) => {
      * Handle "send-changes" event
      * @param {DeltaStatic} delta - The changes to send
      */
-    socket.on("send-changes", (delta: DeltaStatic) => {
+    socket.on("send-changes", (delta) => {
       socket.broadcast.to(documentId).emit("receive-changes", delta);
     });
 
@@ -96,7 +75,7 @@ io.on("connection", (socket: Socket) => {
      * Handle "save-document" event
      * @param {DeltaStatic} data - The document data to save
      */
-    socket.on("save-document", async (data: DeltaStatic) => {
+    socket.on("save-document", async (data) => {
       await saveDocument(documentId, data);
     });
 
@@ -111,7 +90,7 @@ io.on("connection", (socket: Socket) => {
      * Handle socket disconnection
      */
     socket.on("disconnect", async () => {
-      const note: Note = await findDocument(documentId);
+      const note = await findDocument(documentId);
       if (note && note.data.ops) {
         const noteData = note.data.ops[0].insert;
         if (noteData.length === 1 || isOnlyWhiteSpace(noteData)) {
@@ -130,28 +109,22 @@ io.on("connection", (socket: Socket) => {
  * @return {Promise<Note>} A promise that resolves to the found or created
  *  document
  */
-async function findOrCreateDocument(
-  documentId: string,
-  userId: string,
-  date: string
-): Promise<Note> {
+async function findOrCreateDocument(documentId, userId, date){
   try {
     const database = await connectToDatabase();
-    const notes: Collection<Note> = database.collection("notes");
-    let note: Note | null = await notes.findOne({documentId: documentId});
+    const notes = database.collection("notes");
+    let note = await notes.findOne({documentId: documentId});
     if (note) {
       return note;
     } else {
-      const emptyDelta: DeltaStatic = {ops: []};
-      const newNote: Note = {
-        documentId: documentId,
-        userId: userId,
-        date: date,
-        data: emptyDelta,
-        lastUpdated: new Date(),
-      };
-      await notes.insertOne(newNote);
-      return newNote;
+      const emptyDelta = {ops: []};
+      const updateResult = await notes.findOneAndUpdate(
+        {documentId: documentId, userId: userId, date: date},
+        {$setOnInsert: {data: emptyDelta, lastUpdated: new Date()}},
+        {upsert: true, returnDocument: "after"}
+      );
+      note = updateResult.value;
+      return note;
     }
   } catch (error) {
     await client.close();
@@ -165,11 +138,11 @@ async function findOrCreateDocument(
  * @param {string} documentId - The document ID
  * @return {Promise<Note>} A promise that resolves to the found document
  */
-async function findDocument(documentId: string): Promise<Note> {
+async function findDocument(documentId) {
   try {
     const database = await connectToDatabase();
-    const notes: Collection<Note> = database.collection("notes");
-    const note: Note | null = await notes.findOne({documentId});
+    const notes = database.collection("notes");
+    const note = await notes.findOne({documentId});
     if (note) {
       return note;
     } else {
@@ -187,9 +160,9 @@ async function findDocument(documentId: string): Promise<Note> {
  * @param {any} data - The document data to save
  */
 async function saveDocument(
-  documentId: string, data: DeltaStatic ): Promise<void> {
+  documentId, data ) {
   const database = await connectToDatabase();
-  const notes: Collection<Note> = database.collection("notes");
+  const notes = database.collection("notes");
   await notes.findOneAndUpdate(
     {documentId: documentId},
     {$set: {data, lastUpdated: new Date()}}
@@ -200,10 +173,10 @@ async function saveDocument(
  * Delete a document
  * @param {string} documentId - The document ID
  */
-async function deleteDocument(documentId: string): Promise<void> {
+async function deleteDocument(documentId): Promise<void> {
   try {
     const database = await connectToDatabase();
-    const notes: Collection<Note> = database.collection("notes");
+    const notes = database.collection("notes");
     const note = await notes.findOne({documentId: documentId});
     if (note) {
       await notes.deleteOne({documentId: documentId});
