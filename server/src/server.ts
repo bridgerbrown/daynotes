@@ -63,8 +63,10 @@ const io = new Server(httpServer, {
   },
 });
 
-httpServer.listen(3000, () => {
-  console.log("Socket server running on port 3000");
+const port = process.env.PORT || 3000;
+
+httpServer.listen(port, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
 });
 
 /**

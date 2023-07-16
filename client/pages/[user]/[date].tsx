@@ -157,7 +157,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
-    const s = io("https://daynotes-ebon.vercel.app:3000");
+    const s = io();
     setSocket(s);
     console.log("Setting up socket connection...")
     checkNoteExists(usersNotes, selectedDay);
