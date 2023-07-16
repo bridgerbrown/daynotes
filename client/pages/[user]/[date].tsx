@@ -121,7 +121,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => { 
         setUserId(data.data.userId) 
-        console.log(data.data.userId)
         getUsersNotes(data.data.userId)
     })
   }
@@ -131,7 +130,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
-        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
@@ -148,7 +146,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     const noteExists = checkNoteExists(usersNotes, selectedDay);
-    setNoteActivated(noteExists);
+    setNoteActivated(true);
   }, [usersNotes, selectedDay])
 
   useEffect(() => {
