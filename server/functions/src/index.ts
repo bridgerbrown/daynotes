@@ -64,7 +64,7 @@ const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://us-central1-daynotes-9d9d8.cloudfunctions.net/socket",
+    origin: "https://daynotes-ebon.vercel.app",
     methods: ["GET", "POST"],
   },
 });
@@ -84,7 +84,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("get-document", async (userId: string, date: string) => {
     const documentId = `${userId}-${date}`;
     const document: Note = await findOrCreateDocument(documentId, userId, date);
-    console.log("Socket event received:", documentId)
+    console.log("Socket event received:", documentId);
     socket.join(documentId);
     socket.emit("load-document", document.data);
 
