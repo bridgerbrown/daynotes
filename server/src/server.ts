@@ -1,11 +1,8 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
 import {MongoClient, Db, Collection} from "mongodb";
 import express from "express";
 import {createServer} from "http";
 import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
-import * as serviceAccount from "../daynotes-sdk.json";
 
 dotenv.config();
 
@@ -30,9 +27,6 @@ interface Note {
   lastUpdated: Date;
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-});
 const mongodbstring = process.env.MONGODB_CONNECTION_STRING;
 const client = new MongoClient(mongodbstring);
 
@@ -69,7 +63,9 @@ const io = new Server(server, {
   },
 });
 
-server.listen();
+server.listen(3001, () => {
+  console.log("Socket server running on port 3001");
+});
 
 /**
  * Handle socket connection
@@ -220,4 +216,3 @@ app.get("/", (req, res) => {
   res.send("API is running");
 });
 
-exports.api = functions.https.onRequest(app);
