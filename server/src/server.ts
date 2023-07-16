@@ -143,13 +143,15 @@ async function findOrCreateDocument(
       return note;
     } else {
       const emptyDelta: DeltaStatic = {ops: []};
-      const updateResult = await notes.findOneAndUpdate(
-        {documentId: documentId, userId: userId, date: date},
-        {$setOnInsert: {data: emptyDelta, lastUpdated: new Date()}},
-        {upsert: true, returnDocument: "after"}
-      );
-      note = updateResult.value as Note;
-      return note;
+      const newNote: Note = {
+        documentId: documentId,
+        userId: userId,
+        date: date,
+        data: emptyDelta,
+        lastUpdated: new Date(),
+      };
+      await notes.insertOne(newNote);
+      return newNote;
     }
   } catch (error) {
     await client.close();

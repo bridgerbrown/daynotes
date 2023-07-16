@@ -131,7 +131,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
-        console.log("Fetched users notes")
+        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
