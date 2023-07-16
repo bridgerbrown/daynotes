@@ -54,17 +54,17 @@ function isOnlyWhiteSpace(note: string): boolean {
 }
 
 const app = express();
-const server = createServer(app);
+const httpServer = createServer(app);
 
-const io = new Server(server, {
+const io = new Server(httpServer, {
   cors: {
     origin: "https://daynotes-ebon.vercel.app",
     methods: ["GET", "POST"],
   },
 });
 
-server.listen(3001, () => {
-  console.log("Socket server running on port 3001");
+httpServer.listen(3000, () => {
+  console.log("Socket server running on port 3000");
 });
 
 /**
