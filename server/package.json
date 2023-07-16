@@ -4,11 +4,10 @@
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "devStart": "nodemon server.ts",
+    "serve": "npm run build",
+    "shell": "npm run build",
+    "start": "npm run shell"
   },
   "engines": {
     "node": "18"
@@ -22,6 +21,7 @@
     "http": "^0.0.1-security",
     "mongodb": "^5.7.0",
     "mongoose": "^7.3.4",
+    "nodemon": "^3.0.1",
     "socket.io": "^4.7.1",
     "tree": "^0.1.3"
   },
