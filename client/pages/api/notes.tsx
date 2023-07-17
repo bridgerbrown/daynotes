@@ -11,8 +11,10 @@ export default async function handler(req: any, res: any) {
       if (userId) {
         const usersNotes = await db.collection("notes").find({ userId }).toArray();
         res.json({ status: 200, data: usersNotes })
+        console.log("Users notes fetched")
       } else {
         res.status(404).json({ status: 404, message: "User not found" });
+        console.log("No user ID")
       }
     } else if (req.method === "DELETE"){
         const { userId, date } = req.body;

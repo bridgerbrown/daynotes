@@ -122,7 +122,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(data => { 
         setUserId(data.data.userId) 
         getUsersNotes(data.data.userId)
+        console.log("User Id:" + data.data.userId)
     })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   async function getUsersNotes(userId: string){
@@ -130,6 +134,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
+        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
