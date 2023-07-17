@@ -31,7 +31,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   }
 
   async function getUsersNotes(userId: string){
-    await fetch(`/api/notes?userId=${userId}`)
+    await fetch(`https://daynotes-ebon.vercel.app/api/notes?userId=${userId}`)
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)

@@ -218,3 +218,4 @@ app.get("/", (req, res) => {
   res.send("API is running");
 });
 
+module.exports = { app, io };
