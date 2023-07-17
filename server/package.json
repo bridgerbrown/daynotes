@@ -1,5 +1,5 @@
 {
-  "name": "functions",
+  "name": "server",
   "scripts": {
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
@@ -7,7 +7,7 @@
     "devStart": "nodemon server.ts",
     "serve": "npm run build",
     "shell": "npm run build",
-    "start": "npm run shell"
+    "start": "node lib/src/index.js"
   },
   "engines": {
     "node": "18"
