@@ -164,6 +164,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     const s = io();
     setSocket(s);
+    console.log(s);
     checkNoteExists(usersNotes, selectedDay);
 
     return () => {
