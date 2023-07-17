@@ -58,7 +58,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: "https://daynotes-ebon.vercel.app",
     methods: ["GET", "POST"],
   },
 });
