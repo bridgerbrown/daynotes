@@ -14,7 +14,7 @@ const server = app.listen(port, () => {
 
 const io = new Server(server, {
   cors: {
-    origin: "https://daynotes-server.vercel.app/",
+    origin: "https://daynotes-client.vercel.app/",
     methods: ["GET", "POST"],
   },
 });
