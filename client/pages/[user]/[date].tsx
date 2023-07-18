@@ -162,9 +162,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
-    const s = io();
+    const s = io("https://daynotes-server.vercel.app/api");
     setSocket(s);
-    console.log(s);
     checkNoteExists(usersNotes, selectedDay);
 
     return () => {
@@ -175,6 +174,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     if (socket == null || quill == null || !noteActivated) return;
+
+    console.log(socket);
 
     socket.once("load-document", (document: any) => {
         quill.setContents(document)

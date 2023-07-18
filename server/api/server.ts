@@ -58,7 +58,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://daynotes-server.vercel.app/",
+    origin: "https://daynotes-client.vercel.app/",
     methods: ["GET", "POST"],
   },
 });
