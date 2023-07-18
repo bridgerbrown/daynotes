@@ -2,12 +2,12 @@ import {MongoClient, Db, Collection} from "mongodb";
 import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
 import express, {Request, Response} from "express";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const port = 3000;
-
 const server = app.listen(port, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
 });
@@ -19,10 +19,13 @@ const io = new Server(server, {
   },
 });
 
+app.use(cors({ origin: 'https://daynotes-client.vercel.app'}));
+
 app.get('/api', (req: Request, res: Response) => {
   res.send('API is running')
   console.log("API is running")
 });
+
 
 interface DeltaStatic {
   ops: {
@@ -44,9 +47,9 @@ interface Note {
   data: DeltaStatic;
   lastUpdated: Date;
 }
+
 const mongodbstring = process.env.MONGODB_CONNECTION_STRING!;
 const client = new MongoClient(mongodbstring);
-
 let database: Db | undefined;
 
 async function connectToDatabase(): Promise<Db> {
@@ -56,9 +59,11 @@ async function connectToDatabase(): Promise<Db> {
   }
   return database;
 }
+
 function isOnlyWhiteSpace(note: string): boolean {
   return /^\s*$/.test(note);
 }
+
 
 io.on("connection", (socket: Socket) => {
   socket.on("get-document", async (userId: string, date: string) => {
