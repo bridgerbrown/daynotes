@@ -6,7 +6,7 @@ import express, {Request, Response} from "express";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 const server = app.listen(port, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
@@ -14,7 +14,7 @@ const server = app.listen(port, () => {
 
 const io = new Server(server, {
   cors: {
-    origin: "https://daynotes-client.vercel.app/",
+    origin: "https://daynotes-client.vercel.app",
     methods: ["GET", "POST"],
   },
 });
