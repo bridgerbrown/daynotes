@@ -1,5 +1,4 @@
 import {MongoClient, Db, Collection} from "mongodb";
-import express from "express";
 import {createServer} from "http";
 import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
