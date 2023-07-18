@@ -2,6 +2,7 @@ import {MongoClient, Db, Collection} from "mongodb";
 import {createServer} from "http";
 import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
+import express from "express";
 
 dotenv.config();
 
@@ -52,7 +53,8 @@ function isOnlyWhiteSpace(note: string): boolean {
   return /^\s*$/.test(note);
 }
 
-const httpServer = createServer();
+const app = express();
+const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
@@ -65,6 +67,16 @@ const port = process.env.PORT || 3000;
 
 httpServer.listen(port, () => {
   console.log(`Server listening on port ${process.env.PORT}`);
+});
+
+httpServer.on('request', (req, res) => {
+  if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello, world!');
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not found');
+  }
 });
 
 /**
