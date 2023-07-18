@@ -7,7 +7,9 @@
     "devStart": "nodemon server.ts",
     "serve": "npm run build",
     "shell": "npm run build",
-    "start": "node lib/src/index.js"
+    "start": "node lib/src/index.js",
+    "vercel-build": "npm run build",
+    "vercel-start": "npm run start"
   },
   "engines": {
     "node": "18"

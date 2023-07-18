@@ -213,8 +213,4 @@ async function deleteDocument(documentId: string): Promise<void> {
   }
 }
 
-app.get("/", (req, res) => {
-  res.send("API is running");
-});
-
 export { httpServer as server, io };
