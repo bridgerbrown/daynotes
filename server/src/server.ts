@@ -224,4 +224,4 @@ async function deleteDocument(documentId: string): Promise<void> {
   }
 }
 
-export { httpServer as server, io };
+module.exports = { app, io };
