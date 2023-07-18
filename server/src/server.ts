@@ -53,8 +53,7 @@ function isOnlyWhiteSpace(note: string): boolean {
   return /^\s*$/.test(note);
 }
 
-const app = express();
-const httpServer = createServer(app);
+const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
@@ -218,4 +217,4 @@ app.get("/", (req, res) => {
   res.send("API is running");
 });
 
-module.exports = { app, io };
+export { httpServer as server, io };
