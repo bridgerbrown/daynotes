@@ -117,7 +117,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   };
 
   async function getUserIdAndNotes(email: any){
-    await fetch(`https://daynotes-ebon.vercel.app/api/users?email=${email}`)
+    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
         setUserId(data.data.userId) 
@@ -130,7 +130,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }
 
   async function getUsersNotes(userId: string){
-    await fetch(`https://daynotes-ebon.vercel.app/api/notes?userId=${userId}`)
+    await fetch(`https://daynotes-client.vercel.app/api/notes?userId=${userId}`)
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)

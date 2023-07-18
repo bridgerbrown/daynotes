@@ -28,7 +28,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
   ]
 
   async function getUserDoc(email: any){
-    await fetch(`https://daynotes-ebon.vercel.app/api/users?email=${email}`)
+    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
         setUserDoc(data.data);
@@ -40,7 +40,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
   }
 
   async function updateUserImage(email: any, newImage: string){
-    await fetch(`https://daynotes-ebon.vercel.app/api/users?email=${email}&newImage=${newImage}`, {
+    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}&newImage=${newImage}`, {
       method: 'PATCH'
     })
       .then(response => response.json())

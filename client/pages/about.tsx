@@ -14,7 +14,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
   const [userDoc, setUserDoc] = useState<any>([]);
 
   async function getUserDoc(email: any){
-    await fetch(`https://daynotes-ebon.vercel.app/api/users?email=${email}`)
+    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
         setUserDoc(data.data);

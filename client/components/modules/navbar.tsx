@@ -21,7 +21,7 @@ export default function Navbar(props: any){
   useEffect(() => {}, [userDoc])
 
   async function getUserDoc(email: any){
-    await fetch(`https://daynotes-ebon.vercel.app/api/users?email=${email}`)
+    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
       .then(response => response.json())
       .then(data => { 
         setUserData(data.data);
