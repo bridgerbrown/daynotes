@@ -5,7 +5,8 @@
     { "src": "server/src/server.ts", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "server/src/server.ts" },
-    { "src": "/(.*)", "dest": "client/.next/serverless/pages/$1" }
+    { "src": "/api/.*", "dest": "server/src/server.ts" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/client/$1" }
   ]
 }
