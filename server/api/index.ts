@@ -3,20 +3,21 @@ import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
 import express, {Request, Response} from "express";
 import http from 'http';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.port || 3000;
 
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
+app.use(cors({
     origin: "https://daynotes-client.vercel.app",
     methods: ["GET", "POST"],
-  },
-});
+    }
+));
+
+const server = http.createServer(app);
+const io = new Server(server);
 
 app.get('/api', (req: Request, res: Response) => {
   res.send('API is running')
