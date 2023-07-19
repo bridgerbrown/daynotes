@@ -66,7 +66,7 @@ function isOnlyWhiteSpace(note: string): boolean {
 }
 
 
-io.on("connection", (socket: Socket) => {
+io.on("connect", (socket: Socket) => {
   socket.on("get-document", async (userId: string, date: string) => {
     const documentId = `${userId}-${date}`;
     const document: Note = await findOrCreateDocument(documentId, userId, date);
