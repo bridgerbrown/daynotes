@@ -2,7 +2,6 @@ import {MongoClient, Db, Collection} from "mongodb";
 import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
 import express, {Request, Response} from "express";
-import cors from "cors";
 
 dotenv.config();
 
