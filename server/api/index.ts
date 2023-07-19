@@ -14,12 +14,10 @@ const server = app.listen(port, () => {
 
 const io = new Server(server, {
   cors: {
-    origin: "https://daynotes-client.vercel.app",
+    origin: "https://daynotes-client.vercel.app:8080",
     methods: ["GET", "POST"],
   },
 });
-
-app.use(cors({ origin: 'https://daynotes-client.vercel.app'}));
 
 app.get('/api', (req: Request, res: Response) => {
   res.send('API is running')
