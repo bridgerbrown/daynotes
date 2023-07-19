@@ -238,7 +238,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       setDeleteConfirmed(false);
     }
   }, [deleteConfirmed])
-
+/*
   useEffect(() => {
     if (socket == null || quill == null) return;
 
@@ -256,7 +256,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       }
     }
   }, [socket, quill]);
-
+*/
   return (
     <main className="font-SansPro bg-gray-50 min-h-screen w-screen relative">
         <Navbar />
