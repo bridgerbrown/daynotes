@@ -2,14 +2,15 @@ import {MongoClient, Db, Collection} from "mongodb";
 import {Server, Socket} from "socket.io";
 import * as dotenv from "dotenv";
 import express, {Request, Response} from "express";
+import fs from 'fs';
+import http from 'http';
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
-const server = app.listen(port, () => {
-  console.log(`Server listening on port ${process.env.PORT}`);
-});
+const port = process.env.port || 3000;
+
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
@@ -23,6 +24,9 @@ app.get('/api', (req: Request, res: Response) => {
   console.log("API is running")
 });
 
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
 
 interface DeltaStatic {
   ops: {
