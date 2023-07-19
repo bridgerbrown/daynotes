@@ -162,7 +162,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
-    const s = io("https://daynotes-server.onrender.com");
+    const s = io("https://daynotes-server.onrender.com:10000");
     setSocket(s);
     checkNoteExists(usersNotes, selectedDay);
 
