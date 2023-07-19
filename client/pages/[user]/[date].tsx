@@ -162,11 +162,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [])
 
   useEffect(() => {
-    const s = io("https://daynotes-server.vercel.app/api", {
-        withCredentials: true,
-        autoConnect: true,
-      }
-    );
+    const s = io("daynotes-server.onrender.com");
     setSocket(s);
     checkNoteExists(usersNotes, selectedDay);
 
