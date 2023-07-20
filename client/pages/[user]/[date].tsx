@@ -154,6 +154,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [selectedDay])
 
   useEffect(() => {
+    if (!usersNotes) return;
     const noteExists = checkNoteExists(usersNotes, selectedDay);
     setNoteActivated(noteExists);
   }, [usersNotes, selectedDay])
