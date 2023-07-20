@@ -24,6 +24,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [quill, setQuill] = useState<any>();
   const [monthView, setMonthView] = useState<boolean>(false);
   const [usersNotes, setUsersNotes] = useState<any[]>([]);
+  const [noteActivated, setNoteActivated] = useState<boolean | undefined>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
@@ -41,8 +42,16 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return decodedDateString
   }
 
+  const activateNote = async () => {
+    setDeleteConfirmed(false);
+    setNoteActivated(true);
+    await new Promise(resolve => setTimeout(resolve, 900));
+    getUsersNotes(userId);
+  };
+
   const deleteNote = async () => {
     await socket.emit("delete-note", userId, selectedDay);
+    setNoteActivated(false);
     await new Promise(resolve => setTimeout(resolve, 500));
     getUsersNotes(userId);
   };
@@ -97,6 +106,21 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }
 
+
+ const checkNoteExists = (notes: any[], selectedDay: Date) => {
+    if (notes) {
+      const userNotesDates = notes
+        .map((note: any) => parseISO(note.date))
+        .filter((date: any) => isSameDay(date, selectedDay));
+      const noteExists = userNotesDates.length > 0;
+      console.log("Checking note exists: " + noteExists);
+      return noteExists;
+    } else {
+      console.log("Users notes not fetched in time")
+      return false;
+    }
+  };
+
   async function getUserIdAndNotes(email: any){
     await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
       .then(response => response.json())
@@ -114,6 +138,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
+        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
@@ -129,6 +154,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }, [selectedDay])
 
   useEffect(() => {
+    const noteExists = checkNoteExists(usersNotes, selectedDay);
+    setNoteActivated(noteExists);
+  }, [usersNotes, selectedDay])
+
+  useEffect(() => {
     const urlDate = parseDateFromUrl(router.asPath);
     if(urlDate !== selectedDay){
       setSelectedDay(urlDate);
@@ -140,7 +170,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       transports: ['websocket']
     });
     setSocket(s);
-    console.log(s);
+    checkNoteExists(usersNotes, selectedDay);
 
     return () => {
         s.disconnect()
@@ -149,17 +179,18 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
 
   useEffect(() => {
-    if (socket == null || quill == null) return;
+    if (socket == null || quill == null || !noteActivated) return;
 
     console.log(socket);
 
     socket.once("load-document", (document: any) => {
         quill.setContents(document)
         quill.enable()
+        console.log("Loading document...")
     })
 
     socket.emit('get-document', userId, selectedDay)
-  }, [socket, quill])
+  }, [socket, quill, noteActivated])
 
 
   useEffect(() => {
@@ -249,6 +280,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 </p>
               </div>
               {
+                noteActivated ?
                   deleteConfirmation ?
                   <div className='mr-1 flex justify-center items-center space-x-4'>
                     <p className='text-gray-500 font-thin text-sm'>
@@ -285,6 +317,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                       onClick={() => setDeleteConfirmation(true)}
                     />
                   </div>
+                :
+                <div></div>
               }
             </div>
             {
@@ -302,6 +336,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
               <DateHeader 
                 monthView={monthView}
                 setMonthView={setMonthView} 
+                noteActivated={noteActivated} 
                 dateDifference={dateDifference} 
                 selectedDay={selectedDay} 
                 prevDay={prevDay} 
@@ -309,7 +344,17 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 yesterday={yesterday} 
                 tomorrow={tomorrow} 
               />
-              <TextEditorNoSSR setQuill={setQuill} />
+              {
+                noteActivated ?
+                <TextEditorNoSSR setQuill={setQuill} />
+                :
+                <div className='h-[5in] flex justify-center items-center font-light w-full'>
+                  <button className='hover:text-gray-700 hover:border-gray-700 text-gray-400 text-sm flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-2 font-bold border-gray-400'
+                    onClick={() => activateNote()}
+                  > + 
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </div>
