@@ -2,25 +2,39 @@ import Navbar from '@/components/modules/navbar'
 import Footer from '@/components/modules/footer'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { startOfToday } from 'date-fns';
 
 export default function Home() {
+  const { user } = useUser();
+  const today = startOfToday();
 
   return (
     <main className="overflow-hidden font-SansPro bg-gray-50 min-h-screen w-screen relative">
       <Navbar />
       <section className='mx-2 mb-96 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='mt-72 w-full flex flex-col justify-center items-center'>
-          <h1 className='mb-10 text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900'>
+          <h1 className='mb-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900'>
             Daily notes, made easy
           </h1>
-          <p className='text-center mb-24 text-gray-500 text-xl lg:text-2xl px-2 font-light'>
+          <p className='text-center mb-24 text-gray-500 text-lg sm:text-xl lg:text-2xl px-2 font-light'>
             Bring your daily notes to the next level with calendar-based organization.
           </p>
-          <Link href={`/api/auth/login`}>
-            <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b lg:px-8 lg:py-4 px-6 py-3 text-md lg:text-lg text-white font-semibold rounded-lg'>
-              Sign Up
-            </button>
-          </Link>
+          {
+            !user ?
+              <Link href={`/api/auth/login`}>
+                <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b lg:px-8 lg:py-4 px-6 py-3 text-md lg:text-lg text-white font-semibold rounded-lg'>
+                  Sign Up
+                </button>
+              </Link>
+            :
+              <p className='font-light text-gray-500'>Thanks for signing up! <Link 
+                href={`/${user.email}/${today}`} 
+                className='underline underline-offset-2 hover:text-gray-700 transition-colors'>
+                  Click here to make your first note
+                </Link>.
+              </p>
+          }
         </div>
       </section>
       <section className='mb-36 lg:mb-48'>
@@ -77,8 +91,22 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className='mx-2 mb-96 sm:mx-8 flex flex-col justify-center items-center'>
+        <h2 className='mb-10 text-xl md:text-2xl lg:text-3xl text-gray-900'>
+          How was this website built?
+        </h2>
+        <p className='text-center mb-24 text-gray-500 text-lg px-2 font-light'>
+          Learn more about how this Front-End Web Development project was built <Link 
+            href={"/about"} 
+            className='underline underline-offset-4 text-blue-400 hover:text-blue-600 transition-colors'>
+              here
+          </Link>.
+        </p>
+      </section>
          
       <Footer />
     </main>
   )
 };
+
+
