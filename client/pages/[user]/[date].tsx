@@ -302,7 +302,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
               <DateHeader 
                 monthView={monthView}
                 setMonthView={setMonthView} 
-                noteActivated={noteActivated} 
                 dateDifference={dateDifference} 
                 selectedDay={selectedDay} 
                 prevDay={prevDay} 
