@@ -157,7 +157,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     if (!usersNotes) return;
     const noteExists = checkNoteExists(usersNotes, selectedDay);
     setNoteActivated(noteExists);
-  }, [usersNotes, selectedDay])
+  }, [usersNotes])
 
   useEffect(() => {
     const urlDate = parseDateFromUrl(router.asPath);
@@ -176,7 +176,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return () => {
         s.disconnect()
     }
-  }, [router.asPath, selectedDay])
+  }, [router.asPath])
 
 
   useEffect(() => {
