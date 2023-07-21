@@ -47,7 +47,7 @@ export default function User() {
                 </h2>
                 <p className='max-w-2xl text-base font-light'>
                   Once the user signs in through Auth0's user authorization, a MongoDB user collection is made which will store their basic profile data (private login data is securely stored through Auth0.)
-                  When they create their first note, the client-side Vercel-hosted website communicates with the Node.js server hosted on Pusher
+                  When they create their first note, the client-side Vercel-hosted website communicates with the Node.js server hosted on Render
                   to establish a Socket.io web socket connection. This socket connection is what allows for real-time document synchronization between browser tabs.
                   <br/>
                   <br/>
@@ -77,7 +77,7 @@ export default function User() {
               </h2>
               <div className='max-w-2xl text-base font-light'>
                 <p>
-                  This project was made using <span className='font-semibold'>React</span>,<span className='font-semibold'> TypeScript</span>, <span className='font-semibold'> Socket.io</span>,<span className='font-semibold'> Quill.js</span>,<span className='font-semibold'> MongoDB</span>,<span className='font-semibold'> Date-fns</span>,<span className='font-semibold'> Auth0</span>,<span className='font-semibold'> TailwindCSS</span>,<span className='font-semibold'> Pusher</span>,<span className='font-semibold'> NextJS</span>,<span className='font-semibold'> Node.js</span>, and<span className='font-semibold'> Vercel</span>.
+                  This project was made using <span className='font-semibold'>React</span>,<span className='font-semibold'> TypeScript</span>, <span className='font-semibold'> Socket.io</span>,<span className='font-semibold'> Quill.js</span>,<span className='font-semibold'> MongoDB</span>,<span className='font-semibold'> Date-fns</span>,<span className='font-semibold'> Auth0</span>,<span className='font-semibold'> TailwindCSS</span>,<span className='font-semibold'> NextJS</span>,<span className='font-semibold'> Node.js</span>,<span className='font-semibold'> Render</span>, and<span className='font-semibold'> Vercel</span>.
                 </p>
                 <p className='mt-4 mb-0'>
                   Check out my other projects:
