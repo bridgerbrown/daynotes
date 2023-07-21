@@ -31,6 +31,9 @@ export default function CalendarModule(props: any) {
   const [currentMonth, setCurrentMonth] = useState(selectedDay);
   const [userNotesDates, setUserNotesDates] = useState<any[]>([]);
 
+  const activeCalendarCSS: string = `flex justify-center items-center`;
+  const inactiveCalendarCSS: string = `hidden`;
+
   const days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(currentMonth)),
     end: endOfWeek(endOfMonth(currentMonth)),
