@@ -24,16 +24,22 @@ function classNames(...classes: any[]) {
 }
 
 export default function CalendarModule(props: any) {
-  let { usersNotes, setSelectedDay, selectedDay, usersEmail } = props;
+  let { usersNotes, setSelectedDay, selectedDay, usersEmail, monthView } = props;
   let today = startOfToday();
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(selectedDay);
+  const [userNotesDates, setUserNotesDates] = useState<any[]>([]);
 
   const days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(currentMonth)),
     end: endOfWeek(endOfMonth(currentMonth)),
   })
+
+  useEffect(() => {
+    const userNotesDatesArr = usersNotes.map((note: any) => note.date);
+    setUserNotesDates(userNotesDatesArr);
+  }, [usersNotes, monthView]);
 
   function previousMonth() {
     let firstDayNextMonth = subMonths(currentMonth, 1 );
@@ -45,11 +51,6 @@ export default function CalendarModule(props: any) {
     setCurrentMonth(firstDayNextMonth);
     console.log(currentMonth)
   }
-  
-  const userNotesDates: any = [];
-    for (const note of usersNotes) {
-      userNotesDates.push(note.date);
-    }
 
   return (
     <div className="flex justify-center items-center">
@@ -99,8 +100,7 @@ export default function CalendarModule(props: any) {
               <div>SAT</div>
             </div>
             <div className="font-light border-[1px] drop-shadow-sm bg-[#f9fbfa] border-gray-300 grid grid-cols-7 my-2 text-md">
-              {usersNotes ? 
-                days.map((day, dayIdx) => (
+              {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
                   className={classNames(
@@ -143,18 +143,11 @@ export default function CalendarModule(props: any) {
                   </button>
 
                   <div className="relative bottom-5 h-0 w-14 flex justify-center">
-                    {userNotesDates.some((date: any) =>
-                      isSameDay(parseISO(date), day)
-                    ) && (
-                      <div className="relative w-2 h-2 rounded-full bg-blue-500"></div>
-                    )}
+                    {userNotesDates.map((date: any) => isSameDay(parseISO(date), day) ? <div className="relative w-2 h-2 rounded-full bg-blue-500"></div> : <div></div>)}
                   </div>
 
                 </div>
-              ))
-              :
-              <div></div>
-              }
+              ))}
             </div>
           </section>
         </div>

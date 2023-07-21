@@ -329,6 +329,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 usersNotes={usersNotes} 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} 
+                monthView={monthView}
               />
               :
               <div></div>
