@@ -143,7 +143,7 @@ export default function CalendarModule(props: any) {
                   </button>
 
                   <div className="relative bottom-5 h-0 w-14 flex justify-center">
-                    {userNotesDates ? 
+                    {userNotesDates.length ? 
                       userNotesDates.map((date: any) => isSameDay(parseISO(date), day) ? <div className="relative w-2 h-2 rounded-full bg-blue-500"></div> : <div></div>)
                       :
                       <div></div>
