@@ -47,8 +47,10 @@ export default function CalendarModule(props: any) {
   }
 
   const userNotesDates: any = [];
-  for (const note of usersNotes) {
-    userNotesDates.push(note.date);
+    if (usersNotes){
+      for (const note of usersNotes) {
+        userNotesDates.push(note.date);
+    }
   }
 
   return (
