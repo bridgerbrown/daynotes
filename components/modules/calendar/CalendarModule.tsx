@@ -29,11 +29,17 @@ export default function CalendarModule(props: any) {
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(selectedDay);
+  const [userNotesDates, setUserNotesDates] = useState<any[]>([]);
 
-  let days = eachDayOfInterval({
+  const days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(currentMonth)),
     end: endOfWeek(endOfMonth(currentMonth)),
   })
+
+  useEffect(() => {
+    const userNotesDatesArr = usersNotes.map((note: any) => parseISO(note.date));
+    setUserNotesDates(userNotesDatesArr);
+  }, [usersNotes]);
 
   function previousMonth() {
     let firstDayNextMonth = subMonths(currentMonth, 1 );
@@ -45,15 +51,6 @@ export default function CalendarModule(props: any) {
     setCurrentMonth(firstDayNextMonth);
     console.log(currentMonth)
   }
-
-  const userNotesDates: any = [];
-    
-
-  useEffect(() => {
-    for (const note of usersNotes) {
-      userNotesDates.push(note.date);
-    }
-  }, [usersNotes]);
 
   return (
     <div className="flex justify-center items-center">
