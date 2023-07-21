@@ -17,7 +17,7 @@ import {
   subMonths
 } from 'date-fns'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -47,11 +47,11 @@ export default function CalendarModule(props: any) {
   }
 
   const userNotesDates: any = [];
-    if (usersNotes){
-      for (const note of usersNotes) {
-        userNotesDates.push(note.date);
-    }
+    for (const note of usersNotes) {
+      userNotesDates.push(note.date);
   }
+
+  useEffect(() => {}, [usersNotes]);
 
   return (
     <div className="flex justify-center items-center">
