@@ -322,7 +322,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 <div></div>
               }
             </div>
-            
+            {
+              monthView ?
               <CalendarModule 
                 usersEmail={usersEmail} 
                 usersNotes={usersNotes} 
@@ -330,7 +331,9 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 setSelectedDay={setSelectedDay} 
                 monthView={monthView}
               />
-
+              :
+              <div></div>
+            }
             
             <div className='mb-32 flex flex-col justify-center items-center'>
               <DateHeader 

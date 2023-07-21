@@ -29,7 +29,6 @@ export default function CalendarModule(props: any) {
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(selectedDay);
-  const [userNotesDates, setUserNotesDates] = useState<any[]>([]);
 
   const activeCalendarCSS: string = `flex justify-center items-center`;
   const inactiveCalendarCSS: string = `hidden`;
@@ -38,11 +37,6 @@ export default function CalendarModule(props: any) {
     start: startOfWeek(startOfMonth(currentMonth)),
     end: endOfWeek(endOfMonth(currentMonth)),
   })
-
-  useEffect(() => {
-    const userNotesDatesArr = usersNotes ? usersNotes.map((note: any) => note.date) : [];
-    setUserNotesDates(userNotesDatesArr);
-  }, [usersNotes, monthView, userNotesDates]);
 
   function previousMonth() {
     let firstDayNextMonth = subMonths(currentMonth, 1 );
@@ -55,8 +49,17 @@ export default function CalendarModule(props: any) {
     console.log(currentMonth)
   }
 
+  const userNotesDates: any = [];
+
+  for (const note of usersNotes) {
+    userNotesDates.push(note.date);
+  }
+
   return (
-    <div className={monthView ? activeCalendarCSS : inactiveCalendarCSS}>
+    <div>
+    {
+        usersNotes ?
+    <div className={activeCalendarCSS}>
       <section className="w-full rounded-md">
         <div className="w-full flex justify-center items-center bg-gray-100/80 shadow-inner"> 
           <section className="pt-1 pb-7">
@@ -146,11 +149,9 @@ export default function CalendarModule(props: any) {
                   </button>
 
                   <div className="relative bottom-5 h-0 w-14 flex justify-center">
-                    {userNotesDates.length ? 
+                    {
                       userNotesDates.map((date: any) => isSameDay(parseISO(date), day) ? <div className="relative w-2 h-2 rounded-full bg-blue-500"></div> : <div></div>)
-                      :
-                      <div></div>
-                    }
+                     }
                   </div>
 
                 </div>
@@ -159,6 +160,10 @@ export default function CalendarModule(props: any) {
           </section>
         </div>
       </section>
+    </div>
+    :
+    <div></div>
+      }
     </div>
   )
 }
