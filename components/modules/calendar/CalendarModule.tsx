@@ -24,22 +24,16 @@ function classNames(...classes: any[]) {
 }
 
 export default function CalendarModule(props: any) {
-  let { usersNotes, setSelectedDay, selectedDay, usersEmail, monthView } = props;
+  let { usersNotes, setSelectedDay, selectedDay, usersEmail } = props;
   let today = startOfToday();
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(selectedDay);
-  const [userNotesDates, setUserNotesDates] = useState<any[]>([]);
 
   const days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(currentMonth)),
     end: endOfWeek(endOfMonth(currentMonth)),
   })
-
-  useEffect(() => {
-    const userNotesDatesArr = usersNotes.map((note: any) => parseISO(note.date));
-    setUserNotesDates(userNotesDatesArr);
-  }, [usersNotes, monthView]);
 
   function previousMonth() {
     let firstDayNextMonth = subMonths(currentMonth, 1 );
@@ -51,6 +45,11 @@ export default function CalendarModule(props: any) {
     setCurrentMonth(firstDayNextMonth);
     console.log(currentMonth)
   }
+  
+  const userNotesDates: any = [];
+    for (const note of usersNotes) {
+      userNotesDates.push(note.date);
+    }
 
   return (
     <div className="flex justify-center items-center">
@@ -100,7 +99,8 @@ export default function CalendarModule(props: any) {
               <div>SAT</div>
             </div>
             <div className="font-light border-[1px] drop-shadow-sm bg-[#f9fbfa] border-gray-300 grid grid-cols-7 my-2 text-md">
-              {days.map((day, dayIdx) => (
+              {usersNotes ? 
+                days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
                   className={classNames(
@@ -151,7 +151,10 @@ export default function CalendarModule(props: any) {
                   </div>
 
                 </div>
-              ))}
+              ))
+              :
+              <div></div>
+              }
             </div>
           </section>
         </div>
