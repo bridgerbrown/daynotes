@@ -350,7 +350,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                 <TextEditorNoSSR setQuill={setQuill} />
                 :
                 <div className='h-[5in] flex justify-center items-center font-light w-full'>
-                  <button className='hover:text-gray-600 hover:border-gray-600 text-gray-400 text-base flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-3 font-bold border-gray-400'
+                  <button className='hover:text-gray-600 hover:border-gray-600 text-gray-400 text-base flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-4 font-bold border-gray-400'
                     onClick={() => activateNote()}
                   > + 
                   </button>
