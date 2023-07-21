@@ -37,7 +37,7 @@ export default function CalendarModule(props: any) {
   })
 
   useEffect(() => {
-    const userNotesDatesArr = usersNotes.map((note: any) => note.date);
+    const userNotesDatesArr = usersNotes ? usersNotes.map((note: any) => note.date) : [];
     setUserNotesDates(userNotesDatesArr);
   }, [usersNotes, monthView]);
 
