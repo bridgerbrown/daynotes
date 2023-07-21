@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -28,6 +28,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
+  const [lastSocketId, setLastSocketId] = useState<string | null>(null);
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
@@ -182,8 +183,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     if (socket == null || quill == null || !noteActivated) return;
 
-    console.log(socket);
-
     socket.once("load-document", (document: any) => {
         quill.setContents(document)
         quill.enable()
@@ -207,15 +206,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     }
   }, [socket, quill])
 
-  const receivingChanges = useRef(false);
-
   useEffect(() => {
     if (socket == null || quill == null) return;
 
     const handler = (delta: any) => {
-        receivingChanges.current = true;
         quill.updateContents(delta);
-        receivingChanges.current = false;
     }
     socket.on('receive-changes', handler);
 
@@ -228,9 +223,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     if (socket == null || quill == null) return;
 
-    const handler = (delta: any, source: any) => {
-        if (source !== 'user' || receivingChanges.current) return;
-        socket.emit("send-changes", delta);
+    const handler = (delta: any, oldDelta: any, source: any) => {
+        if (source === 'user' && socket.id !== lastSocketId) {
+          socket.emit("send-changes", delta);
+          setLastSocketId(socket.id);
+      }
     }
 
     quill.on('text-change', handler);
