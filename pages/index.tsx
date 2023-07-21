@@ -42,10 +42,10 @@ export default function Home() {
           <div className='mt-12 sm:mt-16 lg:col-start-1 lg:mt-0'>
             <div className='flex justify-center px-6 md:px-12 lg:relative lg:m-0 lg:h-full lg:px-0'>
               <Image
-                src={"/note-sample.png"}
+                src={"/note-preview.png"}
                 alt="Product preview"
-                width={1880}
-                height={1080}
+                width={2199}
+                height={1147}
                 className='w-full max-w-[640px] lg:absolute lg:-right-36 lg:h-[540px] lg:w-auto lg:max-w-none'
               />
             </div>
@@ -70,10 +70,10 @@ export default function Home() {
           <div className='mt-12 sm:mt-16 lg:col-start-2 lg:mt-0'>
             <div className='flex justify-center px-6 md:px-12 lg:relative lg:m-0 lg:h-full lg:px-0'>
               <Image
-                src={"/calendar-sample.png"}
+                src={"/calendar-preview.png"}
                 alt="Product preview"
-                width={1880}
-                height={1080}
+                width={1658}
+                height={1040}
                 className='w-full max-w-[640px] lg:absolute lg:-left-24 lg:h-[540px] lg:w-auto lg:max-w-none'
               />
             </div>
