@@ -39,7 +39,7 @@ export default function CalendarModule(props: any) {
   useEffect(() => {
     const userNotesDatesArr = usersNotes ? usersNotes.map((note: any) => note.date) : [];
     setUserNotesDates(userNotesDatesArr);
-  }, [usersNotes, monthView]);
+  }, [usersNotes, monthView, userNotesDates]);
 
   function previousMonth() {
     let firstDayNextMonth = subMonths(currentMonth, 1 );
