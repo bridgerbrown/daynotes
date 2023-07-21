@@ -56,7 +56,7 @@ export default function CalendarModule(props: any) {
   }
 
   return (
-    <div className="flex justify-center items-center">
+    <div className={monthView ? activeCalendarCSS : inactiveCalendarCSS}>
       <section className="w-full rounded-md">
         <div className="w-full flex justify-center items-center bg-gray-100/80 shadow-inner"> 
           <section className="pt-1 pb-7">
