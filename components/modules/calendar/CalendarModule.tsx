@@ -47,11 +47,13 @@ export default function CalendarModule(props: any) {
   }
 
   const userNotesDates: any = [];
+    
+
+  useEffect(() => {
     for (const note of usersNotes) {
       userNotesDates.push(note.date);
-  }
-
-  useEffect(() => {}, [usersNotes]);
+    }
+  }, [usersNotes]);
 
   return (
     <div className="flex justify-center items-center">
