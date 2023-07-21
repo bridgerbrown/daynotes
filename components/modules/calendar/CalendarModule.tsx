@@ -24,7 +24,7 @@ function classNames(...classes: any[]) {
 }
 
 export default function CalendarModule(props: any) {
-  let { usersNotes, setSelectedDay, selectedDay, usersEmail } = props;
+  let { usersNotes, setSelectedDay, selectedDay, usersEmail, monthView } = props;
   let today = startOfToday();
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function CalendarModule(props: any) {
   useEffect(() => {
     const userNotesDatesArr = usersNotes.map((note: any) => parseISO(note.date));
     setUserNotesDates(userNotesDatesArr);
-  }, [usersNotes]);
+  }, [usersNotes, monthView]);
 
   function previousMonth() {
     let firstDayNextMonth = subMonths(currentMonth, 1 );
