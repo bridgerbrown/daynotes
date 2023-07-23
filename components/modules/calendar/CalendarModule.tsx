@@ -29,6 +29,7 @@ export default function CalendarModule(props: any) {
   let firstDayCurrentMonth = startOfMonth(today);
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(selectedDay);
+  const [arePropsReady, setArePropsReady] = useState<boolean>(false);
 
   const activeCalendarCSS: string = `flex justify-center items-center`;
   const inactiveCalendarCSS: string = `hidden`;
@@ -53,6 +54,20 @@ export default function CalendarModule(props: any) {
 
   for (const note of usersNotes) {
     userNotesDates.push(note.date);
+  }
+
+  useEffect(() => {
+    if (usersNotes && selectedDay && usersEmail){
+      setArePropsReady(true);
+    } else {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000)
+    }
+  }, [usersNotes, selectedDay, usersEmail])
+
+  if (!arePropsReady) {
+    return <div className='w-full flex justify-center items-center'><h2 className='text-2xl text-grayHeading animate-pulse'>Loading...</h2></div>
   }
 
   return (
