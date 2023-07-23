@@ -113,13 +113,13 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       const notesDate = notes
         .map((note: any) => parseISO(note.date))
         .filter((date: any) => isSameDay(date, selectedDay));
-      const noteContainsText = notes
+      const notesText = notes
         .filter((note: any) => {
           const date = parseISO(note.date)
           return isSameDay(date, selectedDay)
         })
-        .map((note: any) => note.data.ops.length)
-      console.log("Note contains text: " + noteContainsText)
+        .map((note: any) => note.data.ops)
+      const noteContainsText = notesText.length > 0;
       const noteCreated = notesDate.length > 0;
       const noteExists = noteCreated && noteContainsText;
       
