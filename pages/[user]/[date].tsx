@@ -119,6 +119,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
           return isSameDay(date, selectedDay)
         })
         .map((note: any) => note.data.ops)
+
+      console.log("notes text: " + notesText)
       const noteContainsText = notesText.length > 0;
       const noteCreated = notesDate.length > 0;
       const noteExists = noteCreated && noteContainsText;
@@ -160,8 +162,9 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     if (!usersNotes) return;
     const noteExists = checkNoteExists(usersNotes, selectedDay);
+    console.log(noteExists)
     setNoteActivated(noteExists);
-  }, [usersNotes])
+  }, [usersNotes, selectedDay])
 
   useEffect(() => {
     const urlDate = parseDateFromUrl(router.asPath);
