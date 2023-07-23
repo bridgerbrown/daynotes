@@ -110,14 +110,21 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
  const checkNoteExists = (notes: any[], selectedDay: Date) => {
     if (notes) {
-      const userNotesDates = notes
+      const notesDate = notes
         .map((note: any) => parseISO(note.date))
         .filter((date: any) => isSameDay(date, selectedDay));
-      const noteExists = userNotesDates.length > 0;
-      console.log("Checking note exists: " + noteExists);
+      const noteContainsText = notes
+        .filter((note: any) => {
+          const date = parseISO(note.date)
+          return isSameDay(date, selectedDay)
+        })
+        .map((note: any) => note.data.ops.length)
+      console.log("Note contains text: " + noteContainsText)
+      const noteCreated = notesDate.length > 0;
+      const noteExists = noteCreated && noteContainsText;
+      
       return noteExists;
     } else {
-      console.log("Users notes not fetched in time")
       return false;
     }
   };
