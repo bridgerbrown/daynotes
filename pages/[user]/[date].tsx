@@ -148,10 +148,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     getUserIdAndNotes(usersEmail);
-  }, [])
-
-  useEffect(() => {
-    getUsersNotes(userId)
   }, [selectedDay])
 
   useEffect(() => {
