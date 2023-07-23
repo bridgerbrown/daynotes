@@ -100,7 +100,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
         router.push(`/${usersEmail}/${yesterday}`)
       )
     }
-  }
+  };
 
   const nextDay = () => {
     setSelectedDay(tomorrow);
@@ -109,7 +109,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
         router.push(`/${usersEmail}/${tomorrow}`)
       )
     }
-  }
+  };
 
 
  const checkNoteExists = (notes: any[], selectedDay: Date) => {
@@ -117,14 +117,14 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       const notesDate = notes
         .map((note: any) => parseISO(note.date))
         .filter((date: any) => isSameDay(date, selectedDay));
+
       const notesText = notes
         .filter((note: any) => {
           const date = parseISO(note.date)
           return isSameDay(date, selectedDay)
         })
-        .map((note: any) => note.data.ops)
+        .map((note: any) => note.data.ops);
 
-      console.log("notes text: " + notesText)
       const noteContainsText = notesText.length > 0;
       const noteCreated = notesDate.length > 0;
       const noteExists = noteCreated && noteContainsText;
@@ -145,7 +145,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .catch(error => {
         console.log(error)
       })
-  }
+  };
 
   async function getUsersNotes(userId: string){
     await fetch(`https://daynotes-client.vercel.app/api/notes?userId=${userId}`)
@@ -157,7 +157,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .catch(error => {
         console.log(error)
       })
-  }
+  };
 
   useEffect(() => {
     getUserIdAndNotes(usersEmail);
