@@ -323,7 +323,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
               }
             </div>
             {
-              monthView ?
+              monthView && usersNotes ?
               <CalendarModule 
                 usersEmail={usersEmail} 
                 usersNotes={usersNotes} 

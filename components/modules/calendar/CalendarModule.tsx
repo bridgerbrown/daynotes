@@ -56,20 +56,6 @@ export default function CalendarModule(props: any) {
     userNotesDates.push(note.date);
   }
 
-  useEffect(() => {
-    if (usersNotes && selectedDay && usersEmail){
-      setArePropsReady(true);
-    } else {
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000)
-    }
-  }, [usersNotes, selectedDay, usersEmail])
-
-  if (!arePropsReady) {
-    return <div className='w-full flex justify-center items-center'><h2 className='text-2xl text-grayHeading animate-pulse'>Loading...</h2></div>
-  }
-
   return (
     <div>
     {
