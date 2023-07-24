@@ -30,7 +30,7 @@ export default function User() {
                 </h2>
                 <p className='max-w-2xl text-base font-light'>
                   DayNotes is a Front-End web development project that allows users to make date-based note documents using the Quill.js text editor alongside
-                  a calendar that visualizes their timleine of created notes. DayNotes also allows users to have 
+                  a calendar that visualizes their timeline of created notes. DayNotes also allows users to have 
                   instantaneously updating and saving documents for real-time synchronization between their browser tabs.
                 </p>
               </div>
