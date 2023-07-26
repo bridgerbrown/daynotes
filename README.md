@@ -8,4 +8,4 @@ a calendar that visualizes your created notes. When a user signs up, their notes
 their secure Auth0 user validation. Utilizing the power of Socket.io web sockets, DayNotes allows users to have 
 instantaneously updating documents for real-time synchronization between your browser tabs.
 
-![DayNotes Preview](/public/note-sample.png)
+![DayNotes Preview](/public/note-preview.png)
