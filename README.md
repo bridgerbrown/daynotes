@@ -1,4 +1,4 @@
-<img src="/client/public/daynotes-logo.png" alt="DayNotes logo" width="740" height="149">
+<img src="/public/daynotes-logo.png" alt="DayNotes logo" width="740" height="149">
 
 ## DayNotes
 #### Date-based note taking platform with seamless synchronization 
@@ -8,4 +8,4 @@ a calendar that visualizes your created notes. When a user signs up, their notes
 their secure Auth0 user validation. Utilizing the power of Socket.io web sockets, DayNotes allows users to have 
 instantaneously updating documents for real-time synchronization between your browser tabs.
 
-![DayNotes Preview](/client/public/note-sample.png)
+![DayNotes Preview](/public/note-sample.png)

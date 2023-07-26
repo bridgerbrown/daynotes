@@ -1,8 +1,13 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
+  "/about": "pages/about.js",
+  "/api/notes": "pages/api/notes.js",
   "/_document": "pages/_document.js",
+  "/": "pages/index.js",
   "/api/auth/[...auth0]": "pages/api/auth/[...auth0].js",
+  "/_error": "pages/_error.js",
+  "/api/users": "pages/api/users.js",
+  "/[user]/[date]": "pages/[user]/[date].js",
   "/[user]": "pages/[user].js",
-  "/": "pages/index.js"
+  "/[user]/notes": "pages/[user]/notes.js"
 }
