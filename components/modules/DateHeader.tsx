@@ -26,7 +26,7 @@ export default function DateHeader(props: any) {
             />
           </button>
           <p className='w-max mt-2 text-gray-500 text-xs font-light'>
-            {format(( new Date(yesterday)), 'LLLL dd')}
+            {format(( new Date(yesterday)), 'LLLL d')}
           </p>
         </div>
 
@@ -61,7 +61,7 @@ export default function DateHeader(props: any) {
             />
           </button>
           <p className='mt-2 w-max text-gray-500 text-xs font-light'>
-            {format(( new Date(tomorrow)), 'LLLL dd')}
+            {format(( new Date(tomorrow)), 'LLLL d')}
           </p>
         </div>
       </div>
