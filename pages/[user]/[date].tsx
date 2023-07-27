@@ -182,7 +182,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       transports: ['websocket']
     });
     setSocket(s);
-    checkNoteExists(usersNotes, selectedDay);
 
     return () => {
         s.disconnect()
