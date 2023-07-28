@@ -29,6 +29,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [lastSocketId, setLastSocketId] = useState<string | null>(null);
+  const [loadingDocument, setLoadingDocument] = useState<boolean>(false);
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
@@ -152,7 +153,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
-        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
@@ -193,9 +193,9 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     if (socket == null || quill == null || !noteActivated) return;
 
     socket.once("load-document", (document: any) => {
+        setLoadingDocument(false);
         quill.setContents(document)
         quill.enable()
-        console.log("Loading document...")
     })
 
     socket.emit('get-document', userId, selectedDay)
@@ -358,10 +358,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
               />
               {
                 noteActivated ?
-                <TextEditorNoSSR setQuill={setQuill} />
+                <TextEditorNoSSR setQuill={setQuill} loadingDocument={loadingDocument} setLoadingDocument={setLoadingDocument} />
                 :
                 <div className='h-[5in] flex justify-center items-center font-light w-full'>
-                  <button className='hover:text-gray-600 hover:border-gray-600 text-gray-400 text-lg flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-[3px] font-bold border-gray-400'
+                  <button className='hover:text-gray-600 hover:border-gray-600 text-gray-400 text-lg flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-[2.75px] font-bold border-gray-400'
                     onClick={() => activateNote()}
                   > + 
                   </button>
