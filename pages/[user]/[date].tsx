@@ -29,7 +29,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [lastSocketId, setLastSocketId] = useState<string | null>(null);
-  const [loadingDocument, setLoadingDocument] = useState<boolean>(false);
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
@@ -48,7 +47,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     const s = io("daynotes-server.onrender.com", {
       transports: ['websocket']
     });
-    setSocket(s);
+    if (!socket) setSocket(s);
     setDeleteConfirmed(false);
     setNoteActivated(true);
     await new Promise(resolve => setTimeout(resolve, 900));
@@ -166,7 +165,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   useEffect(() => {
     if (!usersNotes) return;
     const noteExists = checkNoteExists(usersNotes, selectedDay);
-    console.log(noteExists)
     setNoteActivated(noteExists);
   }, [usersNotes, selectedDay])
 
@@ -193,7 +191,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     if (socket == null || quill == null || !noteActivated) return;
 
     socket.once("load-document", (document: any) => {
-        setLoadingDocument(false);
         quill.setContents(document)
         quill.enable()
     })
@@ -286,8 +283,6 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
                   className='cursor-pointer w-5 mr-4 h-fit opacity-40 hover:opacity-70 transition-opacity'
                   onClick={() => setMonthView(!monthView)}
                 />
-                <p className='transition pt-0.5 text-sm font-light text-gray-500'>
-                </p>
               </div>
               {
                 noteActivated ?
@@ -358,7 +353,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
               />
               {
                 noteActivated ?
-                <TextEditorNoSSR setQuill={setQuill} loadingDocument={loadingDocument} setLoadingDocument={setLoadingDocument} />
+                <TextEditorNoSSR setQuill={setQuill} />
                 :
                 <div className='h-[5in] flex justify-center items-center font-light w-full'>
                   <button className='hover:text-gray-600 hover:border-gray-600 text-gray-400 text-lg flex items-center justify-center text-center w-16 h-16 pb-0.5 rounded-full border-[2.75px] font-bold border-gray-400'
