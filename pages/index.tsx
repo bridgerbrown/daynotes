@@ -4,10 +4,25 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { startOfToday } from 'date-fns';
+import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { user } = useUser();
   const today = startOfToday();
+  const [socket, setSocket] = useState<any>();
+
+  useEffect(() => {
+    const s = io("daynotes-server.onrender.com", {
+      transports: ['websocket']
+    });
+    setSocket(s);
+    console.log("Waking up server...")
+
+    return () => {
+        s.disconnect()
+    }
+  }, [])
 
   return (
     <main className="font-sans overflow-hidden bg-gray-50 min-h-screen w-screen relative">
