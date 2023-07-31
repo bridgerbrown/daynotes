@@ -29,6 +29,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [lastSocketId, setLastSocketId] = useState<string | null>(null);
+  const [tutorial, setTutorial] = useState<boolean>(false);
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
@@ -152,6 +153,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       .then(response => response.json())
       .then(data => {
         setUsersNotes(data.data)
+        console.log(data.data)
         })
       .catch(error => {
         console.log(error)
