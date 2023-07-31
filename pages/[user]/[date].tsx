@@ -162,10 +162,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
 
   useEffect(() => {
     getUserIdAndNotes(usersEmail);
-  }, [])
-
-  useEffect(() => {
-    getUsersNotes(userId)
+    if (usersNotes && usersNotes.length === 0) {
+      setTutorial(true)
+      console.log("Starting tutorial")
+    };
   }, [selectedDay])
 
   useEffect(() => {
