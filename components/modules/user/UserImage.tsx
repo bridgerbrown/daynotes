@@ -18,7 +18,7 @@ function UserImage(props: any){
   return (
     <div className={editImage ? editImageCss : imageCss}>
       {
-        image ?
+        !image ?
           <Image
             src={`/user-icons${image}`}
             alt="User image"
@@ -28,7 +28,7 @@ function UserImage(props: any){
             onClick={submitImage}
           />
           :
-          <div className='w-1/2'>
+          <div className='flex justify-center items-center w-1/2'>
             <Image
               src={"/spinner.png"}
               alt="Loading spinner"
