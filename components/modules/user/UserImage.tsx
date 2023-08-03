@@ -28,7 +28,15 @@ function UserImage(props: any){
             onClick={submitImage}
           />
           :
-          <div></div>
+          <div className='w-1/2'>
+            <Image
+              src={"/spinner.png"}
+              alt="Loading spinner"
+              width={50}
+              height={50}
+              className='animate-spin invert'
+            />
+          </div>
       }
     </div>
   )

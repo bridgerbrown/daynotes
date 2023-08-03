@@ -80,7 +80,7 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
       <Navbar />
-      <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
+      <div className='pb-36 mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='min-h-[85vh] border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
             <h2 className='text-2xl font-regular text-blackHeading'>
