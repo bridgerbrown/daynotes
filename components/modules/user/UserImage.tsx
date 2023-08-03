@@ -18,7 +18,7 @@ function UserImage(props: any){
   return (
     <div className={editImage ? editImageCss : imageCss}>
       {
-        !image ?
+        image ?
           <Image
             src={`/user-icons${image}`}
             alt="User image"

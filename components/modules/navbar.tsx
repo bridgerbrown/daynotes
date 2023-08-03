@@ -74,32 +74,28 @@ export default function Navbar(props: any){
         {
           user && userData ?
           <Link href={`/${user.nickname}`}>
-            {
-              userData.userImage ?
-                <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
-                  <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
-                    <Image
-                      src={`/user-icons${userData.userImage}`}
-                      alt="User profile icon"
-                      width={448}
-                      height={512}
-                      className="w-1/2 invert"
-                    />
-                  </div>
-                </li>
-                :
-                <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
-                  <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
-                    <Image
-                      src={"/spinner.png"}
-                      alt="Loading icon for user image"
-                      width={50}
-                      height={50}
-                      className="w-1/2 animate-spin invert"
-                    />
-                  </div>
-                </li>
-              }
+            <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
+              <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
+              {
+                !userData.userImage ?
+                  <Image
+                    src={`/user-icons${userData.userImage}`}
+                    alt="User profile icon"
+                    width={448}
+                    height={512}
+                    className="w-1/2 invert"
+                  />
+                  :
+                  <Image
+                    src={"/spinner.png"}
+                    alt="Loading icon for user image"
+                    width={50}
+                    height={50}
+                    className="w-1/2 animate-spin invert"
+                  />
+                }
+                </div>
+              </li>
           </Link>
           :
           <Link href={`/api/auth/login`} data-testid="login">
