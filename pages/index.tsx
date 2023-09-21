@@ -13,7 +13,7 @@ export default function Home() {
   const [socket, setSocket] = useState<any>();
 
   useEffect(() => {
-    const s = io("daynotes-server.onrender.com", {
+    const s = io("wss://daynotes-server.onrender.com:10000", {
       transports: ['websocket']
     });
     setSocket(s);

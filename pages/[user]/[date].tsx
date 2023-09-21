@@ -45,7 +45,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   }
 
   const activateNote = async () => {
-    const s = io("daynotes-server.onrender.com", {
+    const s = io("wss://daynotes-server.onrender.com:10000", {
       transports: ['websocket']
     });
     if (!socket) setSocket(s);
