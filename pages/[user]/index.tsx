@@ -7,9 +7,11 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import UserImage from '@/components/modules/user/UserImage';
 import { format } from 'date-fns';
 import { useAuth } from '@/components/context/AuthContext';
+import { useRouter } from 'next/router';
 
 export default function User({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { user } = useUser();
+  const router = useRouter();
   const { userData, setUserData } = useAuth();
   const usersEmail = userCtxt.email;
   const [editImage, setEditImage] = useState<boolean>(false);
@@ -26,6 +28,10 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
     "/user-robot.png",
     "/user-shakespeare.png",
   ]
+
+  useEffect(() => {
+    if (userCtxt.nickname !== user?.nickname) router.push(`/${user?.nickname}`);
+  }, [userCtxt, user, router])
 
   async function getUserDoc(email: any){
     await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
@@ -53,7 +59,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
 
   useEffect(() => {
     getUserDoc(usersEmail);
-  }, [updateUserImage])
+  }, [updateUserImage]);
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">

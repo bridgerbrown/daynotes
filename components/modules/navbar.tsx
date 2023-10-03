@@ -49,7 +49,7 @@ export default function Navbar(props: any){
         </Link>
         {
           user !== undefined && (
-            <Link href={`/${user.email}/${today}`}>
+            <Link href={`/${user.nickname}/${today}`}>
               <li className={liStyle}>
                 Today
               </li>
@@ -58,7 +58,7 @@ export default function Navbar(props: any){
         }
         {
           user ?
-            <Link href={`/${user.email}/notes`}>
+            <Link href={`/${user.nickname}/notes`}>
               <li className={liStyle}>
                 Notes
               </li>

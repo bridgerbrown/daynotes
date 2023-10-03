@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths } from 'date-fns'
+import { isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths, isValid } from 'date-fns'
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -36,13 +36,28 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const SAVE_INTERVAL_MS = 500;
   const { user } = useUser();
   const usersEmail = userCtxt.email;
+  const usersNickname = userCtxt.nickname;
 
   const parseDateFromUrl = (url: string) => {
     const splitUrl = url.split('/');
     const date = splitUrl[2];
     const decodedDateString = new Date(decodeURIComponent(date));
-    return decodedDateString
-  }
+    return decodedDateString;
+  };
+
+  const isValidDate = () => {
+    const urlDate = parseDateFromUrl(router.asPath);
+    return isValid(urlDate);
+  };
+
+  const isValidUser = () => {
+    return usersNickname === user?.nickname;
+  };
+
+  useEffect(() => {
+    if (!isValidDate) router.push('/404');
+    if (!isValidUser) router.push(`/${usersNickname}/${selectedDay}`);
+  })
 
   const activateNote = async () => {
     const s = io("wss://daynotes-server.onrender.com:10000", {
@@ -98,7 +113,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     setSelectedDay(yesterday);
     {
       user !== undefined && (
-        router.push(`/${usersEmail}/${yesterday}`)
+        router.push(`/${usersNickname}/${yesterday}`)
       )
     }
   };
@@ -107,7 +122,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     setSelectedDay(tomorrow);
     {
       user !== undefined && (
-        router.push(`/${usersEmail}/${tomorrow}`)
+        router.push(`/${usersNickname}/${tomorrow}`)
       )
     }
   };
