@@ -56,11 +56,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   };
 
   useEffect(() => {
-    if (!isValidDate) router.push('/404');
-    console.log(isValidDate)
-    if (!isValidUser) router.push(`/${usersNickname}/${selectedDay}`);
-    console.log(isValidUser);
-  }, [router])
+    if (!isValidDate()) router.push('/404');
+    console.log(isValidDate())
+    if (!isValidUser()) router.push(`/${usersNickname}/${selectedDay}`);
+    console.log(isValidUser());
+  }, [router, selectedDay, usersNickname])
 
   const activateNote = async () => {
     const s = io("wss://daynotes-server.onrender.com:10000", {
