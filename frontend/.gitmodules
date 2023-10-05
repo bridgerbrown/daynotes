@@ -1,0 +1,3 @@
+[submodule "server"]
+	path = backend
+	url = https://github.com/bridgerbrown/daynotes-server.git
