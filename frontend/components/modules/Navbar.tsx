@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { startOfToday } from "date-fns";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 export default function Navbar(props: any){
   const liStyle: string = `cursor-pointer ml-2 px-3 sm:px-3 py-2 flex justify-center items-center hover:bg-gray-200/70 transition-colors rounded-lg text-gray-900 tracking-wide font-regular mt-1 flex text-sm`;
+  const user = "";
   const today = startOfToday();
-  const { user } = useUser();
   const { userData, setUserData } = useAuth();
   const { userDoc } = props;
 
