@@ -30,7 +30,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
   ]
 
   useEffect(() => {
-    if (userCtxt?.nickname && user?.nickname !== userCtxt.nickname) router.push(`/${user?.nickname}`);
+    if (userCtxt?.nickname && user?.nickname !== userCtxt.nickname) router.push(`/${userCtxt.nickname || user?.nickname}`);
   }, [userCtxt, user, router])
 
   async function getUserDoc(email: any){
