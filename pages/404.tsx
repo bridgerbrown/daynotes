@@ -1,5 +1,5 @@
-import Footer from '@/components/modules/footer';
-import Navbar from '@/components/modules/navbar';
+import Footer from '@/components/modules/Footer';
+import Navbar from '@/components/modules/Navbar';
 import Image from 'next/image';
 import React from 'react';
 

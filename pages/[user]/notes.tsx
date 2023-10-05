@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '@/components/modules/navbar'
-import Footer from '@/components/modules/footer'
+import Navbar from '@/components/modules/Navbar'
+import Footer from '@/components/modules/Footer'
 import NotePreview from '@/components/modules/notes/NotePreview'
 import Image from 'next/image';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';

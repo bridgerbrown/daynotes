@@ -11,8 +11,8 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Image from 'next/image';
 
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
-import Navbar from '@/components/modules/navbar';
-import Footer from '@/components/modules/footer';
+import Navbar from '@/components/modules/Navbar';
+import Footer from '@/components/modules/Footer';
 import DateHeader from '@/components/modules/DateHeader';
 
 export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {

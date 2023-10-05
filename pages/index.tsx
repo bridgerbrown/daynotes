@@ -1,5 +1,5 @@
-import Navbar from '@/components/modules/navbar'
-import Footer from '@/components/modules/footer'
+import Navbar from '@/components/modules/Navbar'
+import Footer from '@/components/modules/Footer'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0/client';

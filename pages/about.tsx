@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '@/components/modules/navbar';
-import Footer from '@/components/modules/footer';
+import React from 'react';
+import Navbar from '@/components/modules/Navbar';
+import Footer from '@/components/modules/Footer';
 import Image from 'next/image';
 
 export default function User() {
