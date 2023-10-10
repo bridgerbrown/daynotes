@@ -1,6 +1,6 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { AuthProvider } from '@/components/context/AuthContext'
+import { AuthProvider } from '@/data/context/AuthContext'
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { startOfToday } from "date-fns";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@/data/context/AuthContext";
 import Image from "next/image";
 
 export default function Navbar(props: any){

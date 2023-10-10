@@ -1,9 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function SignUp() {
-  const [userDoc, setUserDoc] = useState<any>([]);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState<string>("");
+  const [usernameError, setUsernameError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
+  const [submitError, setSubmitError] = useState<string>("");
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    if (!email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+      setEmailError("Please enter a valid email address.")
+    } else if (username.length < 4) {
+      setUsernameError("Please enter a username with at least 4 characters.")
+    } else if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match!");
+    } else {
+      try {
+        const response = await register(email, username, password);
+        if (response.status === 201) {
+          router.push(`/${username}`);
+        } else if (response.status === 409) {
+          setSubmitError("Email address is already registered.");
+        } else if (response.status === 401) {
+          setSubmitError("Username is already taken.");
+        } else {
+          setSubmitError("An error occured during registration.");
+        }
+      } catch (err) {
+        console.log(err);
+        setSubmitError(JSON.stringify(err));
+      };
+    };
+  };
+
+  async function register(email: string, username: string, password: string){
+    const data = {
+      email: email,
+      username: username,
+      password: password
+    };
+
+    return await fetch(`https://daynotes-client.vercel.app/api/register`, {
+      method: "POST",
+      headers: { 
+        "Content-type": "application/json" 
+      },
+      body: JSON.stringify(data)
+    });
+  };
 
   return (
     <main className="font-sans bg-white min-h-screen w-screen relative flex flex-col justify-center items-center">
@@ -24,21 +91,35 @@ export default function SignUp() {
           </p>
           <input
             type='email'
+            value={email}
+            onChange={handleEmailChange}
             className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
             placeholder='Enter your email address'
           />
           <input
+            type='text'
+            value={username}
+            onChange={handleUsernameChange}
+            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+            placeholder='Enter a username'
+          />
+          <input
             type='password'
+            value={password}
+            onChange={handlePasswordChange}
             className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
             placeholder='Password'
           />
           <input
             type='password'
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
             className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
             placeholder='Confirm Password'
           />
           <button
             className='w-80 h-10 bg-blue-300 rounded-md text-white text-sm'
+            onClick={handleSubmit}
           >
             Continue
           </button>
