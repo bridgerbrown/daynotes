@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function SignUp() {
   const router = useRouter();
@@ -32,11 +33,11 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     if (!email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-      setEmailError("Please enter a valid email address.")
+      setEmailError("Enter a valid email address.")
     } else if (username.length < 4) {
-      setUsernameError("Please enter a username with at least 4 characters.")
+      setUsernameError("Enter a username with at least 4 characters.")
     } else if (password !== confirmPassword) {
-      setPasswordError("Passwords do not match!");
+      setPasswordError("Make sure both passwords match.");
     } else {
       try {
         const response = await register(email, username, password);
@@ -79,7 +80,7 @@ export default function SignUp() {
         width={740}
         height={149}
         alt="DayNotes logo"
-        className="w-48 mb-20"
+        className="w-48 mb-10"
       />
       <div className='w-[400px] h-[700px] text-center'>
         <section className='mb-8 flex flex-col items-center justify-center'>
@@ -89,20 +90,44 @@ export default function SignUp() {
           <p className='text-gray-500 font-light mb-6'>
             Choose your method for signing up
           </p>
+          {
+            emailError ?
+            <p className='pb-2 text-sm text-red-600 font-light'>
+              {emailError}
+            </p>
+            :
+            <p className='pb-0'></p>
+          }
           <input
             type='email'
             value={email}
             onChange={handleEmailChange}
-            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3'
             placeholder='Enter your email address'
           />
+          {
+            usernameError ?
+            <p className='py-2 text-sm text-red-600 font-light'>
+              {usernameError}
+            </p>
+            :
+            <p className='py-2'></p>
+          }
           <input
             type='text'
             value={username}
             onChange={handleUsernameChange}
-            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3'
             placeholder='Enter a username'
           />
+          {
+            passwordError ?
+            <p className='py-2 text-sm text-red-600 font-light'>
+              {passwordError}
+            </p>
+            :
+            <p className='py-2'></p>
+          }
           <input
             type='password'
             value={password}
@@ -123,6 +148,19 @@ export default function SignUp() {
           >
             Continue
           </button>
+          {
+            submitError ?
+            <p className='pt-2 text-sm text-red-600 font-light'>
+              {submitError}
+            </p>
+            :
+            <p className='pb-0'></p>
+          }
+          <Link href={"/auth/login"}>
+            <p className='mt-4 hover:cursor-pointer hover:text-gray-500 underline underline-offset-2 text-sm font-light text-gray-400'>
+              Already registered? Log in
+            </p>
+          </Link>
         </section>
         <section className='flex flex-col items-center'>
           <div className='mb-8 h-0.5 w-80 bg-gray-200'>
