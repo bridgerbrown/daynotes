@@ -11,11 +11,12 @@ export default function Home() {
   const [socket, setSocket] = useState<any>();
 
   useEffect(() => {
-    const s = io("wss://daynotes-server.onrender.com:10000", {
+    const isLocal = window.location.hostname === "localhost";
+    const host = isLocal ? "localhost" : "daynotes-server.onrender.com";
+    const s = io(`wss://${host}:10000`, {
       transports: ['websocket']
     });
     setSocket(s);
-    console.log("Waking up server...")
 
     return () => {
         s.disconnect()

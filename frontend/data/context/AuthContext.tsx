@@ -18,7 +18,6 @@ export function useAuth(): AuthContextType {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<any>(null);
 
-
   return (
     <AuthContext.Provider value={{ userData, setUserData }}>
       {children}

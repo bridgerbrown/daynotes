@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAuth } from '@/data/context/AuthContext';
 
 export default function SignUp() {
   const router = useRouter();
+  const { setUserData } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -33,15 +35,18 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     if (!email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
-      setEmailError("Enter a valid email address.")
+      setEmailError("Enter a valid email address.");
     } else if (username.length < 4) {
-      setUsernameError("Enter a username with at least 4 characters.")
+      setUsernameError("Enter a username with at least 4 characters.");
     } else if (password !== confirmPassword) {
       setPasswordError("Make sure both passwords match.");
     } else {
       try {
         const response = await register(email, username, password);
         if (response.status === 201) {
+          const userData = await response.json(); 
+          console.log(userData);
+          setUserData(userData);
           router.push(`/${username}`);
         } else if (response.status === 409) {
           setSubmitError("Email address is already registered.");
@@ -64,13 +69,16 @@ export default function SignUp() {
       password: password
     };
 
-    return await fetch(`https://daynotes-client.vercel.app/api/register`, {
+    const isLocal = window.location.hostname === "localhost";
+    const host = isLocal ? "localhost" : "daynotes-server.onrender.com";
+
+    return await fetch(`http://${host}:10000`, {
       method: "POST",
       headers: { 
         "Content-type": "application/json" 
       },
       body: JSON.stringify(data)
-    });
+    })
   };
 
   return (

@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAuth } from '@/data/context/AuthContext';
 
 export default function LogIn() {
   const router = useRouter();
+  const { setUserData } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
   const [submitError, setSubmitError] = useState<string>("");
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +28,9 @@ export default function LogIn() {
       try {
         const response = await login(email, password);
         if (response.status === 201) {
-          // router.push(`/${username}`);
+          const userData = await response.json();
+          setUserData(userData);
+          router.push(`/${userData.username}`);
         } else if (response.status === 401) {
           setSubmitError("Incorrect password.");
         } else {
@@ -81,17 +84,9 @@ export default function LogIn() {
             type='email'
             value={email}
             onChange={handleEmailChange}
-            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3'
+            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
             placeholder='Enter your email address'
           />
-          {
-            passwordError ?
-            <p className='py-2 text-sm text-red-600 font-light'>
-              {passwordError}
-            </p>
-            :
-            <p className='py-2'></p>
-          }
           <input
             type='password'
             value={password}

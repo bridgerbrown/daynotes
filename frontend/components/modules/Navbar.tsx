@@ -9,23 +9,8 @@ export default function Navbar(props: any){
   const user = "";
   const today = startOfToday();
   const { userData, setUserData } = useAuth();
-  const { userDoc } = props;
 
-  useEffect(() => {
-    if (user && !userData){
-      getUserDoc(user.email)
-    }
-  }, [user, userData])
-
-  useEffect(() => {}, [userDoc])
-
-  async function getUserDoc(email: any){
-    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
-      .then(response => response.json())
-      .then(data => { 
-        setUserData(data.data);
-    });
-  }
+  useEffect(() => {}, [userData])
 
   return(
     <nav className="pt-4 pb-3 px-6 sm:px-12 flex justify-between items-center">
@@ -48,7 +33,7 @@ export default function Navbar(props: any){
         </Link>
         {
           user !== undefined && (
-            <Link href={`/${user.nickname}/${today}`}>
+            <Link href={`/${userData.username}/${today}`}>
               <li className={liStyle}>
                 Today
               </li>
@@ -57,7 +42,7 @@ export default function Navbar(props: any){
         }
         {
           user ?
-            <Link href={`/${user.nickname}/notes`}>
+            <Link href={`/${userData.username}/notes`}>
               <li className={liStyle}>
                 Notes
               </li>
@@ -72,7 +57,7 @@ export default function Navbar(props: any){
         </Link>
         {
           user && userData ?
-          <Link href={`/${user.nickname}`}>
+          <Link href={`/${userData.username}`}>
             <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
               <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
               {
@@ -97,7 +82,7 @@ export default function Navbar(props: any){
               </li>
           </Link>
           :
-          <Link href={`/api/auth/login`} data-testid="login">
+          <Link href={`/auth/login`} data-testid="login">
             <li className="ml-3 mt-1">
               <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 transition-all bg-gradient-to-b px-3 py-2 text-sm text-white font-semibold tracking-wide rounded-md'>
                 Sign Up
