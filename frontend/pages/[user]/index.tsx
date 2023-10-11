@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/modules/Navbar';
 import Footer from '@/components/modules/Footer';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import UserImage from '@/components/modules/user/UserImage';
 import { format } from 'date-fns';
 import { useAuth } from '@/data/context/AuthContext';
 import { useRouter } from 'next/router';
 
-export default function User({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { user } = useUser();
+export default function User() {
   const router = useRouter();
   const { userData, setUserData } = useAuth();
-  const usersEmail = userCtxt.email;
   const [editImage, setEditImage] = useState<boolean>(false);
   const [userDoc, setUserDoc] = useState<any>([]);
   const [memberSinceDate, setMemberSinceDate] = useState<any>();
@@ -28,10 +23,6 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
     "/user-robot.png",
     "/user-shakespeare.png",
   ]
-
-  useEffect(() => {
-    if (userCtxt?.nickname && user?.nickname !== userCtxt.nickname) router.push(`/${userCtxt.nickname || user?.nickname}`);
-  }, [userCtxt, user, router])
 
   async function getUserDoc(email: any){
     await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
@@ -53,12 +44,12 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
       .then(data => { 
         console.log(data.message)
         setIsLoading(false);
-        getUserDoc(usersEmail);
+        getUserDoc(userData.email);
     })
   }
 
   useEffect(() => {
-    getUserDoc(usersEmail);
+    getUserDoc(userData.Email);
   }, [updateUserImage]);
 
   return (
@@ -72,7 +63,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
             </h2>
           </header>
             {
-              user ?
+              userData ?
                 <div className='flex flex-col text-blackHeading mt-12 mb-2 font-light'>
                   <div className='flex flex-col items-center'>
                     {
@@ -110,7 +101,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
                                 Username:
                             </p>
                             <p className=''>
-                                {user.nickname}
+                                {userData.username}
                             </p>
                           </div>
                           <div className='flex'>
@@ -118,7 +109,7 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
                                 Email:
                             </p>
                             <p className=''>
-                                {user.email}
+                                {userData.email}
                             </p>
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
@@ -147,14 +138,3 @@ export default function User({userCtxt}: InferGetServerSidePropsType<typeof getS
     </main>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = withPageAuthRequired({
-  async getServerSideProps(ctx){
-    const session = await getSession(ctx.req, ctx.res);
-    return {
-      props: {
-        userCtxt: JSON.parse(JSON.stringify(session)).user
-      }
-    }
-  }
-})

@@ -1,21 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from "next/router";
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { isAfter, isBefore, parseISO, isSameDay, subDays, addDays, startOfToday, differenceInDays, differenceInWeeks, differenceInMonths, isValid } from 'date-fns'
 import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
-import { useUser } from "@auth0/nextjs-auth0/client";
 import CalendarModule from '@/components/modules/calendar/CalendarModule';
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Image from 'next/image';
 
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import Navbar from '@/components/modules/Navbar';
 import Footer from '@/components/modules/Footer';
 import DateHeader from '@/components/modules/DateHeader';
+import { useAuth } from '@/data/context/AuthContext';
 
-export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function DayNote() {
   const router = useRouter()
 
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
@@ -30,13 +28,11 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [lastSocketId, setLastSocketId] = useState<string | null>(null);
   const [tutorial, setTutorial] = useState<boolean>(false);
+  const { userData, setUserData } = useAuth();
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
   const SAVE_INTERVAL_MS = 500;
-  const { user } = useUser();
-  const usersEmail = userCtxt.email;
-  const usersNickname = userCtxt.nickname;
 
   const parseDateFromUrl = (url: string) => {
     const splitUrl = url.split('/');
@@ -51,16 +47,10 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
     return isValid(urlDate);
   };
 
-  const isValidUser = () => {
-    return usersNickname === user?.nickname;
-  };
-
   useEffect(() => {
     if (!isValidDate()) router.push('/404');
     console.log(isValidDate())
-    if (!isValidUser()) router.push(`/${usersNickname}/${selectedDay}`);
-    console.log(isValidUser());
-  }, [router, selectedDay, usersNickname])
+  }, [router, selectedDay])
 
   const activateNote = async () => {
     const s = io("wss://daynotes-server.onrender.com:10000", {
@@ -115,8 +105,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const prevDay = () => {
     setSelectedDay(yesterday);
     {
-      user !== undefined && (
-        router.push(`/${usersNickname}/${yesterday}`)
+      userData !== undefined && (
+        router.push(`/${userData.username}/${yesterday}`)
       )
     }
   };
@@ -124,8 +114,8 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   const nextDay = () => {
     setSelectedDay(tomorrow);
     {
-      user !== undefined && (
-        router.push(`/${usersNickname}/${tomorrow}`)
+      userData !== undefined && (
+        router.push(`/${userData.username}/${tomorrow}`)
       )
     }
   };
@@ -179,7 +169,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
   };
 
   useEffect(() => {
-    getUserIdAndNotes(usersEmail);
+    getUserIdAndNotes(userData.Email);
     if (usersNotes && usersNotes.length === 0) {
       setTutorial(true)
       console.log("Starting tutorial")
@@ -353,7 +343,7 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
             {
               monthView && usersNotes ?
               <CalendarModule 
-                usersEmail={usersEmail} 
+                usersEmail={userData.Email} 
                 usersNotes={usersNotes} 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} 
@@ -392,15 +382,4 @@ export default function DayNote({userCtxt}: InferGetServerSidePropsType<typeof g
       <Footer />
     </main>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = withPageAuthRequired({
-  async getServerSideProps(ctx){
-    const session = await getSession(ctx.req, ctx.res);
-    return {
-      props: {
-        userCtxt: JSON.parse(JSON.stringify(session)).user
-      }
-    }
-  }
-})
+};

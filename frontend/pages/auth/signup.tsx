@@ -43,11 +43,13 @@ export default function SignUp() {
     } else {
       try {
         const response = await register(email, username, password);
+        console.log(response.status);
         if (response.status === 201) {
           const userData = await response.json(); 
           console.log(userData);
           setUserData(userData);
-          router.push(`/${username}`);
+          // router.push(`/${username}`);
+          router.push("/temp");
         } else if (response.status === 409) {
           setSubmitError("Email address is already registered.");
         } else if (response.status === 401) {
@@ -72,12 +74,12 @@ export default function SignUp() {
     const isLocal = window.location.hostname === "localhost";
     const host = isLocal ? "localhost" : "daynotes-server.onrender.com";
 
-    return await fetch(`http://${host}:10000`, {
+    return await fetch(`http://${host}:3000/api/auth/signup`, {
       method: "POST",
       headers: { 
-        "Content-type": "application/json" 
+        "Content-type": "application/json"
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
   };
 

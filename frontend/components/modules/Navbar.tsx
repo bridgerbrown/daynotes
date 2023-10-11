@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default function Navbar(props: any){
   const liStyle: string = `cursor-pointer ml-2 px-3 sm:px-3 py-2 flex justify-center items-center hover:bg-gray-200/70 transition-colors rounded-lg text-gray-900 tracking-wide font-regular mt-1 flex text-sm`;
-  const user = "";
   const today = startOfToday();
   const { userData, setUserData } = useAuth();
 
@@ -32,8 +31,8 @@ export default function Navbar(props: any){
           </li>
         </Link>
         {
-          user !== undefined && (
-            <Link href={`/${userData.username}/${today}`}>
+          userData !== undefined && (
+            <Link href={`/${userData?.username}/${today}`}>
               <li className={liStyle}>
                 Today
               </li>
@@ -41,8 +40,8 @@ export default function Navbar(props: any){
           )
         }
         {
-          user ?
-            <Link href={`/${userData.username}/notes`}>
+          userData ?
+            <Link href={`/${userData?.username}/notes`}>
               <li className={liStyle}>
                 Notes
               </li>
@@ -56,14 +55,14 @@ export default function Navbar(props: any){
           </li>
         </Link>
         {
-          user && userData ?
-          <Link href={`/${userData.username}`}>
+          userData ?
+          <Link href={`/${userData?.username}`}>
             <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
               <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
               {
                 userData.userImage ?
                   <Image
-                    src={`/user-icons${userData.userImage}`}
+                    src={`/user-icons${userData?.userImage}`}
                     alt="User profile icon"
                     width={448}
                     height={512}

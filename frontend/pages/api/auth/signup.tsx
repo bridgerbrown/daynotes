@@ -2,7 +2,7 @@ export default async function handler(req:any, res:any) {
   try { 
     if (req.method === "POST"){
       const { email, username, password } = req.body;
-      const url = `${process.env.SERVER_URL}/register`;
+      const url = "http://localhost:10000/register";
       
       const response = await fetch(url, {
         method: "POST",

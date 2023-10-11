@@ -3,11 +3,10 @@ import Navbar from '@/components/modules/Navbar'
 import Footer from '@/components/modules/Footer'
 import NotePreview from '@/components/modules/notes/NotePreview'
 import Image from 'next/image';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { compareAsc, compareDesc, parseISO, format } from 'date-fns';
+import { useAuth } from '@/data/context/AuthContext';
 
-export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Notes() {
   const inactiveSortItemCSS: string = `opacity-50 hover:opacity-100 flex cursor-pointer`;
   const activeSortItemCSS: string = `opacity-100 flex cursor-pointer`;
   const arrowDescendingCss: string = `cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
@@ -19,7 +18,8 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
   const [dateAscending, setDateAscending] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const usersEmail = userCtxt.email;
+  const { userData, setUserData } = useAuth();
+  const usersEmail = userData.email;
 
   async function getUserIdAndNotes(email: any){
     await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
@@ -204,14 +204,3 @@ export default function Notes({userCtxt}: InferGetServerSidePropsType<typeof get
     </main>
   )
 }
-
-export const getServerSideProps: GetServerSideProps = withPageAuthRequired({
-  async getServerSideProps(ctx){
-    const session = await getSession(ctx.req, ctx.res);
-    return {
-      props: {
-        userCtxt: JSON.parse(JSON.stringify(session)).user
-      }
-    }
-  }
-})
