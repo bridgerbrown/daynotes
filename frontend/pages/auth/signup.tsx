@@ -6,7 +6,7 @@ import { useAuth } from '@/data/context/AuthContext';
 
 export default function SignUp() {
   const router = useRouter();
-  const { setUserData } = useAuth();
+  const { setUserData, setToken } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -42,21 +42,7 @@ export default function SignUp() {
       setPasswordError("Make sure both passwords match.");
     } else {
       try {
-        const response = await register(email, username, password);
-        console.log(response.status);
-        if (response.status === 201) {
-          const userData = await response.json(); 
-          console.log(userData);
-          setUserData(userData);
-          // router.push(`/${username}`);
-          router.push("/temp");
-        } else if (response.status === 409) {
-          setSubmitError("Email address is already registered.");
-        } else if (response.status === 401) {
-          setSubmitError("Username is already taken.");
-        } else {
-          setSubmitError("An error occured during registration.");
-        }
+        await register(email, username, password);
       } catch (err) {
         console.log(err);
         setSubmitError(JSON.stringify(err));
@@ -65,19 +51,30 @@ export default function SignUp() {
   };
 
   async function register(email: string, username: string, password: string){
-    const data = {
-      email: email,
-      username: username,
-      password: password
-    };
-
-    return await fetch("http://localhost:10000/register", {
-      method: "POST",
-      headers: { 
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify(data),
-    })
+    try {
+      const response = await fetch("http://localhost:10000/register", {
+        method: "POST",
+        headers: { 
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({ email, username, password }),
+      });
+      console.log(response.status); 
+      if (response.status === 201) {
+        const data = await response.json();
+        setUserData(data);
+        // router.push(`/${username}`);
+        router.push("/temp");
+      } else if (response.status === 409) {
+        setSubmitError("Email address is already registered.");
+      } else if (response.status === 401) {
+        setSubmitError("Username is already taken.");
+      } else {
+        setSubmitError("An error occured during registration.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
