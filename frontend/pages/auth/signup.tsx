@@ -52,7 +52,7 @@ export default function SignUp() {
 
   async function register(email: string, username: string, password: string){
     try {
-      const response = await fetch("http://localhost:10000/register", {
+      const response = await fetch("http://www.localhost:10000/register", {
         method: "POST",
         headers: { 
           "Content-type": "application/json"
@@ -60,8 +60,10 @@ export default function SignUp() {
         body: JSON.stringify({ email, username, password }),
       });
       console.log(response.status); 
+      console.log(response);
       if (response.status === 201) {
         const data = await response.json();
+        console.log(data);
         setUserData(data);
         // router.push(`/${username}`);
         router.push("/temp");
