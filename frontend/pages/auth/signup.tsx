@@ -71,10 +71,7 @@ export default function SignUp() {
       password: password
     };
 
-    const isLocal = window.location.hostname === "localhost";
-    const host = isLocal ? "localhost" : "daynotes-server.onrender.com";
-
-    return await fetch(`http://${host}:3000/api/auth/signup`, {
+    return await fetch("http://localhost:10000/register", {
       method: "POST",
       headers: { 
         "Content-type": "application/json"

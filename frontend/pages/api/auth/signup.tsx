@@ -6,18 +6,21 @@ export default async function handler(req:any, res:any) {
       
       const response = await fetch(url, {
         method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        },
         body: JSON.stringify({
           email: email,
           username: username,
           password: password
         }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        },
       });
 
       if (response.status === 201) {
-        res.status(201).json({ message: "User registered successfully."})
+        const data = await response.json();
+        res.status(201).json({ message: "User registered successfully.", data: data })
       } else {
         res.status(response.status).json(await response.json());
       }
