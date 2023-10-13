@@ -52,7 +52,7 @@ export default function SignUp() {
 
   async function register(email: string, username: string, password: string){
     try {
-      const response = await fetch("http://www.localhost:10000/register", {
+      const response = await fetch("http://localhost:10000/register", {
         method: "POST",
         headers: { 
           "Content-type": "application/json"
@@ -66,7 +66,6 @@ export default function SignUp() {
         console.log(data);
         setUserData(data);
         // router.push(`/${username}`);
-        router.push("/temp");
       } else if (response.status === 409) {
         setSubmitError("Email address is already registered.");
       } else if (response.status === 401) {
