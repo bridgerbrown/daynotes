@@ -5,8 +5,10 @@ import UserImage from '@/components/modules/user/UserImage';
 import { format } from 'date-fns';
 import { useAuth } from '@/data/context/AuthContext';
 import { useRouter } from 'next/router';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import jwt from 'jsonwebtoken';
 
-export default function User() {
+export default function User({ user }: InferGetServerSidePropsType) {
   const router = useRouter();
   const { userData, setUserData } = useAuth();
   const [editImage, setEditImage] = useState<boolean>(false);
@@ -24,18 +26,6 @@ export default function User() {
     "/user-shakespeare.png",
   ]
 
-  async function getUserDoc(email: any){
-    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
-      .then(response => response.json())
-      .then(data => { 
-        setUserDoc(data.data);
-        setUserData(data.data);
-        const memberSince = format(new Date(data.data.memberSince), 'LLLL d, yyyy') + ".";
-        setMemberSinceDate(memberSince);
-        setIsLoading(false);
-    })
-  }
-
   async function updateUserImage(email: any, newImage: string){
     await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}&newImage=${newImage}`, {
       method: 'PATCH'
@@ -47,11 +37,7 @@ export default function User() {
         getUserDoc(userData.email);
     })
   }
-
-  useEffect(() => {
-    getUserDoc(userData.Email);
-  }, [updateUserImage]);
-
+  
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
       <Navbar userDoc={userDoc} />
@@ -73,7 +59,7 @@ export default function User() {
                           Choose a new profile picture:
                         </p>
                         <div className='w-fit grid grid-cols-4'>
-                          {imageOptions.map((image: string) => <UserImage updateUserImage={updateUserImage} email={usersEmail} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
+                          {imageOptions.map((image: string) => <UserImage updateUserImage={updateUserImage} email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
                           <button 
@@ -138,3 +124,34 @@ export default function User() {
     </main>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+  const token = ctx.req.cookies.jwt;
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  try {
+    const decoded = jwt.verify(token, '');
+    const user = await fetchUserData(decoded.username);
+
+    return {
+      props: {
+        user,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+})

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '@/data/context/AuthContext';
+import Cookies from 'js-cookie';
 
 export default function SignUp() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function SignUp() {
         const data = await response.json();
         console.log(data);
         setUserData(data);
-        // router.push(`/${username}`);
+        router.push(`/${username}`);
       } else if (response.status === 409) {
         setSubmitError("Email address is already registered.");
       } else if (response.status === 401) {
