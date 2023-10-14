@@ -124,7 +124,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
     </main>
   )
 }
-
+/*
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   const token = ctx.req.cookies.jwt;
 
@@ -155,3 +155,4 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
     }
   }
 })
+*/

@@ -64,9 +64,8 @@ export default function SignUp() {
       console.log(response);
       if (response.status === 201) {
         const data = await response.json();
-        console.log(data);
         setUserData(data);
-        router.push(`/${username}`);
+        router.push("/auth/login");
       } else if (response.status === 409) {
         setSubmitError("Email address is already registered.");
       } else if (response.status === 401) {

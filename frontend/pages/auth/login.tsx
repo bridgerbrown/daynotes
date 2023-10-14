@@ -26,16 +26,7 @@ export default function LogIn() {
       setEmailError("Enter a valid email address.")
     } else {
       try {
-        const response = await login(email, password);
-        if (response.status === 201) {
-          const userData = await response.json();
-          setUserData(userData);
-          router.push(`/${userData.username}`);
-        } else if (response.status === 401) {
-          setSubmitError("Incorrect password.");
-        } else {
-          setSubmitError("An error occured during registration.");
-        }
+        await login(email, password);
       } catch (err) {
         console.log(err);
         setSubmitError(JSON.stringify(err));
@@ -44,18 +35,29 @@ export default function LogIn() {
   };
 
   async function login(email: string, password: string){
-    const data = {
-      email: email,
-      password: password
-    };
+    try {
+      const response = await fetch("http://localhost:10000/login", {
+        method: "POST",
+        headers: { 
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      console.log(response.status); 
 
-    return await fetch(`https://daynotes-client.vercel.app/api/login`, {
-      method: "POST",
-      headers: { 
-        "Content-type": "application/json" 
-      },
-      body: JSON.stringify(data)
-    });
+      if (response.status === 200) {
+        const data = await response.json();
+        setUserData(data);
+        router.push(`/${email}`); // switch to username
+      } else if (response.status === 401) {
+        setSubmitError("Invalid email or password.");
+      } else {
+        setSubmitError("An error occured during login.");
+      }
+    } catch (err) {
+      console.error(err);
+      setSubmitError("An error occured during login.");
+    }
   };
 
   return (
@@ -142,3 +144,4 @@ export default function LogIn() {
     </main>
   )
 }
+
