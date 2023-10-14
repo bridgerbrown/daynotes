@@ -124,7 +124,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
     </main>
   )
 }
-/*
+
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   const token = ctx.req.cookies.jwt;
 
@@ -138,12 +138,14 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   }
 
   try {
-    const decoded = jwt.verify(token, '');
-    const user = await fetchUserData(decoded.username);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const email = decoded.UserInfo.email;
+    const userResponse = await fetch(`http://localhost:3000/api/user?email=${email}`);
+    const userData = await userResponse.json();
 
     return {
       props: {
-        user,
+        user: userData,
       },
     };
   } catch (err) {
@@ -151,8 +153,7 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
       redirect: {
         destination: '/login',
         permanent: false,
-      }
-    }
+      },
+    };
   }
-})
-*/
+});
