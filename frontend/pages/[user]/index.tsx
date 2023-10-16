@@ -6,7 +6,29 @@ import { format } from 'date-fns';
 import { useAuth } from '@/data/context/AuthContext';
 import { useRouter } from 'next/router';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { getCookie } from 'cookies-next';
+
+interface UserJwtPayload extends JwtPayload {
+  UserInfo: {
+    email: {
+      type: String,
+    },
+    username: {
+      type: String,
+    },
+    userId: {
+      type: String,
+    },
+    userImage: {
+      type: String,
+    },
+    memberSince: {
+      type: Date
+    },
+    refreshToken: String
+  };
+}
 
 export default function User({ user }: InferGetServerSidePropsType) {
   const router = useRouter();
@@ -25,7 +47,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
     "/user-robot.png",
     "/user-shakespeare.png",
   ]
-
+/*
   async function updateUserImage(email: any, newImage: string){
     await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}&newImage=${newImage}`, {
       method: 'PATCH'
@@ -37,7 +59,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
         getUserDoc(userData.email);
     })
   }
-  
+*/  
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
       <Navbar userDoc={userDoc} />
@@ -59,7 +81,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
                           Choose a new profile picture:
                         </p>
                         <div className='w-fit grid grid-cols-4'>
-                          {imageOptions.map((image: string) => <UserImage updateUserImage={updateUserImage} email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
+                          {imageOptions.map((image: string) => <UserImage email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
                           <button 
@@ -125,20 +147,24 @@ export default function User({ user }: InferGetServerSidePropsType) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  const token = ctx.req.cookies.jwt;
+export const getServerSideProps: GetServerSideProps = (async ({ req, res }) => {
+  const token = getCookie('jwt', { req, res });
 
   if (!token) {
+    /*
     return {
       redirect: {
         destination: '/login',
         permanent: false,
       },
     };
+    */
+    console.log("No token found")
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
+    const decoded = jwt.verify(token, accessTokenSecret);
     const email = decoded.UserInfo.email;
     const userResponse = await fetch(`http://localhost:3000/api/user?email=${email}`);
     const userData = await userResponse.json();
