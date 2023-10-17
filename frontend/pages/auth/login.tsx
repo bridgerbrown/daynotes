@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '@/data/context/AuthContext';
-import { setCookie } from 'cookies-next';
+import Cookies from 'js-cookie';
 
 export default function LogIn() {
   const router = useRouter();
@@ -48,7 +48,8 @@ export default function LogIn() {
 
       if (response.status === 200) {
         const data = await response.json();
-        setCookie('jwt', data.accessToken, { maxAge: 1800 });
+        console.log(data);
+        Cookies.set('jwt', data.accessToken, { expires: 1, path: '/' });
         setUserData(data);
         router.push(`/${email}`); // switch to username
       } else if (response.status === 401) {

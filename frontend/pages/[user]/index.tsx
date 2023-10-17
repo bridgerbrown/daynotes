@@ -9,27 +9,6 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { getCookie } from 'cookies-next';
 
-interface UserJwtPayload extends JwtPayload {
-  UserInfo: {
-    email: {
-      type: String,
-    },
-    username: {
-      type: String,
-    },
-    userId: {
-      type: String,
-    },
-    userImage: {
-      type: String,
-    },
-    memberSince: {
-      type: Date
-    },
-    refreshToken: String
-  };
-}
-
 export default function User({ user }: InferGetServerSidePropsType) {
   const router = useRouter();
   const { userData, setUserData } = useAuth();
@@ -81,7 +60,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
                           Choose a new profile picture:
                         </p>
                         <div className='w-fit grid grid-cols-4'>
-                          {imageOptions.map((image: string) => <UserImage email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
+                          {imageOptions.map((image: string) => <UserImage email={user.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
                           <button 
@@ -94,7 +73,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
                       </div>
                       :
                       <div className='flex flex-col justify-center items-center'>
-                        <UserImage editImage={editImage} setEditImage={setEditImage} image={userDoc.userImage} />
+                        <UserImage editImage={editImage} setEditImage={setEditImage} image={user.userImage} />
                         <div className='w-[125px] flex justify-end'>
                           <p 
                             className='hover:opacity-90 transition-opacity cursor-pointer text-xs font-medium opacity-50'
@@ -109,7 +88,7 @@ export default function User({ user }: InferGetServerSidePropsType) {
                                 Username:
                             </p>
                             <p className=''>
-                                {userData.username}
+                                {user.username}
                             </p>
                           </div>
                           <div className='flex'>
@@ -117,12 +96,12 @@ export default function User({ user }: InferGetServerSidePropsType) {
                                 Email:
                             </p>
                             <p className=''>
-                                {userData.email}
+                                {user.email}
                             </p>
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {memberSinceDate}
+                              Member since {user.memberSinceDate}
                             </p>
                           </div>
                         </div>
@@ -147,11 +126,11 @@ export default function User({ user }: InferGetServerSidePropsType) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = (async ({ req, res }) => {
-  const token = getCookie('jwt', { req, res }) as string;
-  console.log(token);
+export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+  const jwtCookie = ctx.req.headers.cookie as string;
+  console.log(jwtCookie);
 
-  if (!token) {
+  if (!jwtCookie) {
     /*
     return {
       redirect: {
@@ -160,22 +139,26 @@ export const getServerSideProps: GetServerSideProps = (async ({ req, res }) => {
       },
     };
     */
-    console.log("No token found")
+    console.log("No jwtCookie found")
   }
 
   try {
     let accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as string;
-    const decoded = jwt.verify(token, accessTokenSecret) as UserJwtPayload;
-    const email = decoded.UserInfo.email;
+    const decoded = jwt.verify(jwtCookie, accessTokenSecret) as JwtPayload;
+    console.log(decoded);
+    /*
     const userResponse = await fetch(`http://localhost:3000/api/user?email=${email}`);
+    if (!userResponse.ok) {
+      throw new Error("Failed to fetch data");
+    }
     const userData = await userResponse.json();
-
+    */
     return {
       props: {
-        user: userData,
       },
     };
   } catch (err) {
+    console.log(err);
     return {
       redirect: {
         destination: '/login',
