@@ -48,7 +48,7 @@ export default function LogIn() {
 
       if (response.status === 200) {
         const data = await response.json();
-        setCookie('jwt', data.jwt, { maxAge: 60 * 6 * 24 });
+        setCookie('jwt', data.accessToken, { maxAge: 1800 });
         setUserData(data);
         router.push(`/${email}`); // switch to username
       } else if (response.status === 401) {

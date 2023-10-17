@@ -148,7 +148,8 @@ export default function User({ user }: InferGetServerSidePropsType) {
 }
 
 export const getServerSideProps: GetServerSideProps = (async ({ req, res }) => {
-  const token = getCookie('jwt', { req, res });
+  const token = getCookie('jwt', { req, res }) as string;
+  console.log(token);
 
   if (!token) {
     /*
@@ -163,8 +164,8 @@ export const getServerSideProps: GetServerSideProps = (async ({ req, res }) => {
   }
 
   try {
-    let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
-    const decoded = jwt.verify(token, accessTokenSecret);
+    let accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as string;
+    const decoded = jwt.verify(token, accessTokenSecret) as UserJwtPayload;
     const email = decoded.UserInfo.email;
     const userResponse = await fetch(`http://localhost:3000/api/user?email=${email}`);
     const userData = await userResponse.json();
