@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 
 export default function LogIn() {
   const router = useRouter();
-  const { setUserData } = useAuth();
+  const { setUserEmail } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -45,12 +45,11 @@ export default function LogIn() {
         body: JSON.stringify({ email, password }),
       });
       console.log(response.status); 
-
+      
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
         Cookies.set('jwt', data.accessToken, { expires: 1, path: '/' });
-        setUserData(data);
+        setUserEmail(email);
         router.push(`/${email}`); // switch to username
       } else if (response.status === 401) {
         setSubmitError("Invalid email or password.");

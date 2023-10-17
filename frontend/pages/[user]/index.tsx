@@ -7,10 +7,12 @@ import { useAuth } from '@/data/context/AuthContext';
 import { useRouter } from 'next/router';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { getCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
+import Cookies from 'js-cookie';
 
-export default function User({ user }: InferGetServerSidePropsType) {
+export default function User() {
   const router = useRouter();
+  const { userEmail } = useAuth();
   const { userData, setUserData } = useAuth();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [userDoc, setUserDoc] = useState<any>([]);
@@ -39,6 +41,35 @@ export default function User({ user }: InferGetServerSidePropsType) {
     })
   }
 */  
+  async function getUserData() {
+    const accessToken = Cookies.get('jwt');
+    
+    try {
+      const userResponse = await fetch(`http://localhost:3000/api/user?userEmail=${userEmail}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error(`Failed to fetch data. Status: ${userResponse.status}`);
+      }
+
+      const user = await userResponse.json();
+      setUserData(user);
+      console.log(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    console.log(userEmail);
+    getUserData();
+  }, [])
+
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
       <Navbar userDoc={userDoc} />
@@ -128,8 +159,6 @@ export default function User({ user }: InferGetServerSidePropsType) {
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   const jwtCookie = ctx.req.headers.cookie as string;
-  console.log(jwtCookie);
-
   if (!jwtCookie) {
     /*
     return {
@@ -143,27 +172,16 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   }
 
   try {
-    let accessTokenSecret = process.env.ACCESS_TOKEN_SECRET as string;
+    let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
     const decoded = jwt.verify(jwtCookie, accessTokenSecret) as JwtPayload;
     console.log(decoded);
-    /*
-    const userResponse = await fetch(`http://localhost:3000/api/user?email=${email}`);
-    if (!userResponse.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const userData = await userResponse.json();
-    */
+    
     return {
-      props: {
-      },
+      props: {},
     };
   } catch (err) {
-    console.log(err);
     return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
+      props: {},
     };
   }
 });

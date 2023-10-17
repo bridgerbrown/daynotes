@@ -3,6 +3,8 @@ import React, { createContext, useState, useContext } from "react";
 interface AuthContextType {
   userData: any;
   setUserData: React.Dispatch<React.SetStateAction<any>>;
+  userEmail: string;
+  setUserEmail: React.Dispatch<React.SetStateAction<any>>;
   token: string | null;
   setToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -19,10 +21,11 @@ export function useAuth(): AuthContextType {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<any>(null);
+  const [userEmail, setUserEmail] = useState<string>("");
   const [token, setToken] = useState<any>(null);
 
   return (
-    <AuthContext.Provider value={{ userData, setUserData, token, setToken }}>
+    <AuthContext.Provider value={{ userData, setUserData, userEmail, setUserEmail, token, setToken }}>
       {children}
     </AuthContext.Provider>
   );
