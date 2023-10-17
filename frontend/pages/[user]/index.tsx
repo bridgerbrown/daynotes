@@ -10,9 +10,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { setCookie } from 'cookies-next';
 import Cookies from 'js-cookie';
 
-export default function User() {
+export default function User({ userEmail }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const { userEmail } = useAuth();
   const { userData, setUserData } = useAuth();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [userDoc, setUserDoc] = useState<any>([]);
@@ -91,7 +90,7 @@ export default function User() {
                           Choose a new profile picture:
                         </p>
                         <div className='w-fit grid grid-cols-4'>
-                          {imageOptions.map((image: string) => <UserImage email={user.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
+                          {imageOptions.map((image: string) => <UserImage email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
                           <button 
@@ -104,7 +103,7 @@ export default function User() {
                       </div>
                       :
                       <div className='flex flex-col justify-center items-center'>
-                        <UserImage editImage={editImage} setEditImage={setEditImage} image={user.userImage} />
+                        <UserImage editImage={editImage} setEditImage={setEditImage} image={userData.userImage} />
                         <div className='w-[125px] flex justify-end'>
                           <p 
                             className='hover:opacity-90 transition-opacity cursor-pointer text-xs font-medium opacity-50'
@@ -119,7 +118,7 @@ export default function User() {
                                 Username:
                             </p>
                             <p className=''>
-                                {user.username}
+                                {userData.username}
                             </p>
                           </div>
                           <div className='flex'>
@@ -127,12 +126,12 @@ export default function User() {
                                 Email:
                             </p>
                             <p className=''>
-                                {user.email}
+                                {userData.email}
                             </p>
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {user.memberSinceDate}
+                              Member since {userData.memberSinceDate}
                             </p>
                           </div>
                         </div>
@@ -174,10 +173,13 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   try {
     let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
     const decoded = jwt.verify(jwtCookie, accessTokenSecret) as JwtPayload;
-    console.log(decoded);
+    const userEmail: string = decoded.email;
+    console.log(userEmail);
     
     return {
-      props: {},
+      props: {
+        userEmail,
+      },
     };
   } catch (err) {
     return {
