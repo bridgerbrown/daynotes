@@ -14,7 +14,6 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
   const router = useRouter();
   const { userData, setUserData } = useAuth();
   const [editImage, setEditImage] = useState<boolean>(false);
-  const [userDoc, setUserDoc] = useState<any>([]);
   const [memberSinceDate, setMemberSinceDate] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const imageOptions: any[] = [
@@ -27,24 +26,35 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
     "/user-robot.png",
     "/user-shakespeare.png",
   ]
-/*
-  async function updateUserImage(email: any, newImage: string){
-    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}&newImage=${newImage}`, {
-      method: 'PATCH'
-    })
-      .then(response => response.json())
-      .then(data => { 
-        console.log(data.message)
+
+  async function updateUserImage(userEmail: string, newImage: string){
+    try {
+      const accessToken = Cookies.get('jwt');
+      const response = await fetch(`http://localhost:3000/api/user`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ userEmail, newImage }),
+      });
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data.message);
         setIsLoading(false);
-        getUserDoc(userData.email);
-    })
+        getUserData();
+      } else {
+        console.error("Error updating user data.")
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
-*/  
+ 
   async function getUserData() {
     const accessToken = Cookies.get('jwt');
-    
     try {
-      const userResponse = await fetch(`http://localhost:3000/api/user?userEmail=${userEmail}`, {
+      const response = await fetch(`http://localhost:3000/api/user?userEmail=${userEmail}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -52,14 +62,12 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
         },
       });
 
-      if (!userResponse.ok) {
-        throw new Error(`Failed to fetch data. Status: ${userResponse.status}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data. Status: ${response.status}`);
       }
 
-      const data = await userResponse.json();
+      const data = await response.json();
       setUserData(data.user);
-      setUserDoc(data.user);
-      console.log(data.user);
     } catch (err) {
       console.log(err);
     }
@@ -69,7 +77,7 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar userDoc={userDoc} />
+      <Navbar />
       <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -88,7 +96,7 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
                           Choose a new profile picture:
                         </p>
                         <div className='w-fit grid grid-cols-4'>
-                          {imageOptions.map((image: string) => <UserImage email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
+                          {imageOptions.map((image: string) => <UserImage updateUserImage={updateUserImage} email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
                           <button 
