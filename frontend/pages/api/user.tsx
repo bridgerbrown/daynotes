@@ -6,8 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const userEmail = req.query.userEmail as string;
       const accessToken = req.headers.authorization?.replace('Bearer ', '');
 
-      console.log(userEmail);
-      console.log(accessToken);
+      console.log("API useremail: " + userEmail);
 
       if (!userEmail) {
         return res.status(400).json({ message: 'Email is required' });

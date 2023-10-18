@@ -48,7 +48,8 @@ export default function LogIn() {
       
       if (response.status === 200) {
         const data = await response.json();
-        Cookies.set('jwt', data.accessToken, { expires: 1, path: '/' });
+        Cookies.set('jwt', data.accessToken, { expires: 30, path: '/' });
+        console.log(data.accessToken)
         setUserEmail(email);
         router.push(`/${email}`); // switch to username
       } else if (response.status === 401) {

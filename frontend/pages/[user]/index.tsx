@@ -56,18 +56,16 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
         throw new Error(`Failed to fetch data. Status: ${userResponse.status}`);
       }
 
-      const user = await userResponse.json();
-      setUserData(user);
-      console.log(user);
+      const data = await userResponse.json();
+      setUserData(data.user);
+      setUserDoc(data.user);
+      console.log(data.user);
     } catch (err) {
       console.log(err);
     }
   }
 
-  useEffect(() => {
-    console.log(userEmail);
-    getUserData();
-  }, [])
+  useEffect(() => { getUserData() }, []);
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
@@ -157,7 +155,8 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
 }
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  const jwtCookie = ctx.req.headers.cookie as string;
+  const jwtCookie = ctx.req.headers.cookie!;
+  const token = jwtCookie.split('jwt=')[1];
   if (!jwtCookie) {
     /*
     return {
@@ -172,16 +171,18 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
 
   try {
     let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
-    const decoded = jwt.verify(jwtCookie, accessTokenSecret) as JwtPayload;
-    const userEmail: string = decoded.email;
-    console.log(userEmail);
+    const decoded = jwt.verify(token, accessTokenSecret) as JwtPayload;
+    console.log("decoded: " + decoded);
+    const userEmail = decoded.email;
+    console.log("userEmail gssp: "+ userEmail);
     
     return {
       props: {
-        userEmail,
+      userEmail,
       },
     };
   } catch (err) {
+    console.error("Error in JWT verification:", err);
     return {
       props: {},
     };
