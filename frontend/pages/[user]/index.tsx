@@ -9,7 +9,7 @@ import getUserData from '@/data/getUserData';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
-  const { userData } = useAuth();
+  const { userData, setUserData } = useAuth();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const imageOptions: any[] = [
@@ -23,7 +23,17 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-shakespeare.png",
   ]
 
-  useEffect(() => { getUserData(userEmail, userId) }, []);
+  useEffect(() => { 
+    const fetchData = async () => {
+      try {
+        const data = await getUserData(userEmail, userId);
+        setUserData(data);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+    fetchData();
+  }, [userEmail, userId]);
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">

@@ -6,7 +6,6 @@ import "quill/dist/quill.snow.css"
 import { io } from 'socket.io-client'
 import CalendarModule from '@/components/modules/calendar/CalendarModule';
 import Image from 'next/image';
-
 const TextEditorNoSSR = dynamic(() => import('../../components/modules/TextEditor'), { ssr: false })
 import Navbar from '@/components/modules/Navbar';
 import Footer from '@/components/modules/Footer';

@@ -6,8 +6,6 @@ import Image from 'next/image';
 import { compareAsc, compareDesc, parseISO, format } from 'date-fns';
 import { useAuth } from '@/data/context/AuthContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import Cookies from 'js-cookie';
 import getJwt from '@/data/getJwt';
 import getNotesData from '@/data/getUsersNotes';
 
