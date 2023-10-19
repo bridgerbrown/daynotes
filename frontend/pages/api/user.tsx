@@ -13,12 +13,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
     const userEmail = req.query.userEmail as string;
+    const userId = req.query.userId as string;
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
     if (!userEmail) {
       return res.status(400).json({ message: 'Email is required' });
     }
 
-    const response = await fetch(`http://localhost:10000/user?email=${userEmail}`, {
+    const response = await fetch(`http://localhost:10000/user?email=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -30,6 +31,7 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
       try {
         const userData = await response.json();
         res.status(200).json(userData);
+        return userData;
       } catch (err) {
         console.error("Error parsing JSON:", err);
         res.status(500).json({ message: "Error parsing JSON response" });
@@ -42,15 +44,16 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
   } catch (err) {
     console.error("Error:", err);
     res.status(500).json({ message: "Internal server error" });
+    return [];
   }
 }
 
 async function handlePatchRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { userEmail, newImage } = req.body;
+    const { userEmail, userId, newImage } = req.body;
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
-    if (!userEmail) {
-      return res.status(400).json({ message: 'Email is required' });
+    if (!userEmail || !userId) {
+      return res.status(400).json({ message: 'User info is required' });
     }
     const response = await fetch(`http://localhost:10000/user`, {
       method: 'PATCH',
@@ -58,7 +61,7 @@ async function handlePatchRequest(req: NextApiRequest, res: NextApiResponse) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify({ userEmail, newImage }), 
+      body: JSON.stringify({ userEmail, userId, newImage }), 
     });
 
     if (response.status === 200) {

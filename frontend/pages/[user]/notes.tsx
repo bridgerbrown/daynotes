@@ -5,13 +5,18 @@ import NotePreview from '@/components/modules/notes/NotePreview'
 import Image from 'next/image';
 import { compareAsc, compareDesc, parseISO, format } from 'date-fns';
 import { useAuth } from '@/data/context/AuthContext';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import Cookies from 'js-cookie';
+import getJwt from '@/data/getJwt';
+import getNotesData from '@/data/getUsersNotes';
 
-export default function Notes() {
+export default function Notes({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { userEmail, userId } = userResponse;
   const inactiveSortItemCSS: string = `opacity-50 hover:opacity-100 flex cursor-pointer`;
   const activeSortItemCSS: string = `opacity-100 flex cursor-pointer`;
   const arrowDescendingCss: string = `cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
   const arrowAscendingCss: string = `rotate-180 cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
-  const [userId, setUserId] = useState<string>("");
   const [usersNotes, setUsersNotes] = useState<any[]>([]);
   const [filteredNotes, setFilteredNotes] = useState<any[]>([]);
   const [sortedType, setSortedType] = useState<string>("date");
@@ -20,26 +25,6 @@ export default function Notes() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { userData, setUserData } = useAuth();
   const usersEmail = userData.email;
-
-  async function getUserIdAndNotes(email: any){
-    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
-      .then(response => response.json())
-      .then(data => { 
-        setUserId(data.data.userId) 
-        getUsersNotes(data.data.userId)
-    })
-  }
-
-  async function getUsersNotes(userId: string){
-    await fetch(`https://daynotes-client.vercel.app/api/notes?userId=${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        setUsersNotes(data.data)
-        })
-      .catch(error => {
-        console.log(error)
-      })
-  }
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
@@ -67,12 +52,12 @@ export default function Notes() {
   const sortedFilteredNotesLastUpdated = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));
 
   useEffect(() => {
-    getUserIdAndNotes(usersEmail)
+    getNotesData(userEmail, userId);
   }, [])
 
   useEffect(() => {
     if(deleteConfirmed){
-      getUsersNotes(userId)
+      getNotesData(userEmail, userId);
       setDeleteConfirmed(false);
     }
   }, [deleteConfirmed])
@@ -204,3 +189,20 @@ export default function Notes() {
     </main>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+  try {
+    const userResponse = getJwt(ctx);
+
+    return {
+      props: {
+        userResponse,
+      },
+    };
+  } catch (err) {
+    console.error("Error in JWT verification:", err);
+    return {
+      props: {},
+    };
+  }
+});

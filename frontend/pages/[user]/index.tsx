@@ -2,19 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/modules/Navbar';
 import Footer from '@/components/modules/Footer';
 import UserImage from '@/components/modules/user/UserImage';
-import { format } from 'date-fns';
 import { useAuth } from '@/data/context/AuthContext';
-import { useRouter } from 'next/router';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { setCookie } from 'cookies-next';
-import Cookies from 'js-cookie';
+import getJwt from '@/data/getJwt';
+import getUserData from '@/data/getUserData';
 
-export default function User({ userEmail }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
-  const { userData, setUserData } = useAuth();
+export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { userEmail, userId } = userResponse;
+  const { userData } = useAuth();
   const [editImage, setEditImage] = useState<boolean>(false);
-  const [memberSinceDate, setMemberSinceDate] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const imageOptions: any[] = [
     "/user.png",
@@ -27,53 +23,7 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
     "/user-shakespeare.png",
   ]
 
-  async function updateUserImage(userEmail: string, newImage: string){
-    try {
-      const accessToken = Cookies.get('jwt');
-      const response = await fetch(`http://localhost:3000/api/user`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
-        },
-        body: JSON.stringify({ userEmail, newImage }),
-      });
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data.message);
-        setIsLoading(false);
-        getUserData();
-      } else {
-        console.error("Error updating user data.")
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
- 
-  async function getUserData() {
-    const accessToken = Cookies.get('jwt');
-    try {
-      const response = await fetch(`http://localhost:3000/api/user?userEmail=${userEmail}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data. Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setUserData(data.user);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => { getUserData() }, []);
+  useEffect(() => { getUserData(userEmail, userId) }, []);
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
@@ -96,7 +46,18 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
                           Choose a new profile picture:
                         </p>
                         <div className='w-fit grid grid-cols-4'>
-                          {imageOptions.map((image: string) => <UserImage updateUserImage={updateUserImage} email={userData.email} key={image} editImage={editImage} setEditImage={setEditImage} image={image} /> )}
+                          {imageOptions.map((image: string) => 
+                            <UserImage 
+                              email={userData.email} 
+                              userId={userData.userId}
+                              key={image} 
+                              editImage={editImage} 
+                              setEditImage={setEditImage} 
+                              image={image} 
+                              isLoading={isLoading}
+                              setIsLoading={setIsLoading}
+                            /> 
+                          )}
                         </div>
                         <div className='mt-3 mb-6 text-sm flex space-x-3 justify-center'>
                           <button 
@@ -163,30 +124,12 @@ export default function User({ userEmail }: InferGetServerSidePropsType<typeof g
 }
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  const jwtCookie = ctx.req.headers.cookie!;
-  const token = jwtCookie.split('jwt=')[1];
-  if (!jwtCookie) {
-    /*
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-    */
-    console.log("No jwtCookie found")
-  }
-
   try {
-    let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
-    const decoded = jwt.verify(token, accessTokenSecret) as JwtPayload;
-    console.log("decoded: " + decoded);
-    const userEmail = decoded.email;
-    console.log("userEmail gssp: "+ userEmail);
-    
+    const userResponse = getJwt(ctx);
+
     return {
       props: {
-      userEmail,
+        userResponse,
       },
     };
   } catch (err) {
