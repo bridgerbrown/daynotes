@@ -2,7 +2,6 @@ import Cookies from 'js-cookie';
 import { useNotes } from './context/NotesContext';
 
 export default async function getNotesData(userEmail: string, userId: string) {
-  const { setUsersNotes } = useNotes();
   try {
     const accessToken = Cookies.get('jwt');
     const response = await fetch(`http://localhost:3000/api/notes?userEmail=${userEmail}&userId=${userId}`, {
@@ -18,8 +17,7 @@ export default async function getNotesData(userEmail: string, userId: string) {
     }
 
     const data = await response.json();
-    setUsersNotes(data);
-    console.log(data);
+    return data.usersNotes;
   } catch (err) {
     console.log(err);
   }

@@ -3,5 +3,10 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/[user]": "pages/[user].js",
-  "/api/user": "pages/api/user.js"
+  "/about": "pages/about.js",
+  "/api/user": "pages/api/user.js",
+  "/": "pages/index.js",
+  "/api/notes": "pages/api/notes.js",
+  "/[user]/notes": "pages/[user]/notes.js",
+  "/[user]/[date]": "pages/[user]/[date].js"
 }

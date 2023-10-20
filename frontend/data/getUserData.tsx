@@ -17,7 +17,6 @@ export default async function getUserData(userEmail: string, userId: string) {
     }
 
     const data = await response.json();
-    console.log(data);
     return data.user;
   } catch (err) {
     console.log(err);

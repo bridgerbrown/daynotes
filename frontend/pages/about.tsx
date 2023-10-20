@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '@/components/modules/Navbar';
 import Footer from '@/components/modules/Footer';
 import Image from 'next/image';
+import getJwt from '@/data/getJwt';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import getUserData from '@/data/getUserData';
+import { useAuth } from '@/data/context/AuthContext';
 
-export default function User() {
+export default function About({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { userEmail, userId } = userResponse;
+  const { userData, setUserData } = useAuth();
+
+  useEffect(() => { 
+    const fetchData = async () => {
+      try {
+        const data = await getUserData(userEmail, userId);
+        setUserData(data);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+    fetchData();
+  }, [userEmail, userId]);
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar />
+      <Navbar userId={userId} userData={userData} />
       <div className='pb-36 mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -96,3 +114,12 @@ export default function User() {
     </main>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+    const userResponse = getJwt(ctx);
+    return {
+      props: {
+        userResponse,
+      },
+    };
+});

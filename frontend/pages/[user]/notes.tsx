@@ -8,21 +8,21 @@ import { useAuth } from '@/data/context/AuthContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import getJwt from '@/data/getJwt';
 import getNotesData from '@/data/getUsersNotes';
+import { useNotes } from '@/data/context/NotesContext';
 
 export default function Notes({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
+  const { usersNotes, setUsersNotes } = useNotes();
   const inactiveSortItemCSS: string = `opacity-50 hover:opacity-100 flex cursor-pointer`;
   const activeSortItemCSS: string = `opacity-100 flex cursor-pointer`;
   const arrowDescendingCss: string = `cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
   const arrowAscendingCss: string = `rotate-180 cursor-pointer ml-1.5 mr-4 mt-0.5 w-3 opacity-70 h-fit`;
-  const [usersNotes, setUsersNotes] = useState<any[]>([]);
   const [filteredNotes, setFilteredNotes] = useState<any[]>([]);
   const [sortedType, setSortedType] = useState<string>("date");
   const [dateAscending, setDateAscending] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { userData, setUserData } = useAuth();
-  const usersEmail = userData.email;
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
@@ -50,7 +50,15 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
   const sortedFilteredNotesLastUpdated = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));
 
   useEffect(() => {
-    getNotesData(userEmail, userId);
+    const fetchData = async () => {
+      try {
+        const data = await getNotesData(userEmail, userId);
+        setUsersNotes(data);
+      } catch (err) {
+        console.error("Error fetching notes data:", err);
+      }
+    };
+    fetchData();
   }, [])
 
   useEffect(() => {
@@ -62,7 +70,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar />
+      <Navbar userId={userId} userData={userData} />
       <div className='pb-36 mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='min-h-[85vh] border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -140,7 +148,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
                 sortedType == "date" ?
                     dateAscending ?
                       sortedFilteredNotesAscDates.length ?
-                        sortedFilteredNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                        sortedFilteredNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} userEmail={userEmail} />)
                         :
                         <div className='w-full flex justify-center items-center mt-48'>
                           <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
@@ -149,7 +157,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
                         </div>
                       :
                       sortedFilteredNotesDescDates.length ?
-                        sortedFilteredNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                        sortedFilteredNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} userEmail={userEmail} />)
                         :
                         <div className='w-full flex justify-center items-center mt-48'>
                           <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
@@ -158,7 +166,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
                         </div>
                     :
                     sortedFilteredNotesLastUpdated.length ?
-                      sortedFilteredNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                      sortedFilteredNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} userEmail={userEmail} />)
                       :
                       <div className='w-full flex justify-center items-center mt-48'>
                         <h2 className='text-lg md:text-xl font-thin text-grayHeading'>
@@ -168,11 +176,11 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
                 :
                 sortedType == "date" ?
                     dateAscending ?
-                      sortedNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                      sortedNotesAscDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} userEmail={userEmail} />)
                       :
-                      sortedNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                      sortedNotesDescDates.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} userEmail={userEmail} />)
                     :
-                    sortedNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} usersEmail={usersEmail} />)
+                    sortedNotesLastUpdated.map((note: any) => <NotePreview key={note._id} note={note} setDeleteConfirmed={setDeleteConfirmed} userEmail={userEmail} />)
             :
             <div className='w-full flex justify-center items-center mt-48'>
               <h2 className='text-lg md:text-xl font-thin text-grayHeading'>

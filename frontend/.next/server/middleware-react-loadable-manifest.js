@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST={}
+self.__REACT_LOADABLE_MANIFEST={"[user]/[date].tsx -> ../../components/modules/TextEditor":{"id":"[user]/[date].tsx -> ../../components/modules/TextEditor","files":["static/chunks/components_modules_TextEditor_tsx.js"]}}

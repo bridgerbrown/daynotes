@@ -11,16 +11,19 @@ import Navbar from '@/components/modules/Navbar';
 import Footer from '@/components/modules/Footer';
 import DateHeader from '@/components/modules/DateHeader';
 import { useAuth } from '@/data/context/AuthContext';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import getJwt from '@/data/getJwt';
+import getNotesData from '@/data/getUsersNotes';
+import { useNotes } from '@/data/context/NotesContext';
 
-export default function DayNote() {
+export default function DayNote({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { userEmail, userId } = userResponse;
+  const { usersNotes, setUsersNotes } = useNotes();
   const router = useRouter()
-
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
-  const [userId, setUserId] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [quill, setQuill] = useState<any>();
   const [monthView, setMonthView] = useState<boolean>(false);
-  const [usersNotes, setUsersNotes] = useState<any[]>([]);
   const [noteActivated, setNoteActivated] = useState<boolean | undefined>(false);
   const [dateDifference, setDateDifference] = useState<string>("Today");
   const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false);
@@ -51,22 +54,32 @@ export default function DayNote() {
     console.log(isValidDate())
   }, [router, selectedDay])
 
+  const fetchNotesData = async () => {
+    try {
+      const data = await getNotesData(userEmail, userId);
+      setUsersNotes(data);
+    } catch (err) {
+      console.error("Error fetching notes data:", err);
+    }
+  };
+
   const activateNote = async () => {
-    const s = io("wss://daynotes-server.onrender.com:10000", {
+    // const s = io("wss://daynotes-server.onrender.com:10000", {
+    const s = io("wss://localhost:10000", {
       transports: ['websocket']
     });
     if (!socket) setSocket(s);
     setDeleteConfirmed(false);
     setNoteActivated(true);
     await new Promise(resolve => setTimeout(resolve, 900));
-    getUsersNotes(userId);
+    fetchNotesData();
   };
 
   const deleteNote = async () => {
     await socket.emit("delete-note", userId, selectedDay);
     setNoteActivated(false);
     await new Promise(resolve => setTimeout(resolve, 500));
-    getUsersNotes(userId);
+    fetchNotesData();
   };
 
   const getDateDifference = useMemo(() => {
@@ -105,7 +118,7 @@ export default function DayNote() {
     setSelectedDay(yesterday);
     {
       userData !== undefined && (
-        router.push(`/${userData.username}/${yesterday}`)
+        router.push(`/${userData.userEmail}/${yesterday}`)
       )
     }
   };
@@ -114,11 +127,10 @@ export default function DayNote() {
     setSelectedDay(tomorrow);
     {
       userData !== undefined && (
-        router.push(`/${userData.username}/${tomorrow}`)
+        router.push(`/${userData.userEmail}/${tomorrow}`)
       )
     }
   };
-
 
  const checkNoteExists = (notes: any[], selectedDay: Date) => {
     if (notes) {
@@ -143,32 +155,8 @@ export default function DayNote() {
     }
   };
 
-  async function getUserIdAndNotes(email: any){
-    await fetch(`https://daynotes-client.vercel.app/api/users?email=${email}`)
-      .then(response => response.json())
-      .then(data => { 
-        setUserId(data.data.userId) 
-        getUsersNotes(data.data.userId)
-    })
-      .catch(error => {
-        console.log(error)
-      })
-  };
-
-  async function getUsersNotes(userId: string){
-    await fetch(`https://daynotes-client.vercel.app/api/notes?userId=${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        setUsersNotes(data.data)
-        console.log(data.data)
-        })
-      .catch(error => {
-        console.log(error)
-      })
-  };
-
   useEffect(() => {
-    getUserIdAndNotes(userData.Email);
+    fetchNotesData();
     if (usersNotes && usersNotes.length === 0) {
       setTutorial(true)
       console.log("Starting tutorial")
@@ -189,7 +177,8 @@ export default function DayNote() {
   }, [])
 
   useEffect(() => {
-    const s = io("daynotes-server.onrender.com", {
+    //const s = io("daynotes-server.onrender.com", {
+    const s = io("wss://localhost:10000", {
       transports: ['websocket']
     });
     setSocket(s);
@@ -283,7 +272,7 @@ export default function DayNote() {
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-        <Navbar />
+        <Navbar userId={userId} userData={userData} />
         <div className='mx-2 sm:mx-8 mt-0 pt-0 flex flex-col justify-center items-center'>
           <div className='rounded-lg bg-slate-50 border-boxBorder border drop-shadow-lg min-h-[100vh] mt-0 mb-32 w-full'>
             <div className='px-4 pt-3 pb-2 flex justify-between'>
@@ -382,3 +371,20 @@ export default function DayNote() {
     </main>
   )
 };
+
+export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+  try {
+    const userResponse = getJwt(ctx);
+
+    return {
+      props: {
+        userResponse,
+      },
+    };
+  } catch (err) {
+    console.error("Error in JWT verification:", err);
+    return {
+      props: {},
+    };
+  }
+});

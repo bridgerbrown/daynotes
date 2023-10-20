@@ -6,7 +6,7 @@ import React from 'react';
 function NotFoundPage() {
   return (
     <main className="font-sans overflow-hidden bg-gray-50 min-h-screen w-screen relative">
-      <Navbar />
+      <Navbar userId={userId} userData={userData} />
         <section className='mx-2 my-96 sm:mx-8 flex flex-col justify-center items-center'>
           <div className='flex flex-col justify-center items-center'>
             <Image

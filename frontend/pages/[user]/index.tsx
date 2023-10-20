@@ -6,6 +6,7 @@ import { useAuth } from '@/data/context/AuthContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import getJwt from '@/data/getJwt';
 import getUserData from '@/data/getUserData';
+import { useRouter } from 'next/router';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -37,7 +38,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar />
+      <Navbar userId={userId} userData={userData} />
       <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -137,6 +138,11 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   try {
     const userResponse = getJwt(ctx);
 
+    console.log(userResponse);
+    if (!userResponse && typeof window !== 'undefined') {
+      const router = useRouter();
+      router.push('/auth/login');
+    }
     return {
       props: {
         userResponse,
@@ -144,6 +150,17 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
     };
   } catch (err) {
     console.error("Error in JWT verification:", err);
+    const router = useRouter();
+    if (typeof window !== 'undefined') {
+      router.push('/auth/login');
+    } else {
+      return {
+        redirect: {
+          destination: '/auth/login',
+          permanent: false,
+        }
+      }
+    }
     return {
       props: {},
     };

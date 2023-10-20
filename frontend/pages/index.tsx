@@ -5,8 +5,14 @@ import Link from 'next/link'
 import { startOfToday } from 'date-fns';
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useAuth } from '@/data/context/AuthContext';
+import getJwt from '@/data/getJwt';
+import getUserData from '@/data/getUserData';
 
-export default function Home() {
+export default function Home({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { userEmail, userId } = userResponse;
+  const { userData, setUserData } = useAuth();
   const today = startOfToday();
   const [socket, setSocket] = useState<any>();
 
@@ -23,9 +29,21 @@ export default function Home() {
     }
   }, [])
 
+  useEffect(() => { 
+    const fetchData = async () => {
+      try {
+        const data = await getUserData(userEmail, userId);
+        setUserData(data);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+    fetchData();
+  }, [userEmail, userId]);
+
   return (
     <main className="font-sans overflow-hidden bg-gray-50 min-h-screen w-screen relative">
-      <Navbar />
+      <Navbar userId={userId} userData={userData} />
       <section className='mx-2 mb-96 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='mt-72 w-full flex flex-col justify-center items-center'>
           <h1 className='mb-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900'>
@@ -35,7 +53,7 @@ export default function Home() {
             Bring your daily notes to the next level with date-based organization.
           </p>
           {
-            !user ?
+            !userResponse ?
               <Link href={`/api/auth/login`}>
                 <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b lg:px-8 lg:py-4 px-6 py-3 text-md lg:text-lg text-white font-semibold rounded-lg'>
                   Sign Up
@@ -43,7 +61,7 @@ export default function Home() {
               </Link>
             :
               <p className='font-light text-gray-500'>Thanks for signing up! <Link 
-                href={`/${user.email}/${today}`} 
+                href={`/${userEmail}/${today}`} 
                 className='underline underline-offset-2 hover:text-gray-700 transition-colors'>
                   Click here to make your first note
                 </Link>.
@@ -123,4 +141,11 @@ export default function Home() {
   )
 };
 
-
+export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+    const userResponse = getJwt(ctx);
+    return {
+      props: {
+        userResponse,
+      },
+    };
+});
