@@ -272,7 +272,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-        <Navbar userId={userId} userData={userData} />
+        <Navbar userEmail={userEmail} userData={userData} />
         <div className='mx-2 sm:mx-8 mt-0 pt-0 flex flex-col justify-center items-center'>
           <div className='rounded-lg bg-slate-50 border-boxBorder border drop-shadow-lg min-h-[100vh] mt-0 mb-32 w-full'>
             <div className='px-4 pt-3 pb-2 flex justify-between'>
@@ -372,6 +372,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   )
 };
 
+
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   try {
     const userResponse = getJwt(ctx);
@@ -384,7 +385,10 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   } catch (err) {
     console.error("Error in JWT verification:", err);
     return {
-      props: {},
-    };
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      }
+    }
   }
 });

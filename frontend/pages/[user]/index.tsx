@@ -7,10 +7,12 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import getJwt from '@/data/getJwt';
 import getUserData from '@/data/getUserData';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
   const { userData, setUserData } = useAuth();
+  const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const imageOptions: any[] = [
@@ -29,6 +31,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
+        console.log(data);
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
@@ -36,9 +39,33 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     fetchData();
   }, [userEmail, userId]);
 
+  async function logOut() {
+    try {
+      const response = await fetch(`http://localhost:3000/api/logout}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to logout. Status: ${response.status}`);
+      } else {
+        Cookies.remove('jwt', { path: '/' });
+        setUserData([]);
+        router.push("/");
+      }
+
+      const data = await response.json();
+      return data.user;
+    } catch (err) {
+      console.log(err);
+    }
+  }; 
+
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar userId={userId} userData={userData} />
+      <Navbar userEmail={userEmail} userData={userData} />
       <div className='mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -113,11 +140,11 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                             </p>
                           </div>
                         </div>
-                          <a className='bg-gray-200/70 hover:bg-gray-300 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full'
-                              href='/api/auth/logout'
+                          <p className='bg-gray-200/70 hover:bg-gray-300 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full'
+                             onClick={() => logOut()}
                           >
                               LOG OUT
-                          </a>
+                          </p>
                       </div>
                     }
                   </div>
@@ -138,11 +165,6 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   try {
     const userResponse = getJwt(ctx);
 
-    console.log(userResponse);
-    if (!userResponse && typeof window !== 'undefined') {
-      const router = useRouter();
-      router.push('/auth/login');
-    }
     return {
       props: {
         userResponse,
@@ -150,19 +172,11 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
     };
   } catch (err) {
     console.error("Error in JWT verification:", err);
-    const router = useRouter();
-    if (typeof window !== 'undefined') {
-      router.push('/auth/login');
-    } else {
-      return {
-        redirect: {
-          destination: '/auth/login',
-          permanent: false,
-        }
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
       }
     }
-    return {
-      props: {},
-    };
   }
 });

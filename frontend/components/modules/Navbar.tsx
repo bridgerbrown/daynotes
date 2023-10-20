@@ -7,9 +7,9 @@ import Image from "next/image";
 export default function Navbar(props: any){
   const liStyle: string = `cursor-pointer ml-2 px-3 sm:px-3 py-2 flex justify-center items-center hover:bg-gray-200/70 transition-colors rounded-lg text-gray-900 tracking-wide font-regular mt-1 flex text-sm`;
   const today = startOfToday();
-  const { userId, userData } = props;
+  const { userEmail, userData } = props;
 
-  useEffect(() => {}, [userId, userData])
+  useEffect(() => {}, [userEmail, userData])
 
   return(
     <nav className="pt-4 pb-3 px-6 sm:px-12 flex justify-between items-center">
@@ -31,8 +31,8 @@ export default function Navbar(props: any){
           </li>
         </Link>
         {
-          userId !== undefined && (
-            <Link href={`/${userId}/${today}`}>
+          userEmail !== undefined && (
+            <Link href={`/${userEmail}/${today}`}>
               <li className={liStyle}>
                 Today
               </li>
@@ -40,8 +40,8 @@ export default function Navbar(props: any){
           )
         }
         {
-          userId ?
-            <Link href={`/${userId?.userEmail}/notes`}>
+          userEmail ?
+            <Link href={`/${userEmail}/notes`}>
               <li className={liStyle}>
                 Notes
               </li>
@@ -56,7 +56,7 @@ export default function Navbar(props: any){
         </Link>
         {
           userData ?
-          <Link href={`/${userId}`}>
+          <Link href={`/${userEmail}`}>
             <li className="cursor-pointer ml-1 px-3 sm:px-3 pt-2">
               <div className="hover:drop-shadow-md bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer w-[30px] h-[30px] rounded-full flex justify-center items-center">
               {

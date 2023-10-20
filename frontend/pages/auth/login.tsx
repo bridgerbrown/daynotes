@@ -27,7 +27,7 @@ export default function LogIn() {
       setEmailError("Enter a valid email address.")
     } else {
       try {
-        await login(email, password);
+        await logIn(email, password);
       } catch (err) {
         console.log(err);
         setSubmitError(JSON.stringify(err));
@@ -35,7 +35,7 @@ export default function LogIn() {
     };
   };
 
-  async function login(email: string, password: string){
+  async function logIn(email: string, password: string){
     try {
       const response = await fetch("http://localhost:10000/login", {
         method: "POST",

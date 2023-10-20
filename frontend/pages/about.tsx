@@ -6,6 +6,7 @@ import getJwt from '@/data/getJwt';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import getUserData from '@/data/getUserData';
 import { useAuth } from '@/data/context/AuthContext';
+import { useRouter } from 'next/router';
 
 export default function About({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -25,7 +26,7 @@ export default function About({ userResponse }: InferGetServerSidePropsType<type
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar userId={userId} userData={userData} />
+      <Navbar userEmail={userEmail} userData={userData} />
       <div className='pb-36 mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -116,10 +117,20 @@ export default function About({ userResponse }: InferGetServerSidePropsType<type
 }
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+  try {
     const userResponse = getJwt(ctx);
+
     return {
       props: {
         userResponse,
       },
     };
+  } catch (err) {
+    console.error("Error in JWT verification:", err);
+    return {
+      props: {
+        userResponse: [],
+      },
+    }
+  }
 });

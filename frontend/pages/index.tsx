@@ -9,6 +9,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useAuth } from '@/data/context/AuthContext';
 import getJwt from '@/data/getJwt';
 import getUserData from '@/data/getUserData';
+import { useRouter } from 'next/router';
 
 export default function Home({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -43,7 +44,7 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
 
   return (
     <main className="font-sans overflow-hidden bg-gray-50 min-h-screen w-screen relative">
-      <Navbar userId={userId} userData={userData} />
+      <Navbar userEmail={userEmail} userData={userData} />
       <section className='mx-2 mb-96 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='mt-72 w-full flex flex-col justify-center items-center'>
           <h1 className='mb-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900'>
@@ -142,10 +143,20 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
 };
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
+  try {
     const userResponse = getJwt(ctx);
+
     return {
       props: {
         userResponse,
       },
     };
+  } catch (err) {
+    console.error("Error in JWT verification:", err);
+    return {
+      props: {
+        userResponse: [],
+      },
+    }
+  }
 });

@@ -9,6 +9,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import getJwt from '@/data/getJwt';
 import getNotesData from '@/data/getUsersNotes';
 import { useNotes } from '@/data/context/NotesContext';
+import { useRouter } from 'next/router';
 
 export default function Notes({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -70,7 +71,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen w-screen relative">
-      <Navbar userId={userId} userData={userData} />
+      <Navbar userEmail={userEmail} userData={userData} />
       <div className='pb-36 mx-2 sm:mx-8 flex flex-col justify-center items-center'>
         <div className='min-h-[85vh] border-boxBorder border drop-shadow-lg rounded-lg bg-slate-50 pb-20 w-full'>
           <header className='border-b border-headerBorder flex justify-between items-center pt-5 pb-4 px-4 sm:px-8'>
@@ -208,7 +209,10 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   } catch (err) {
     console.error("Error in JWT verification:", err);
     return {
-      props: {},
-    };
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      }
+    }
   }
 });

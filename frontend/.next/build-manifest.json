@@ -30,11 +30,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/[user]/[date].js"
     ],
-    "/[user]/notes": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/[user]/notes.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -45,10 +40,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/about": [
+    "/auth/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/about.js"
+      "static/chunks/pages/auth/login.js"
     ]
   },
   "ampFirstPages": []
