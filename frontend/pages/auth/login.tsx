@@ -47,9 +47,9 @@ export default function LogIn() {
       
       if (response.status === 200) {
         const data = await response.json();
-        Cookies.set('jwt', data.accessToken, { expires: 30, path: '/' });
+        Cookies.set('jwt', data.accessToken, { expires: 1 / 24, path: '/' });
         setUserEmail(email);
-        router.push(`/${email}`); // switch to username
+        router.push(`/${email}`); 
       } else if (response.status === 401) {
         setSubmitError("Invalid email or password.");
       } else {

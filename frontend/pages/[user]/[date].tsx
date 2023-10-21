@@ -45,13 +45,11 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
 
   const isValidDate = () => {
     const urlDate = parseDateFromUrl(router.asPath);
-    console.log(urlDate);
     return isValid(urlDate);
   };
 
   useEffect(() => {
     if (!isValidDate()) router.push('/404');
-    console.log(isValidDate())
   }, [router, selectedDay])
 
   const fetchNotesData = async () => {
@@ -64,8 +62,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   };
 
   const activateNote = async () => {
-    // const s = io("wss://daynotes-server.onrender.com:10000", {
-    const s = io("wss://localhost:10000", {
+    const s = io("wss://daynotes-server.onrender.com:10000", {
       transports: ['websocket']
     });
     if (!socket) setSocket(s);
@@ -177,8 +174,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   }, [])
 
   useEffect(() => {
-    //const s = io("daynotes-server.onrender.com", {
-    const s = io("wss://localhost:10000", {
+    const s = io("wss://daynotes-server.onrender.com:10000", {
       transports: ['websocket']
     });
     setSocket(s);

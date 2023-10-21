@@ -31,7 +31,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
-        console.log(data);
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
