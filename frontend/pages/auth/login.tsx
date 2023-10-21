@@ -37,7 +37,7 @@ export default function LogIn() {
 
   async function logIn(email: string, password: string){
     try {
-      const response = await fetch("http://localhost:10000/login", {
+      const response = await fetch("https://daynotes-server.onrender.com:10000/login", {
         method: "POST",
         headers: { 
           "Content-type": "application/json"

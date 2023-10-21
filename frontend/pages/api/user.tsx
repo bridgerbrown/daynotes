@@ -19,7 +19,7 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
       return res.status(400).json({ message: 'Email is required' });
     }
 
-    const response = await fetch(`http://localhost:10000/user?email=${userEmail}&userId=${userId}`, {
+    const response = await fetch(`https://daynotes-server.onrender.com:10000/user?email=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const response = await fetch(`http://localhost:10000/logout`, {
+    const response = await fetch(`https://daynotes-server.onrender.com:10000/logout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
