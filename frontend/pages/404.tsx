@@ -1,19 +1,11 @@
 import Footer from '@/components/modules/Footer';
-import Navbar from '@/components/modules/Navbar';
-import { useAuth } from '@/data/context/AuthContext';
-import getJwt from '@/data/getJwt';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import React from 'react';
 
-export default function NotFoundPage({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { userEmail, userId } = userResponse;
-  const { userData, setUserData } = useAuth();
+export default function NotFoundPage() {
 
   return (
     <main className="font-sans overflow-hidden bg-gray-50 min-h-screen w-screen relative">
-      <Navbar userEmail={userEmail} userData={userData} />
         <section className='mx-2 my-96 sm:mx-8 flex flex-col justify-center items-center'>
           <div className='flex flex-col justify-center items-center'>
             <Image
@@ -35,22 +27,3 @@ export default function NotFoundPage({ userResponse }: InferGetServerSidePropsTy
     </main>
   );
 };
-
-export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  try {
-    const userResponse = getJwt(ctx);
-
-    return {
-      props: {
-        userResponse,
-      },
-    };
-  } catch (err) {
-    console.error("Error in JWT verification:", err);
-    return {
-      props: {
-        userResponse: [],
-      },
-    }
-  }
-});
