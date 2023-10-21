@@ -52,7 +52,7 @@ export default function SignUp() {
 
   async function register(email: string, username: string, password: string){
     try {
-      const response = await fetch("https://daynotes-server.onrender.com:10000/register", {
+      const response = await fetch("https://daynotes-server.onrender.com/register", {
         method: "POST",
         headers: { 
           "Content-type": "application/json"
