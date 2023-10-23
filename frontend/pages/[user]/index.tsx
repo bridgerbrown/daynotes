@@ -16,7 +16,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [formattedDate, setFormattedDate] = useState<string | Date>("");
+  const [formattedDate, setFormattedDate] = useState<string>("");
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -33,7 +33,8 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
-        setFormattedDate(format(userData.memberSince, 'M/dd/yyyy'))
+        const formatted = format(userData.memberSince, 'M/dd/yyyy');
+        setFormattedDate(formatted);
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
