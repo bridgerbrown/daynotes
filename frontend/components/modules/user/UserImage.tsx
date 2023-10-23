@@ -22,7 +22,7 @@ function UserImage(props: any){
           />
           :
           <div className="w-1/2">
-            <Loading />
+            <Loading dimensions={50} invert={true} />
           </div>
       }
     </div>
