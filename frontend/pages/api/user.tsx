@@ -55,7 +55,7 @@ async function handlePatchRequest(req: NextApiRequest, res: NextApiResponse) {
     if (!userEmail || !userId) {
       return res.status(400).json({ message: 'User info is required' });
     }
-    const response = await fetch(`http://localhost:10000/user`, {
+    const response = await fetch(`https://daynotes-server.onrender.com/user?email=${userEmail}&userId=${userId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

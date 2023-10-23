@@ -18,7 +18,7 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
   const [socket, setSocket] = useState<any>();
 
   useEffect(() => {
-    const s = io("wss://daynotes-server.onrender.com:10000", {
+    const s = io("wss://daynotes-server.onrender.com", {
       transports: ['websocket']
     });
     setSocket(s);

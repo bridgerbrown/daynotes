@@ -62,7 +62,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   };
 
   const activateNote = async () => {
-    const s = io("wss://daynotes-server.onrender.com:10000", {
+    const s = io("wss://daynotes-server.onrender.com", {
       transports: ['websocket']
     });
     if (!socket) setSocket(s);
@@ -174,7 +174,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   }, [])
 
   useEffect(() => {
-    const s = io("wss://daynotes-server.onrender.com:10000", {
+    const s = io("wss://daynotes-server.onrender.com", {
       transports: ['websocket']
     });
     setSocket(s);
