@@ -4,7 +4,7 @@ import { useAuth } from './context/AuthContext';
 export default async function getUserData(userEmail: string, userId: string) {
   try {
     const accessToken = Cookies.get('jwt');
-    const response = await fetch(`https://daynotes-client.vercel.app/api/user?userEmail=${userEmail}&userId=${userId}`, {
+    const response = await fetch(`/api/user?userEmail=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

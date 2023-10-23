@@ -4,7 +4,7 @@ import { useNotes } from './context/NotesContext';
 export default async function getNotesData(userEmail: string, userId: string) {
   try {
     const accessToken = Cookies.get('jwt');
-    const response = await fetch(`https://daynotes-client.vercel.app/api/notes?userEmail=${userEmail}&userId=${userId}`, {
+    const response = await fetch(`/api/notes?userEmail=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
