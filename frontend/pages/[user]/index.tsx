@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { format, parseISO } from 'date-fns';
 import updateUserImage from '@/data/updateUserImage';
+import Loading from '@/components/modules/Loading';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -164,8 +165,8 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                   </div>
                 </div>
               :
-              <div>
-                <h2>Loading...</h2>
+              <div className='flex justify-center items-center w-32'>
+                <Loading />
               </div>
             }
         </div>

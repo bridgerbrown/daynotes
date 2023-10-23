@@ -1,6 +1,7 @@
 import React from "react"
 import Image from "next/image"
 import updateUserImage from "@/data/updateUserImage";
+import Loading from "../Loading";
 
 function UserImage(props: any){
   const { editImage, image, submitImage } = props;
@@ -20,14 +21,8 @@ function UserImage(props: any){
             onClick={() => submitImage(image)}
           />
           :
-          <div className='flex justify-center items-center w-1/2'>
-            <Image
-              src={"/spinner.png"}
-              alt="Loading spinner"
-              width={50}
-              height={50}
-              className='animate-spin invert'
-            />
+          <div className="w-1/2">
+            <Loading />
           </div>
       }
     </div>

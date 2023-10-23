@@ -2,5 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/[user]/[date]": "pages/[user]/[date].js"
+  "/": "pages/index.js",
+  "/api/user": "pages/api/user.js",
+  "/auth/login": "pages/auth/login.js",
+  "/[user]": "pages/[user].js"
 }
