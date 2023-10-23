@@ -16,6 +16,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [formattedDate, setFormattedDate] = useState<string | Date>("");
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -32,6 +33,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
+        setFormattedDate(format(userData.memberSince, 'M/dd/yyyy'))
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
@@ -136,7 +138,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {format(userData.memberSince, 'MM dd, yyyy')}
+                              Member since {formattedDate}
                             </p>
                           </div>
                         </div>
