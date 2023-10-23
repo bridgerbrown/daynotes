@@ -10,7 +10,7 @@ function UserImage(props: any){
   
   const submitImage = () => {
     if (editImage) {
-      updateUserImage(email,userId, image)
+      updateUserImage(email, userId, image);
       setEditImage(false)
     } else {
       setEditImage(false)
