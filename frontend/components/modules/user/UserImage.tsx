@@ -32,7 +32,7 @@ function UserImage(props: any){
         const data = await response.json();
         console.log(data.message);
         setIsLoading(false);
-        getUserData(email, userId);
+        getUserData(userEmail, userId);
       } else {
         const data = await response.json();
         console.error(`Error updating user data, ${data.message}`)
