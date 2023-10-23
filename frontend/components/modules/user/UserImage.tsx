@@ -20,21 +20,22 @@ function UserImage(props: any){
   async function updateUserImage(userEmail: string, userId: string, newImage: string){
     try {
       const accessToken = Cookies.get('jwt');
-      const response = await fetch("/api/user", {
+      const response = await fetch(`/api/user?email=${userEmail}&userId=${userId}&newImage=${newImage}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
-        },
-        body: JSON.stringify({ userEmail, userId, newImage }),
+        }
       });
+
       if (response.status === 200) {
         const data = await response.json();
         console.log(data.message);
         setIsLoading(false);
         getUserData(email, userId);
       } else {
-        console.error(`Error updating user data, ${response.text}`)
+        const data = await response.json();
+        console.error(`Error updating user data, ${data.message}`)
       }
     } catch (err) {
       console.error(err);

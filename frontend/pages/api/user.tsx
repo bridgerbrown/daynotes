@@ -50,18 +50,19 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePatchRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { userEmail, userId, newImage } = req.body;
+    const userEmail = req.query.userEmail as string;
+    const userId = req.query.userId as string;
+    const newImage = req.query.newImage as string;
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
     if (!userEmail || !userId) {
       return res.status(400).json({ message: 'User info is required' });
     }
-    const response = await fetch(`https://daynotes-server.onrender.com/user?email=${userEmail}&userId=${userId}`, {
+    const response = await fetch(`https://daynotes-server.onrender.com/user?email=${userEmail}&userId=${userId}&newImage=${newImage}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({ userEmail, userId, newImage }), 
+      }
     });
 
     if (response.status === 200) {
