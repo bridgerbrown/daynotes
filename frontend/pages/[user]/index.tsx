@@ -16,6 +16,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [submittedImage, setSubmittedImage] = useState<boolean>(false);
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -37,7 +38,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       }
     };
     fetchData();
-  }, [userEmail, userId]);
+  }, [userEmail, userId, submittedImage]);
 
   async function logOut() {
     try {
@@ -94,6 +95,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                               image={image} 
                               isLoading={isLoading}
                               setIsLoading={setIsLoading}
+                              setSubmittedImage={setSubmittedImage}
                             /> 
                           )}
                         </div>

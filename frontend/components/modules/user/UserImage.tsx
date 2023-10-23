@@ -4,7 +4,7 @@ import getUserData from "@/data/getUserData";
 import Cookies from "js-cookie";
 
 function UserImage(props: any){
-  const { email, userId, editImage, setEditImage, image, isLoading, setIsLoading } = props;
+  const { email, userId, editImage, setEditImage, image, isLoading, setIsLoading, setSubmittedImage } = props;
   const imageCss: string = `mx-2 bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer drop-shadow-md w-[125px] h-[125px] rounded-full flex justify-center items-center`;
   const editImageCss: string = `mb-4 mx-2 bg-blue-700 hover:opacity-100 opacity-90 transition-opacity cursor-pointer drop-shadow-md w-[75px] h-[75px] rounded-full flex justify-center items-center`;
   
