@@ -20,7 +20,7 @@ function UserImage(props: any){
   async function updateUserImage(userEmail: string, userId: string, newImage: string){
     try {
       const accessToken = Cookies.get('jwt');
-      const response = await fetch(`http://localhost:3000/api/user`, {
+      const response = await fetch(`/api/user`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
