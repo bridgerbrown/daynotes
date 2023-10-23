@@ -8,6 +8,7 @@ import getJwt from '@/data/getJwt';
 import getUserData from '@/data/getUserData';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import { format } from 'date-fns';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -135,7 +136,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {userData.memberSince}
+                              Member since {format(userData.memberSince, 'MM dd, yyyy')}
                             </p>
                           </div>
                         </div>
