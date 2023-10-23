@@ -9,6 +9,7 @@ import getUserData from '@/data/getUserData';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { format, parseISO } from 'date-fns';
+import updateUserImage from '@/data/updateUserImage';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -16,7 +17,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [submittedImage, setSubmittedImage] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<boolean>(false);
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -27,6 +28,16 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-robot.png",
     "/user-shakespeare.png",
   ]
+  
+  const submitImage = async (selectedImage: string) => {
+    if (editImage) {
+      await updateUserImage(userEmail, userId, selectedImage);
+      setEditImage(false);
+      return selectedImage;
+    } else {
+      setEditImage(false)
+    }
+  };
 
   useEffect(() => { 
     const fetchData = async () => {
@@ -38,7 +49,8 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       }
     };
     fetchData();
-  }, [userEmail, userId, submittedImage]);
+  }, [userEmail, userId, () => submitImage]);
+
 
   async function logOut() {
     try {
@@ -95,7 +107,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                               image={image} 
                               isLoading={isLoading}
                               setIsLoading={setIsLoading}
-                              setSubmittedImage={setSubmittedImage}
+                              submitImage={submitImage}
                             /> 
                           )}
                         </div>

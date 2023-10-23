@@ -81,7 +81,7 @@ export default function Navbar(props: any){
               </li>
           </Link>
           :
-          <Link href={`/auth/login`} data-testid="login">
+          <Link href={`/auth/signup`} data-testid="signup">
             <li className="ml-3 mt-1">
               <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 transition-all bg-gradient-to-b px-3 py-2 text-sm text-white font-semibold tracking-wide rounded-md'>
                 Sign Up
