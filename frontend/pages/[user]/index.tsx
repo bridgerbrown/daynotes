@@ -33,7 +33,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
-        const formatted = format(userData.memberSince, 'M/dd/yyyy');
+        const formatted = format(data.memberSince, 'M/dd/yyyy');
         setFormattedDate(formatted);
       } catch (err) {
         console.error("Error fetching user data:", err);
