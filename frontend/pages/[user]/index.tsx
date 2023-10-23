@@ -8,7 +8,7 @@ import getJwt from '@/data/getJwt';
 import getUserData from '@/data/getUserData';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -16,7 +16,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [formattedDate, setFormattedDate] = useState<string>("");
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -33,8 +32,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
-        const formatted = format(data.memberSince, 'M/dd/yyyy');
-        setFormattedDate(formatted);
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
@@ -139,7 +136,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {formattedDate}
+                              Member since {format(userData.memberSince, 'M/dd/yyyy')}
                             </p>
                           </div>
                         </div>
