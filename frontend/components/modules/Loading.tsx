@@ -8,7 +8,7 @@ export default function Loading() {
         alt="Loading spinner"
         width={50}
         height={50}
-        className='animate-spin invert'
+        className='animate-spin'
       />
     </div>
   )

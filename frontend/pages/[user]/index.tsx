@@ -165,7 +165,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                   </div>
                 </div>
               :
-              <div className='flex justify-center items-center w-32'>
+              <div className='flex justify-center items-center w-32 mt-20'>
                 <Loading />
               </div>
             }
