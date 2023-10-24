@@ -76,7 +76,7 @@ export default function LogIn() {
       {
         isLoading
         ?
-        <div className='flex justify-center items-center w-full my-28'>
+        <div className='h-[700] flex justify-center items-center w-full'>
           <Loading dimensions={125} invert={false} />
         </div>
         :
