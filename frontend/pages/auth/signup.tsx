@@ -8,7 +8,7 @@ import Loading from '@/components/modules/Loading';
 export default function SignUp() {
   const router = useRouter();
   const { setUserData, setToken } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");

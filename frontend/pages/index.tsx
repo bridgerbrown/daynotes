@@ -53,7 +53,7 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
           </p>
           {
             !userData ?
-              <Link href={`/api/auth/login`}>
+              <Link href={`/auth/signup`}>
                 <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b lg:px-8 lg:py-4 px-6 py-3 text-md lg:text-lg text-white font-semibold rounded-lg'>
                   Sign Up
                 </button>

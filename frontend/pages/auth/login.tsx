@@ -9,7 +9,7 @@ import Loading from '@/components/modules/Loading';
 export default function LogIn() {
   const router = useRouter();
   const { setUserEmail } = useAuth();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
