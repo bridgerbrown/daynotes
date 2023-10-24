@@ -56,7 +56,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   async function logOut() {
     try {
       setIsLoading(true);
-      const accessToken = Cookies.get('jwt');
+      const accessToken = Cookies.get('accessToken');
       const response = await fetch("/api/logout", {
         method: 'POST',
         headers: {
@@ -72,7 +72,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
         throw new Error(`Failed to logout. Status: ${response.status}`);
       } else {
         await router.push("/");
-        Cookies.remove('jwt', { path: '/' });
+        Cookies.remove('accessToken', { path: '/' });
         setUserData([]);
       }
 

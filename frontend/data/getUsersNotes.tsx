@@ -3,7 +3,7 @@ import { useNotes } from './context/NotesContext';
 
 export default async function getNotesData(userEmail: string, userId: string) {
   try {
-    const accessToken = Cookies.get('jwt');
+    const accessToken = Cookies.get('accessToken');
     const response = await fetch(`/api/notes?userEmail=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {

@@ -50,7 +50,8 @@ export default function LogIn() {
       
       if (response.status === 200) {
         const data = await response.json();
-        Cookies.set('jwt', data.accessToken, { expires: 1 / 24, path: '/' });
+        Cookies.set('accessToken', data.accessToken, { expires: 1 / 24, path: '/' });
+        Cookies.set('refreshToken', data.refreshToken, { expires: 1 / 24, path: '/' });
         setUserEmail(email);
         router.push(`/${email}`); 
       } else if (response.status === 401) {
@@ -65,70 +66,72 @@ export default function LogIn() {
   };
 
   return (
-    <main className="font-sans bg-white min-h-screen w-screen relative flex flex-col justify-center items-center">
-      <Image
-        src={"/daynotes-logo.png"}
-        width={740}
-        height={149}
-        alt="DayNotes logo"
-        className="w-48 mb-10"
-      />
-      {
-        isLoading
-        ?
-        <div className='h-[700] flex justify-center items-center w-full'>
-          <Loading dimensions={125} invert={false} />
-        </div>
-        :
-        <div className='w-[400px] h-[700px] text-center'>
-          <section className='mb-8 flex flex-col items-center justify-center'>
-            <h1 className='text-2xl font-semibold tracking-wide mb-2'>
-              Log In
-            </h1>
-            {
-              emailError ?
-              <p className='pb-2 text-sm text-red-600 font-light'>
-                {emailError}
-              </p>
-              :
-              <p className='pb-0'></p>
-            }
-            <input
-              type='email'
-              value={email}
-              onChange={handleEmailChange}
-              className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
-              placeholder='Enter your email address'
-            />
-            <input
-              type='password'
-              value={password}
-              onChange={handlePasswordChange}
-              className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
-              placeholder='Password'
-            />
-            <button
-              className='w-80 h-10 bg-blue-300 rounded-md text-white text-sm'
-              onClick={handleSubmit}
-            >
-              Continue
-            </button>
-            {
-              submitError ?
-              <p className='pt-2 text-sm text-red-600 font-light'>
-                {submitError}
-              </p>
-              :
-              <p className='pb-0'></p>
-            }
-            <Link href={"/auth/signup"}>
-              <p className='mt-4 hover:cursor-pointer hover:text-gray-500 underline underline-offset-2 text-sm font-light text-gray-400'>
-                Don't have an account? Sign up here
-              </p>
-            </Link>
-          </section>
-        </div>
-      }
+    <main className="font-sans bg-white min-h-screen w-screen absolute top-1/4">
+      <div className='flex flex-col justify-center items-center'>
+        <Image
+          src={"/daynotes-logo.png"}
+          width={740}
+          height={149}
+          alt="DayNotes logo"
+          className="w-48 mb-12"
+        />
+        {
+          isLoading
+          ?
+          <div className='h-[700] flex justify-center items-center w-full'>
+            <Loading dimensions={125} invert={false} />
+          </div>
+          :
+          <div className='w-[400px] h-[700px] text-center'>
+            <section className='mb-8 flex flex-col items-center justify-center'>
+              <h1 className='text-2xl font-semibold tracking-wide mb-4'>
+                Log In
+              </h1>
+              {
+                emailError ?
+                <p className='pb-2 text-sm text-red-600 font-light'>
+                  {emailError}
+                </p>
+                :
+                <p className='pb-0'></p>
+              }
+              <input
+                type='email'
+                value={email}
+                onChange={handleEmailChange}
+                className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+                placeholder='Enter your email address'
+              />
+              <input
+                type='password'
+                value={password}
+                onChange={handlePasswordChange}
+                className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+                placeholder='Password'
+              />
+              <button
+                className='w-80 h-10 bg-blue-300 rounded-md text-white text-sm'
+                onClick={handleSubmit}
+              >
+                Continue
+              </button>
+              {
+                submitError ?
+                <p className='pt-2 text-sm text-red-600 font-light'>
+                  {submitError}
+                </p>
+                :
+                <p className='pb-0'></p>
+              }
+              <Link href={"/auth/signup"}>
+                <p className='mt-4 hover:cursor-pointer hover:text-gray-500 underline underline-offset-2 text-sm font-light text-gray-400'>
+                  Don't have an account? Sign up here
+                </p>
+              </Link>
+            </section>
+          </div>
+        }
+      </div>
     </main>
   )
 }

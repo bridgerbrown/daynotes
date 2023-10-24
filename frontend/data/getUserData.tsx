@@ -3,7 +3,7 @@ import { useAuth } from './context/AuthContext';
 
 export default async function getUserData(userEmail: string, userId: string) {
   try {
-    const accessToken = Cookies.get('jwt');
+    const accessToken = Cookies.get('accessToken');
     const response = await fetch(`/api/user?userEmail=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {

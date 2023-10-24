@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 export default async function updateUserImage(userEmail: string, userId: string, newImage: string){
   try {
-    const accessToken = Cookies.get('jwt');
+    const accessToken = Cookies.get('accessToken');
     const response = await fetch(`/api/user?userEmail=${userEmail}&userId=${userId}&newImage=${newImage}`, {
       method: 'PATCH',
       headers: {
