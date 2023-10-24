@@ -55,7 +55,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
 
   async function logOut() {
     try {
-      const response = await fetch("https://daynotes-server.onrender.com/logout", {
+      const response = await fetch("/api/logout", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
