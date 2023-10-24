@@ -71,7 +71,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
         console.log(`${data.message}`);
         throw new Error(`Failed to logout. Status: ${response.status}`);
       } else {
-        router.push("/");
+        await router.push("/");
         Cookies.remove('jwt', { path: '/' });
         setUserData([]);
       }

@@ -30,8 +30,8 @@ export default function LogIn() {
       try {
         setIsLoading(true);
         await logIn(email, password);
-        setIsLoading(false);
       } catch (err) {
+        setIsLoading(false);
         console.log(err);
         setSubmitError(JSON.stringify(err));
       };
@@ -129,32 +129,6 @@ export default function LogIn() {
           </section>
         </div>
       }
-        /*
-        <section className='flex flex-col items-center'>
-          <div className='mb-8 h-0.5 w-80 bg-gray-200'>
-            <div className='w-80 relative bottom-2.5 flex items-center justify-center'>
-              <p className='z-10 font-light text-gray-500 text-sm'>
-                or
-              </p>
-              <div className='bg-white w-8 h-8 absolute'>
-              </div>
-            </div>
-          </div>
-          <button
-            className='mb-3 w-80 h-10 bg-white border-gray-400 border rounded-md font-semibold text-sm'
-          >
-            Continue with Google
-          </button>
-          <button
-            className='w-80 h-10 bg-white border-gray-400 border rounded-md font-semibold text-sm'
-          >
-            Email me a magic link
-          </button>
-          <p className='mt-4 hover:cursor-pointer hover:text-gray-500 underline underline-offset-2 text-sm font-light text-gray-400'>
-            Learn about our secure login process
-          </p>
-        </section>
-        */
     </main>
   )
 }
