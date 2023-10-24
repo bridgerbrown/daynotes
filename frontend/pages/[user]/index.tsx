@@ -34,7 +34,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     if (editImage) {
       await updateUserImage(userEmail, userId, selectedImage);
       setEditImage(false);
-      return selectedImage;
+      router.reload();
     } else {
       setEditImage(false)
     }
@@ -50,15 +50,17 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       }
     };
     fetchData();
-  }, [userEmail, userId, submitImage]);
+  }, [userEmail, userId]);
 
 
   async function logOut() {
     try {
+      const accessToken = Cookies.get('jwt');
       const response = await fetch("/api/logout", {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
       });
 

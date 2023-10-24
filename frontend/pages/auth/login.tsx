@@ -27,7 +27,9 @@ export default function LogIn() {
       setEmailError("Enter a valid email address.")
     } else {
       try {
+        setIsLoading(true);
         await logIn(email, password);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
         setSubmitError(JSON.stringify(err));
