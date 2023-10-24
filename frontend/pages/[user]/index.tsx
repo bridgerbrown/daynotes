@@ -18,7 +18,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedImage, setSelectedImage] = useState<boolean>(false);
   const imageOptions: any[] = [
     "/user.png",
     "/user-hair-long.png",
@@ -44,6 +43,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     const fetchData = async () => {
       try {
         const data = await getUserData(userEmail, userId);
+        console.log(data);
         setUserData(data);
       } catch (err) {
         console.error("Error fetching user data:", err);

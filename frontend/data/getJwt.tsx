@@ -3,6 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export default async function getJwt(ctx: any) {
   const jwtCookie = ctx.req.headers.cookie!;
+  console.log("getJWT: ", jwtCookie);
   const accessToken = jwtCookie.split('accessToken=')[1];
   const refreshToken = jwtCookie.split('refreshToken=')[2];
 
