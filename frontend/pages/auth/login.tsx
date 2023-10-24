@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '@/data/context/AuthContext';
 import Cookies from 'js-cookie';
+import Loading from '@/components/modules/Loading';
 
 export default function LogIn() {
   const router = useRouter();
@@ -72,53 +73,63 @@ export default function LogIn() {
         alt="DayNotes logo"
         className="w-48 mb-10"
       />
-      <div className='w-[400px] h-[700px] text-center'>
-        <section className='mb-8 flex flex-col items-center justify-center'>
-          <h1 className='text-2xl font-semibold tracking-wide mb-2'>
-            Log In
-          </h1>
-          {
-            emailError ?
-            <p className='pb-2 text-sm text-red-600 font-light'>
-              {emailError}
-            </p>
-            :
-            <p className='pb-0'></p>
-          }
-          <input
-            type='email'
-            value={email}
-            onChange={handleEmailChange}
-            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
-            placeholder='Enter your email address'
-          />
-          <input
-            type='password'
-            value={password}
-            onChange={handlePasswordChange}
-            className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
-            placeholder='Password'
-          />
-          <button
-            className='w-80 h-10 bg-blue-300 rounded-md text-white text-sm'
-            onClick={handleSubmit}
-          >
-            Continue
-          </button>
-          {
-            submitError ?
-            <p className='pt-2 text-sm text-red-600 font-light'>
-              {submitError}
-            </p>
-            :
-            <p className='pb-0'></p>
-          }
-          <Link href={"/auth/signup"}>
-            <p className='mt-4 hover:cursor-pointer hover:text-gray-500 underline underline-offset-2 text-sm font-light text-gray-400'>
-              Don't have an account? Sign up here
-            </p>
-          </Link>
-        </section>
+      {
+        isLoading
+        ?
+        <div className='flex justify-center items-center w-full my-28'>
+          <Loading dimensions={125} invert={false} />
+        </div>
+        :
+        <div className='w-[400px] h-[700px] text-center'>
+          <section className='mb-8 flex flex-col items-center justify-center'>
+            <h1 className='text-2xl font-semibold tracking-wide mb-2'>
+              Log In
+            </h1>
+            {
+              emailError ?
+              <p className='pb-2 text-sm text-red-600 font-light'>
+                {emailError}
+              </p>
+              :
+              <p className='pb-0'></p>
+            }
+            <input
+              type='email'
+              value={email}
+              onChange={handleEmailChange}
+              className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+              placeholder='Enter your email address'
+            />
+            <input
+              type='password'
+              value={password}
+              onChange={handlePasswordChange}
+              className='border-gray-400 border w-80 h-10 font-light rounded-md bg-gray-100 px-3 mb-4'
+              placeholder='Password'
+            />
+            <button
+              className='w-80 h-10 bg-blue-300 rounded-md text-white text-sm'
+              onClick={handleSubmit}
+            >
+              Continue
+            </button>
+            {
+              submitError ?
+              <p className='pt-2 text-sm text-red-600 font-light'>
+                {submitError}
+              </p>
+              :
+              <p className='pb-0'></p>
+            }
+            <Link href={"/auth/signup"}>
+              <p className='mt-4 hover:cursor-pointer hover:text-gray-500 underline underline-offset-2 text-sm font-light text-gray-400'>
+                Don't have an account? Sign up here
+              </p>
+            </Link>
+          </section>
+        </div>
+      }
+        /*
         <section className='flex flex-col items-center'>
           <div className='mb-8 h-0.5 w-80 bg-gray-200'>
             <div className='w-80 relative bottom-2.5 flex items-center justify-center'>
@@ -143,7 +154,7 @@ export default function LogIn() {
             Learn about our secure login process
           </p>
         </section>
-      </div>
+        */
     </main>
   )
 }
