@@ -17,7 +17,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   const { userData, setUserData } = useAuth();
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<boolean>(false);
   const imageOptions: any[] = [
     "/user.png",
