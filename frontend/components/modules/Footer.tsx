@@ -10,7 +10,7 @@ export default function Footer(){
               alt="Note icon"
               width={448}
               height={448}
-              className="w-28"
+              className="w-28 h-min"
             />
           </div>
         </footer>

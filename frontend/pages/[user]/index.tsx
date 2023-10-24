@@ -50,7 +50,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       }
     };
     fetchData();
-  }, [userEmail, userId, () => submitImage]);
+  }, [userEmail, userId, submitImage]);
 
 
   async function logOut() {
@@ -63,6 +63,8 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       });
 
       if (!response.ok) {
+        const data = await response.json();
+        console.log(`${data.message}`);
         throw new Error(`Failed to logout. Status: ${response.status}`);
       } else {
         Cookies.remove('jwt', { path: '/' });
@@ -165,7 +167,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                   </div>
                 </div>
               :
-              <div className='flex justify-center items-center w-full mt-28 mb-32'>
+              <div className='flex justify-center items-center w-full my-28'>
                 <Loading dimensions={125} invert={false} />
               </div>
             }

@@ -9,7 +9,7 @@ export default function Loading(props: any) {
         alt="Loading spinner"
         width={dimensions}
         height={dimensions}
-        className={ invert ? "animate-spin invert" : "animate-spin opacity-70" }
+        className={ invert ? "animate-spin invert" : "animate-spin opacity-60" }
       />
     </div>
   )
