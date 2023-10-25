@@ -34,10 +34,7 @@ export default async function getJwt(ctx: any) {
       if (refreshResponse) {
         Cookies.set('accessToken', refreshResponse.accessToken, { expires: 1 / 24, path: '/' });
         return {
-          userResponse: {
-            ...userResponse,
-            accessToken: refreshResponse.accessToken,
-          },
+          userResponse,
         };
       } else {
         console.log("Token refresh failed");
