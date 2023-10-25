@@ -4,12 +4,15 @@ import { useAuth } from './context/AuthContext';
 export default async function getUserData(userEmail: string, userId: string) {
   try {
     const accessToken = Cookies.get('accessToken');
+    const refreshToken = Cookies.get('refreshToken');
+
     const response = await fetch(`/api/user?userEmail=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
       },
+      body: JSON.stringify({ refreshToken }),
     });
 
     if (!response.ok) {

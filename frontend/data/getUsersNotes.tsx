@@ -4,12 +4,15 @@ import { useNotes } from './context/NotesContext';
 export default async function getNotesData(userEmail: string, userId: string) {
   try {
     const accessToken = Cookies.get('accessToken');
+    const refreshToken = Cookies.get('refreshToken');
+
     const response = await fetch(`/api/notes?userEmail=${userEmail}&userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
+      body: JSON.stringify({ refreshToken }),
     });
 
     if (!response.ok) {

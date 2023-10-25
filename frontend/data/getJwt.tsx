@@ -7,7 +7,7 @@ export default function getJwt(ctx: any) {
     console.log("No jwtCookie found")
     return {
       redirect: {
-        destination: '/login',
+        destination: '/auth/login',
         permanent: false,
       },
     };
