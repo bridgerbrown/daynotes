@@ -14,7 +14,7 @@ import Loading from '@/components/modules/Loading';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
-  const { userData, setUserData } = useAuth();
+  const { userData, setUserData, isAuthenticated, logout } = useAuth();
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,7 +43,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     const fetchData = async () => {
       try {
         const data = await getUserData(userEmail, userId);
-        console.log(data);
         setUserData(data);
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -66,6 +65,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
         },
       });
       setIsLoading(false);
+      logout();
 
       if (!response.ok) {
         const data = await response.json();
@@ -95,7 +95,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
             </h2>
           </header>
             {
-              userData && !isLoading ?
+              isAuthenticated && !isLoading ?
                 <div className='flex flex-col text-blackHeading mt-12 mb-2 font-light'>
                   <div className='flex flex-col items-center'>
                     {
@@ -184,22 +184,11 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
 }
 
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  try {
-    const userResponse = getJwt(ctx);
+  const userResponse = getJwt(ctx);
 
-    console.log(userResponse);
-    return {
-      props: {
-        userResponse,
-      },
-    };
-  } catch (err) {
-    console.error("Error in JWT verification:", err);
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      }
-    }
-  }
+  return {
+    props: {
+      userResponse,
+   },
+  };
 });

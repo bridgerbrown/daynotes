@@ -8,7 +8,7 @@ import Loading from '@/components/modules/Loading';
 
 export default function LogIn() {
   const router = useRouter();
-  const { setUserEmail } = useAuth();
+  const { setUserEmail, login } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -30,6 +30,7 @@ export default function LogIn() {
       try {
         setIsLoading(true);
         await logIn(email, password);
+        login();
       } catch (err) {
         setIsLoading(false);
         console.log(err);

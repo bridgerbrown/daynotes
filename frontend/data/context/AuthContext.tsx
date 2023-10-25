@@ -1,6 +1,9 @@
 import React, { createContext, useState, useContext } from "react";
 
 interface AuthContextType {
+  isAuthenticated: boolean;
+  login: () => void;
+  logout: () => void;
   userData: any;
   setUserData: React.Dispatch<React.SetStateAction<any>>;
   userEmail: string;
@@ -20,12 +23,28 @@ export function useAuth(): AuthContextType {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userData, setUserData] = useState<any>(null);
   const [userEmail, setUserEmail] = useState<string>("");
   const [token, setToken] = useState<any>(null);
 
+  const login = () => setIsAuthenticated(true);
+  const logout = () => setIsAuthenticated(false);
+
+   const contextValue: AuthContextType = {
+      isAuthenticated,
+      login,
+      logout,
+      userData,
+      setUserData,
+      userEmail,
+      setUserEmail,
+      token,
+      setToken,
+    };
+
   return (
-    <AuthContext.Provider value={{ userData, setUserData, userEmail, setUserEmail, token, setToken }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
