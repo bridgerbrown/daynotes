@@ -13,7 +13,6 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
     const userEmail = req.query.userEmail as string;
     const userId = req.query.userId as string;
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
-    const { refreshToken } = req.body;
 
     if (!userEmail || !userId) {
       return res.status(400).json({ message: 'User info is required' });
@@ -24,7 +23,6 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
-        'Refresh-Token': refreshToken,
       }
     });
 

@@ -57,6 +57,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     try {
       setIsLoading(true);
       const accessToken = Cookies.get('accessToken');
+
       const response = await fetch("/api/logout", {
         method: 'POST',
         headers: {

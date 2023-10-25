@@ -3,14 +3,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
-    const { refreshToken } = req.body;
 
     const response = await fetch("https://daynotes-server.onrender.com/logout", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        'Refresh-Token': refreshToken,
+        'Authorization': `Bearer ${accessToken}`
       }
     });
 
