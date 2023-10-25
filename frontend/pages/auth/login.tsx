@@ -51,7 +51,6 @@ export default function LogIn() {
       if (response.status === 200) {
         const data = await response.json();
         Cookies.set('accessToken', data.accessToken, { expires: 1 / 24, path: '/' });
-        Cookies.set('refreshToken', data.refreshToken, { expires: 1 / 24, path: '/' });
         setUserEmail(email);
         router.push(`/${email}`); 
       } else if (response.status === 401) {
