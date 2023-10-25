@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 export default async function updateUserImage(userEmail: string, userId: string, newImage: string){
   try {
     const accessToken = Cookies.get('accessToken');
-    const refreshToken = Cookies.get('refreshToken');
 
     const response = await fetch(`/api/user?userEmail=${userEmail}&userId=${userId}&newImage=${newImage}`, {
       method: 'PATCH',
@@ -12,7 +11,6 @@ export default async function updateUserImage(userEmail: string, userId: string,
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify({ refreshToken }),
     });
 
     if (response.status === 200) {
