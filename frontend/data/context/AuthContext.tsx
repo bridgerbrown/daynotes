@@ -31,7 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = () => setIsAuthenticated(true);
   const logout = () => setIsAuthenticated(false);
 
-   const contextValue: AuthContextType = {
+  return (
+    <AuthContext.Provider value={{
       isAuthenticated,
       login,
       logout,
@@ -41,10 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUserEmail,
       token,
       setToken,
-    };
-
-  return (
-    <AuthContext.Provider value={contextValue}>
+    }}>
       {children}
     </AuthContext.Provider>
   );
