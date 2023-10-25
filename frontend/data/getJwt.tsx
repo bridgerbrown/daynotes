@@ -2,10 +2,9 @@ import Cookies from 'js-cookie';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export default async function getJwt(ctx: any) {
-  const jwtCookie = ctx.req.headers.cookie!;
-  console.log("getJWT: ", jwtCookie);
-  const accessToken = jwtCookie.split('accessToken=')[1];
-  const refreshToken = jwtCookie.split('refreshToken=')[2];
+  const jwtCookie = ctx.req.headers.cookie;
+  const accessToken = jwtCookie ? jwtCookie.split('accessToken=')[1] : undefined;
+  const refreshToken = jwtCookie ? jwtCookie.split('refreshToken=')[1] : undefined;
 
   if (!jwtCookie) {
     console.log("No jwtCookie found")
