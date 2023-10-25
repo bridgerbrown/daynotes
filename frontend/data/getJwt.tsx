@@ -3,6 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export default async function getJwt(ctx: any) {
   const jwtCookie = ctx.req.headers.cookie;
+  console.log("getJWT: ", jwtCookie);
   const accessToken = jwtCookie ? jwtCookie.split('accessToken=')[1] : undefined;
   const refreshToken = jwtCookie ? jwtCookie.split('refreshToken=')[1] : undefined;
 
@@ -32,9 +33,7 @@ export default async function getJwt(ctx: any) {
 
       if (refreshResponse) {
         Cookies.set('accessToken', refreshResponse.accessToken, { expires: 1 / 24, path: '/' });
-        return {
-          userResponse,
-        };
+        return userResponse;
       } else {
         console.log("Token refresh failed");
         return {
@@ -45,9 +44,7 @@ export default async function getJwt(ctx: any) {
         };
       }
     }
-    return {
-      userResponse,
-    };
+    return userResponse;
   } catch (err) {
     console.error("Error verifying access token:", err);
     return {
@@ -64,7 +61,7 @@ async function refreshAccessToken(refreshToken: string) {
   try {
     const accessToken = Cookies.get('accessToken');
     const response = await fetch(`/api/refresh?refreshToken=${refreshToken}`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`
