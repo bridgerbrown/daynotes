@@ -96,7 +96,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
             </h2>
           </header>
             {
-              isAuthenticated && !isLoading ?
+             userEmail && !isLoading ?
                 <div className='flex flex-col text-blackHeading mt-12 mb-2 font-light'>
                   <div className='flex flex-col items-center'>
                     {

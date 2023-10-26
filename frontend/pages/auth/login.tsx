@@ -53,7 +53,6 @@ export default function LogIn() {
         const data = await response.json();
         Cookies.set('accessToken', data.accessToken, { expires: 1 / 24, path: '/' });
         setUserEmail(email);
-        login();
         router.push(`/${email}`); 
       } else if (response.status === 401) {
         setSubmitError("Invalid email or password.");
