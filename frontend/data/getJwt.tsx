@@ -2,8 +2,9 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { useAuth } from './context/AuthContext';
 
 export default function getJwt(ctx: any) {
+  const { login } = useAuth();
   const jwtCookie = ctx.req.headers.cookie!;
-  const token = jwtCookie.split('refreshToken=')[1];
+  const token = jwtCookie.split('accessToken=')[1];
   if (!jwtCookie) {
     console.log("No jwtCookie found")
     return {
@@ -19,5 +20,6 @@ export default function getJwt(ctx: any) {
     userEmail: decoded.email,
     userId: decoded.userId,
   }
+  login();
   return userResponse;
 };
