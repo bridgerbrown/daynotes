@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 
 export default function Home({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
-  const { userData, setUserData } = useAuth();
+  const { userData, setUserData, login } = useAuth();
   const today = startOfToday();
   const [socket, setSocket] = useState<any>();
 
@@ -33,6 +33,7 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
+        login();
       } catch (err) {
         console.error("Error fetching user data:", err);
       }

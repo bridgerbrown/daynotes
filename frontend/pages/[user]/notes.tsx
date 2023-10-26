@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 
 export default function Notes({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
+  const { userData, setUserData, login } = useAuth();
   const { usersNotes, setUsersNotes } = useNotes();
   const inactiveSortItemCSS: string = `opacity-50 hover:opacity-100 flex cursor-pointer`;
   const activeSortItemCSS: string = `opacity-100 flex cursor-pointer`;
@@ -23,7 +24,6 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
   const [dateAscending, setDateAscending] = useState<boolean>(false);
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const { userData, setUserData } = useAuth();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
@@ -55,7 +55,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
       try {
         const data = await getNotesData(userEmail, userId);
         setUsersNotes(data);
-        console.log(data);
+        login();
       } catch (err) {
         console.error("Error fetching notes data:", err);
       }

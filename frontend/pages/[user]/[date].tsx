@@ -19,6 +19,7 @@ import { useNotes } from '@/data/context/NotesContext';
 export default function DayNote({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
   const { usersNotes, setUsersNotes } = useNotes();
+  const { userData, setUserData, login } = useAuth();
   const router = useRouter()
   const [selectedDay, setSelectedDay] = useState<any>(startOfToday())
   const [socket, setSocket] = useState<any>();
@@ -30,7 +31,6 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   const [deleteConfirmed, setDeleteConfirmed] = useState<boolean>(false);
   const [lastSocketId, setLastSocketId] = useState<string | null>(null);
   const [tutorial, setTutorial] = useState<boolean>(false);
-  const { userData, setUserData } = useAuth();
   
   const yesterday = subDays(new Date(selectedDay), 1)
   const tomorrow = addDays(new Date(selectedDay), 1)
@@ -153,6 +153,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   };
 
   useEffect(() => {
+    login();
     fetchNotesData();
     if (usersNotes && usersNotes.length === 0) {
       setTutorial(true)

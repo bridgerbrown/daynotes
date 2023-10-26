@@ -14,7 +14,7 @@ import Loading from '@/components/modules/Loading';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
-  const { userData, setUserData, isAuthenticated, logout } = useAuth();
+  const { userData, setUserData, isAuthenticated, logout, login } = useAuth();
   const router = useRouter();
   const [editImage, setEditImage] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -44,6 +44,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
       try {
         const data = await getUserData(userEmail, userId);
         setUserData(data);
+        login();
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
