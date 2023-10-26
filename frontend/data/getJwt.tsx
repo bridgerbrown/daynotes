@@ -2,7 +2,6 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { useAuth } from './context/AuthContext';
 
 export default function getJwt(ctx: any) {
-  const { login } = useAuth();
   const jwtCookie = ctx.req.headers.cookie!;
   const token = jwtCookie.split('accessToken=')[1];
   if (!jwtCookie) {
@@ -15,11 +14,10 @@ export default function getJwt(ctx: any) {
     };
   };
   let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
-    const decoded = jwt.verify(token, accessTokenSecret) as JwtPayload;
-    const userResponse = {
-      userEmail: decoded.email,
-      userId: decoded.userId,
-    }
-    login();
-    return userResponse;
+  const decoded = jwt.verify(token, accessTokenSecret) as JwtPayload;
+  const userResponse = {
+    userEmail: decoded.email,
+    userId: decoded.userId,
+  };
+  return userResponse;
 };

@@ -139,14 +139,21 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
     </main>
   )
 };
-
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
-  const userResponse = getJwt(ctx);
-  console.log(userResponse);
+  try {
+    const userResponse = getJwt(ctx);
 
-  return {
-    props: {
-      userResponse,
-   },
-  };
+    return {
+      props: {
+        userResponse,
+      },
+    };
+  } catch (err) {
+    console.error("Error in JWT verification:", err);
+    return {
+      props: {
+        userResponse: [],
+      },
+    }
+  }
 });
