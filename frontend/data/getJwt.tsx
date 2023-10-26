@@ -2,9 +2,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { useAuth } from './context/AuthContext';
 
 export default function getJwt(ctx: any) {
-  console.log("getting jwt...")
   const jwtCookie = ctx.req.headers.cookie!;
-  const token = jwtCookie.split('accessToken=')[1];
+  const token = jwtCookie.split('refreshToken=')[1];
   if (!jwtCookie) {
     console.log("No jwtCookie found")
     return {
