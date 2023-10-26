@@ -15,7 +15,6 @@ export default function getJwt(ctx: any) {
     };
   };
   let accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET as string;
-  try {
     const decoded = jwt.verify(token, accessTokenSecret) as JwtPayload;
     const userResponse = {
       userEmail: decoded.email,
@@ -23,13 +22,4 @@ export default function getJwt(ctx: any) {
     }
     login();
     return userResponse;
-  } catch (err) {
-    console.log("Token is invalid or expired:", err);
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    };
-  }
 };
