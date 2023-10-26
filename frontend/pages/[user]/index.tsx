@@ -187,6 +187,8 @@ export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   try {
     const userResponse = getJwt(ctx);
 
+    console.log(userResponse);
+
     return {
       props: {
         userResponse,
