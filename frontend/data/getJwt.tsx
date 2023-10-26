@@ -18,6 +18,6 @@ export default function getJwt(ctx: any) {
   const userResponse = {
     userEmail: decoded.email,
     userId: decoded.userId,
-  };
+  }
   return userResponse;
 };

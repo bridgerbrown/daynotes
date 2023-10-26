@@ -139,6 +139,7 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
     </main>
   )
 };
+
 export const getServerSideProps: GetServerSideProps = (async (ctx) => {
   try {
     const userResponse = getJwt(ctx);
