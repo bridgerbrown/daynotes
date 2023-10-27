@@ -1,5 +1,4 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { useAuth } from './context/AuthContext';
 
 export default function getJwt(ctx: any) {
   const jwtCookie = ctx.req.headers.cookie!;

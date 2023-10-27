@@ -1,6 +1,5 @@
 import React from "react"
 import Image from "next/image"
-import updateUserImage from "@/data/updateUserImage";
 import Loading from "../Loading";
 
 function UserImage(props: any){

@@ -81,7 +81,7 @@ export default function SignUp() {
   };
 
   return (
-    <main className="font-sans bg-white min-h-screen w-screen absolute top-1/4">
+    <main className="font-sans bg-white w-screen absolute top-28 sm:top-1/4">
       <div className='flex flex-col justify-center items-center'>
         <Image
           src={"/daynotes-logo.png"}
@@ -93,11 +93,11 @@ export default function SignUp() {
         {
           isLoading
           ?
-          <div className='h-[700] flex justify-center items-center w-full'>
+          <div className='flex justify-center items-center w-full'>
             <Loading dimensions={125} invert={false} />
           </div>
           :
-          <div className='w-[400px] h-[700px] text-center'>
+          <div className='w-[370px] text-center'>
             <section className='mb-8 flex flex-col items-center justify-center'>
               <h1 className='text-2xl font-semibold tracking-wide mb-4'>
                 Sign Up

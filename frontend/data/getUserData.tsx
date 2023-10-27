@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import { useAuth } from './context/AuthContext';
 
 export default async function getUserData(userEmail: string, userId: string) {
   try {
