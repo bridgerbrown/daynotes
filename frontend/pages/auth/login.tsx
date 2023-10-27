@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/data/context/AuthContext';
 import Cookies from 'js-cookie';
 import Loading from '@/components/modules/Loading';
+import getUserData from '@/data/getUserData';
 
 export default function LogIn() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function LogIn() {
       try {
         setIsLoading(true);
         await logIn(email, password);
+        router.push(`/${email}`); 
       } catch (err) {
         setIsLoading(false);
         console.log(err);
@@ -53,7 +55,6 @@ export default function LogIn() {
         const data = await response.json();
         Cookies.set('accessToken', data.accessToken, { expires: 1 / 24, path: '/' });
         setUserEmail(email);
-        router.push(`/${email}`); 
       } else if (response.status === 401) {
         setSubmitError("Invalid email or password.");
       } else {
