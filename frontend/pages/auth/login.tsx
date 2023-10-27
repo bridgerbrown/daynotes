@@ -49,7 +49,6 @@ export default function LogIn() {
         body: JSON.stringify({ email, password }),
       });
       
-      console.log(response);
       if (response.status === 200) {
         const data = await response.json();
         Cookies.set('accessToken', data.accessToken, { expires: 1 / 24, path: '/' });
