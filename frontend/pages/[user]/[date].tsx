@@ -48,10 +48,6 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
     return isValid(urlDate);
   };
 
-  useEffect(() => {
-    if (!isValidDate()) router.push('/404');
-  }, [router, selectedDay])
-
   const fetchNotesData = async () => {
     try {
       const data = await getNotesData(userEmail, userId);
@@ -154,10 +150,10 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
 
   useEffect(() => {
     login();
+    if (!isValidDate()) router.push('/404');
     fetchNotesData();
     if (usersNotes && usersNotes.length === 0) {
       setTutorial(true)
-      console.log("Starting tutorial")
     };
   }, [selectedDay])
 
@@ -169,9 +165,7 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
 
   useEffect(() => {
     const urlDate = parseDateFromUrl(router.asPath);
-    if(urlDate !== selectedDay){
-      setSelectedDay(urlDate);
-    }
+    if(urlDate !== selectedDay) setSelectedDay(urlDate);
   }, [])
 
   useEffect(() => {
