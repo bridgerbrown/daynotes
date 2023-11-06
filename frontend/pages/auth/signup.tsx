@@ -62,8 +62,6 @@ export default function SignUp() {
         },
         body: JSON.stringify({ email, username, password }),
       });
-      console.log(response.status); 
-      console.log(response);
       if (response.status === 201) {
         const data = await response.json();
         setUserData(data);

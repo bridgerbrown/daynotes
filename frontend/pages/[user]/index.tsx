@@ -159,7 +159,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since 
+                              Member since {userData.memberSince}
                             </p>
                           </div>
                         </div>
