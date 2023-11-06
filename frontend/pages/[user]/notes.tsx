@@ -45,6 +45,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
         const data = await getNotesData(userEmail, userId);
         setUsersNotes(data);
         login();
+        console.log(data);
       } catch (err) {
         console.error("Error fetching notes data:", err);
       }
