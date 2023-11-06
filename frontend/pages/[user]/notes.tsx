@@ -30,8 +30,6 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     setSearchQuery(query);
   }
 
-
-
   const sortedNotesAscDates = [...usersNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedNotesDescDates = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
   const sortedNotesLastUpdated = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));

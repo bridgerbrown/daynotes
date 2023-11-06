@@ -61,6 +61,9 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
     const s = io("wss://daynotes-server.onrender.com", {
       transports: ['websocket']
     });
+
+    s.emit("join-room", userId, selectedDay);
+
     if (!socket) setSocket(s);
     setDeleteConfirmed(false);
     setNoteActivated(true);
@@ -149,26 +152,21 @@ export default function DayNote({ userResponse }: InferGetServerSidePropsType<ty
   };
 
   useEffect(() => {
-    login();
-    if (!isValidDate()) router.push('/404');
-    fetchNotesData();
-    if (usersNotes && usersNotes.length === 0) {
-      setTutorial(true)
-    };
-  }, [selectedDay])
-
-  useEffect(() => {
     if (!usersNotes || !usersNotes.length) return;
     const noteExists = checkNoteExists(usersNotes, selectedDay);
     setNoteActivated(noteExists);
   }, [usersNotes, selectedDay])
 
   useEffect(() => {
+    if (usersNotes && usersNotes.length === 0) setTutorial(true);
+
     const urlDate = parseDateFromUrl(router.asPath);
     if(urlDate !== selectedDay) setSelectedDay(urlDate);
-  }, [])
+    if (!isValidDate()) router.push('/404');
 
-  useEffect(() => {
+    login();
+    fetchNotesData();
+
     const s = io("wss://daynotes-server.onrender.com", {
       transports: ['websocket']
     });

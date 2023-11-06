@@ -26,8 +26,6 @@ export default function NotePreview(props: any){
       return extractedText.join(' ');
     }
   }
-  console.log(extractNoteData(noteObj))
-  console.log(noteObj)
 
   async function deleteSelectedNote(userId: string, date: string){
     await fetch("/api/notes", {
