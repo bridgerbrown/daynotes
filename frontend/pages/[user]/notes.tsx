@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Navbar from '@/components/modules/Navbar'
 import Footer from '@/components/modules/Footer'
 import NotePreview from '@/components/modules/notes/NotePreview'
@@ -30,8 +30,8 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     setSearchQuery(query);
   }
 
-  useEffect(() => {
-    const filteredNotes = usersNotes.filter((note: any) => {
+  const formattedFilteredNotes = useMemo(() => {
+    return usersNotes.filter((note: any) => {
       const { data, date } = note;
       const formattedData = JSON.stringify(data);
       const formattedDate = JSON.stringify(format(( new Date(date)), 'LLLL d, yyyy'));
@@ -39,9 +39,8 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
         formattedData.toLowerCase().includes(searchQuery) ||
         formattedDate.toLowerCase().includes(searchQuery)
       );
-    })
-    setFilteredNotes(filteredNotes);
-  }, [usersNotes, searchQuery])
+    });
+  }, [usersNotes]);
 
   const sortedNotesAscDates = [...usersNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedNotesDescDates = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
@@ -55,6 +54,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
       try {
         const data = await getNotesData(userEmail, userId);
         setUsersNotes(data);
+        setFilteredNotes(formattedFilteredNotes);
         login();
       } catch (err) {
         console.error("Error fetching notes data:", err);
@@ -62,6 +62,9 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     };
     fetchData();
   }, [])
+
+  useEffect(() => {
+  }, [searchQuery])
 
   useEffect(() => {
     if(deleteConfirmed){
@@ -114,7 +117,10 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
               </div>
             </div>
             <div className='flex sm:flex-row flex-col-reverse justify-center items-end sm:items-center'>
-              <p className='mt-2 sm:mt-0 mr-2 sm:mr-4 text-xs sm:text-sm font-light text-grayHeading'>
+              <p 
+                className='mt-2 sm:mt-0 mr-2 sm:mr-4 text-xs sm:text-sm font-light text-grayHeading'
+                data-testid="notes-notesmadetext"
+              >
                 {
                   usersNotes ?
                    usersNotes.length == 1 ?
