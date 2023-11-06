@@ -53,14 +53,21 @@ export default function Home({ userResponse }: InferGetServerSidePropsType<typeo
             Bring your daily notes to the next level with date-based organization.
           </p>
           {
-            !userData ?
+            !userEmail ?
               <Link href={`/auth/signup`}>
-                <button className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b lg:px-8 lg:py-4 px-6 py-3 text-md lg:text-lg text-white font-semibold rounded-lg'>
+                <button 
+                  className='border border-blue-700 hover:from-blue-700 hover:to-blue-700 from-blue-600 to-blue-700 shadow-lg hover:shadow-xl transition-all bg-gradient-to-b lg:px-8 lg:py-4 px-6 py-3 text-md lg:text-lg text-white font-semibold rounded-lg'
+                  data-testid="home-signup-button"
+                >
                   Sign Up
                 </button>
               </Link>
             :
-              <p className='font-light text-gray-500'>Thanks for signing up! <Link 
+              <p 
+                className='font-light text-gray-500'
+                data-testid="home-welcome-text"
+              >
+                Thanks for signing up! <Link 
                 href={`/${userEmail}/${today}`} 
                 className='underline underline-offset-2 hover:text-gray-700 transition-colors'>
                   Click here to make your first note

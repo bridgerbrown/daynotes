@@ -12,7 +12,10 @@ export default function Navbar(props: any){
   useEffect(() => {}, [userEmail, userData])
 
   return(
-    <nav className="pt-4 pb-3 px-6 sm:px-12 flex justify-between items-center">
+    <nav 
+      className="pt-4 pb-3 px-6 sm:px-12 flex justify-between items-center"
+      data-testid="navbar"
+    >
       <Link href={`/`}>
         <div className="cursor-pointer flex justify-center items-center">
           <Image
@@ -21,6 +24,7 @@ export default function Navbar(props: any){
             width={740}
             height={149}
             className="mt-2 w-[125px] sm:w-[150px]"
+            data-testid="navbar-logo"
           />
         </div>
       </Link>
