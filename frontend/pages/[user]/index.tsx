@@ -73,9 +73,9 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
         console.log(`${data.message}`);
         throw new Error(`Failed to logout. Status: ${response.status}`);
       } else {
-        await router.push("/");
         Cookies.remove('accessToken', { path: '/' });
         setUserData([]);
+        await router.push("/");
       }
 
       const data = await response.json();
