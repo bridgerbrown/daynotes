@@ -30,16 +30,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     setSearchQuery(query);
   }
 
-  const formattedFilteredNotes = 
-    usersNotes.filter((note: any) => {
-      const { data, date } = note;
-      const formattedData = JSON.stringify(data);
-      const formattedDate = JSON.stringify(format(( new Date(date)), 'LLLL d, yyyy'));
-      return (
-        formattedData.toLowerCase().includes(searchQuery) ||
-        formattedDate.toLowerCase().includes(searchQuery)
-      );
-  }); 
+
 
   const sortedNotesAscDates = [...usersNotes].sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
   const sortedNotesDescDates = [...usersNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
@@ -62,8 +53,18 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
   }, [])
 
   useEffect(() => {
+    const formattedFilteredNotes = 
+      usersNotes.filter((note: any) => {
+        const { data, date } = note;
+        const formattedData = JSON.stringify(data);
+        const formattedDate = JSON.stringify(format(( new Date(date)), 'LLLL d, yyyy'));
+        return (
+          formattedData.toLowerCase().includes(searchQuery) ||
+          formattedDate.toLowerCase().includes(searchQuery)
+        );
+    }); 
     setFilteredNotes(formattedFilteredNotes);
-  }, [searchQuery])
+  }, [searchQuery, usersNotes])
 
   useEffect(() => {
     if(deleteConfirmed){
