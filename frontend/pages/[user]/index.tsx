@@ -27,7 +27,9 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-ninja.png",
     "/user-robot.png",
     "/user-shakespeare.png",
-  ]
+  ];
+  const memberSinceDate = new Date(userData.memberSince);
+  const dateFormatted = format(memberSinceDate, "MMMM dd yyyy");
   
   const submitImage = async (selectedImage: string) => {
     if (editImage) {
@@ -159,7 +161,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {userData.memberSince}
+                              Member since {dateFormatted}
                             </p>
                           </div>
                         </div>
