@@ -30,6 +30,11 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
   ];
   const memberSinceDate = new Date(userData.memberSince);
   const dateFormatted = format(memberSinceDate, "MMMM dd yyyy");
+  console.log(userData.memberSince);
+  console.log(typeof(userData.memberSince));
+  console.log(memberSinceDate)
+  console.log(dateFormatted);
+
   
   const submitImage = async (selectedImage: string) => {
     if (editImage) {
