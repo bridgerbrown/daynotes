@@ -29,12 +29,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-shakespeare.png",
   ];
   const memberSinceDate = new Date(parseISO(userData.memberSince));
-  const dateFormatted = format(memberSinceDate, "MMMM dd yyyy");
-  console.log(userData.memberSince);
-  console.log(typeof(userData.memberSince));
-  console.log(memberSinceDate)
-  console.log(dateFormatted);
-
+  const dateFormatted = format(memberSinceDate, "MMMM d yyyy");
   
   const submitImage = async (selectedImage: string) => {
     if (editImage) {

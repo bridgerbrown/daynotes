@@ -74,7 +74,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     if (!arraysAreEqual(formattedFilteredNotes, filteredNotes)) {
       setFilteredNotes(formattedFilteredNotes);
     }
-  }, [searchQuery])
+  }, [searchQuery, usersNotes])
 
   useEffect(() => {
     if(deleteConfirmed){
