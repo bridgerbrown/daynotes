@@ -28,17 +28,46 @@ jest.mock('../data/context/NotesContext', () => ({
       {
         _id: "abc123456789",
         date: "2023-07-19T07:00:00.000Z",
-        documentId: "testdocument",
+        documentId: "testdocument1",
         userId: "123abc",
         data: {
           ops: [
             {
-              insert: "test"
+              insert: "apple"
             }
           ]
         },
         lastUpdated: new Date(2023, 6, 20, 19, 11, 23),
       },
+      {
+        _id: "abc123456789",
+        date: "2023-07-20T07:00:00.000Z",
+        documentId: "testdocument2",
+        userId: "123abc",
+        data: {
+          ops: [
+            {
+              insert: "blue"
+            }
+          ]
+        },
+        lastUpdated: new Date(2023, 6, 21, 19, 11, 23),
+      },
+      {
+        _id: "abc123456789",
+        date: "2023-07-21T07:00:00.000Z",
+        documentId: "testdocument3",
+        userId: "123abc",
+        data: {
+          ops: [
+            {
+              insert: "chocolate"
+            }
+          ]
+        },
+        lastUpdated: new Date(2023, 6, 22, 19, 11, 23),
+      },
+
     ],
     setUsersNotes: jest.fn(),
   })
@@ -46,20 +75,49 @@ jest.mock('../data/context/NotesContext', () => ({
 
 jest.mock('../data/getUsersNotes', () => ({
   default: jest.fn().mockResolvedValue([
-    {
-      _id: "abc123456789",
-      date: "2023-07-19T07:00:00.000Z",
-      documentId: "testdocument",
-      userId: "123abc",
-      data: {
-        ops: [
-          {
-            insert: "test"
-          }
-        ]
+      {
+        _id: "abc123456789",
+        date: "2023-07-19T07:00:00.000Z",
+        documentId: "testdocument1",
+        userId: "123abc",
+        data: {
+          ops: [
+            {
+              insert: "apple"
+            }
+          ]
+        },
+        lastUpdated: new Date(2023, 6, 20, 19, 11, 23),
       },
-      lastUpdated: new Date(2023, 6, 20, 19, 11, 23),
-    }
+      {
+        _id: "abc123456789",
+        date: "2023-07-20T07:00:00.000Z",
+        documentId: "testdocument2",
+        userId: "123abc",
+        data: {
+          ops: [
+            {
+              insert: "blue"
+            }
+          ]
+        },
+        lastUpdated: new Date(2023, 6, 21, 19, 11, 23),
+      },
+      {
+        _id: "abc123456789",
+        date: "2023-07-21T07:00:00.000Z",
+        documentId: "testdocument3",
+        userId: "123abc",
+        data: {
+          ops: [
+            {
+              insert: "chocolate"
+            }
+          ]
+        },
+        lastUpdated: new Date(2023, 6, 22, 19, 11, 23),
+      },
+
   ]),
 }));
 
@@ -98,7 +156,7 @@ describe('Notes component with existing notes', () => {
     
     await waitFor(() => {
       const notesMadeText = getByTestId("notes-notesmadetext");
-      expect(notesMadeText.textContent).toBe("1 note made");
+      expect(notesMadeText.textContent).toBe("3 notes made");
     });
   });
 });

@@ -28,7 +28,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-robot.png",
     "/user-shakespeare.png",
   ];
-  const [memberSinceDate, setMemberSinceDate] = useState<string>();
+  const [memberSinceDate, setMemberSinceDate] = useState<string>("");
   
   const submitImage = async (selectedImage: string) => {
     if (editImage) {
@@ -40,19 +40,20 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     }
   };
 
+  const fetchData = async () => {
+    try {
+      const data = await getUserData(userEmail, userId);
+      setUserData(data);
+      const newDate = new Date(parseISO(userData.memberSince));
+      const dateFormatted = format(newDate, "MMMM d yyyy").toString();
+      setMemberSinceDate(dateFormatted);
+      login();
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+    }
+  };
+
   useEffect(() => { 
-    const fetchData = async () => {
-      try {
-        const data = await getUserData(userEmail, userId);
-        setUserData(data);
-        const newDate = new Date(parseISO(userData.memberSince));
-        const dateFormatted = format(newDate, "MMMM d yyyy").toString();
-        setMemberSinceDate(dateFormatted);
-        login();
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-      }
-    };
     fetchData();
   }, [userEmail, userId]);
 
@@ -163,7 +164,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {memberSinceDate} 
+                              Member since {memberSinceDate ? memberSinceDate : ""} 
                             </p>
                           </div>
                         </div>

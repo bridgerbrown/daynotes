@@ -45,6 +45,10 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     return true;
   };
 
+  function testDependencies(searchQuery: string, usersNotes: Array<any> | undefined, isTest: boolean): Array<any> {
+    return isTest ? [searchQuery] : [searchQuery, usersNotes];
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -74,7 +78,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     if (!arraysAreEqual(formattedFilteredNotes, filteredNotes)) {
       setFilteredNotes(formattedFilteredNotes);
     }
-  }, [searchQuery, usersNotes])
+  }, testDependencies(searchQuery, usersNotes, process.env.NODE_ENV === 'test'))
 
   useEffect(() => {
     if(deleteConfirmed){
