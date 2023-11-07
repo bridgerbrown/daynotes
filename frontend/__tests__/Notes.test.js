@@ -1,8 +1,6 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import mockRouter from 'next-router-mock';
-import { act } from 'react-dom/test-utils';
-import Navbar from "../components/modules/Navbar";
 import Notes from "../pages/[user]/notes";
 
 jest.mock('next/router', () => jest.requireActual('next-router-mock'));
