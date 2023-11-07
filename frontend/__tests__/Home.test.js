@@ -88,7 +88,7 @@ describe('Home component', () => {
 
     renderedComponent = render(<Home userResponse={trueUserResponse} />);
     const { getByTestId } = renderedComponent;
-    
+
     await waitFor(() => {
       const homeWelcomeText = getByTestId("home-welcome-text");
       expect(homeWelcomeText).toBeInTheDocument(); 

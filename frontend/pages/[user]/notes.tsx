@@ -37,6 +37,14 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
   const sortedFilteredNotesDescDates = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
   const sortedFilteredNotesLastUpdated = [...filteredNotes].sort((a, b) => compareDesc(parseISO(a.lastUpdated), parseISO(b.lastUpdated)));
 
+  function arraysAreEqual<T>(arr1: T[], arr2: T[]): boolean {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,8 +70,11 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
           formattedDate.toLowerCase().includes(searchQuery)
         );
     }); 
-    setFilteredNotes(formattedFilteredNotes);
-  }, [searchQuery, usersNotes])
+
+    if (!arraysAreEqual(formattedFilteredNotes, filteredNotes)) {
+      setFilteredNotes(formattedFilteredNotes);
+    }
+  }, [searchQuery])
 
   useEffect(() => {
     if(deleteConfirmed){

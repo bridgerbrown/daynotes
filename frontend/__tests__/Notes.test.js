@@ -26,9 +26,43 @@ jest.mock('../data/context/AuthContext', () => ({
 
 jest.mock('../data/context/NotesContext', () => ({
   useNotes: () => ({
-    usersNotes: [],
+    usersNotes: [
+      {
+        _id: "abc123456789",
+        date: "2023-07-19T07:00:00.000Z",
+        documentId: "testdocument",
+        userId: "123abc",
+        data: {
+          ops: [
+            {
+              insert: "test"
+            }
+          ]
+        },
+        lastUpdated: new Date(2023, 6, 20, 19, 11, 23),
+      },
+    ],
     setUsersNotes: jest.fn(),
   })
+}));
+
+jest.mock('../data/getUsersNotes', () => ({
+  default: jest.fn().mockResolvedValue([
+    {
+      _id: "abc123456789",
+      date: "2023-07-19T07:00:00.000Z",
+      documentId: "testdocument",
+      userId: "123abc",
+      data: {
+        ops: [
+          {
+            insert: "test"
+          }
+        ]
+      },
+      lastUpdated: new Date(2023, 6, 20, 19, 11, 23),
+    }
+  ]),
 }));
 
 const mockRouterSetup = () => {
@@ -41,7 +75,7 @@ describe('next-router-mock', () => {
   });
 });
 
-describe('Notes component', () => {
+describe('Notes component with existing notes', () => {
   let renderedComponent;
   const mockUserResponse = {
     userEmail: "test@gmail.com",
@@ -49,16 +83,24 @@ describe('Notes component', () => {
   };
 
   beforeEach(() => {
+    const mockedDate = new Date(2023, 11, 6);
+    jest.useFakeTimers("modern");
+    jest.setSystemTime(mockedDate);
+
     mockRouterSetup();
     renderedComponent = render(<Notes userResponse={mockUserResponse} />);
   });
 
-  it('display no notes if notes context is empty', async () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('displays existing notes', async () => {
     const { getByTestId } = renderedComponent;
     
     await waitFor(() => {
       const notesMadeText = getByTestId("notes-notesmadetext");
-      expect(notesMadeText.textContent).toBe("0 notes made");
+      expect(notesMadeText.textContent).toBe("1 note made");
     });
   });
 });
