@@ -28,7 +28,7 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-robot.png",
     "/user-shakespeare.png",
   ];
-  const memberSinceDate = new Date(userData.memberSince);
+  const memberSinceDate = new Date(parseISO(userData.memberSince));
   const dateFormatted = format(memberSinceDate, "MMMM dd yyyy");
   console.log(userData.memberSince);
   console.log(typeof(userData.memberSince));
@@ -166,7 +166,12 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                           </div>
                           <div className='flex flex-col items-center mt-2 text-sm'>
                             <p>
-                              Member since {userData.memberSince}
+                              Member since {
+                                userData ?
+                                dateFormatted
+                                :
+                                "..."
+                              }
                             </p>
                           </div>
                         </div>
