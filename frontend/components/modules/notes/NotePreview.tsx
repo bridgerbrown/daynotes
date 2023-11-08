@@ -44,7 +44,12 @@ export default function NotePreview(props: any){
   }
 
   return (
-    <div className="group mr-6 mb-3">
+    <div 
+      className="group mr-6 mb-3"
+      data-testid="note-preview"
+      data-date={note.date}
+      data-lastupdated={note.lastUpdated}
+    >
         {
           deleteConfirmation ?
           <div></div>

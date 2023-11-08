@@ -49,32 +49,33 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
     return isTest ? [searchQuery] : [searchQuery, usersNotes];
   }
 
+  const fetchData = async () => {
+    try {
+      const data = await getNotesData(userEmail, userId);
+      setUsersNotes(data);
+      login();
+      console.log(data);
+    } catch (err) {
+      console.error("Error fetching notes data:", err);
+    }
+  };
+
+  const formattedFilteredNotes = 
+    usersNotes.filter((note: any) => {
+      const { data, date } = note;
+      const formattedData = JSON.stringify(data);
+      const formattedDate = JSON.stringify(format(( new Date(date)), 'LLLL d, yyyy'));
+      return (
+        formattedData.toLowerCase().includes(searchQuery) ||
+        formattedDate.toLowerCase().includes(searchQuery)
+      );
+  }); 
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getNotesData(userEmail, userId);
-        setUsersNotes(data);
-        login();
-        console.log(data);
-      } catch (err) {
-        console.error("Error fetching notes data:", err);
-      }
-    };
     fetchData();
   }, [])
 
   useEffect(() => {
-    const formattedFilteredNotes = 
-      usersNotes.filter((note: any) => {
-        const { data, date } = note;
-        const formattedData = JSON.stringify(data);
-        const formattedDate = JSON.stringify(format(( new Date(date)), 'LLLL d, yyyy'));
-        return (
-          formattedData.toLowerCase().includes(searchQuery) ||
-          formattedDate.toLowerCase().includes(searchQuery)
-        );
-    }); 
-
     if (!arraysAreEqual(formattedFilteredNotes, filteredNotes)) {
       setFilteredNotes(formattedFilteredNotes);
     }
@@ -109,6 +110,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
                     :
                     setSortedType("date");
                 }}
+                data-testid="notes-sortby-date"
               >
                 <h3 className=":text-sm cursor-pointer text-blackHeading font-light">
                   Date
@@ -124,6 +126,7 @@ export default function Notes({ userResponse }: InferGetServerSidePropsType<type
               <div 
                 className={sortedType == "last-updated" ? activeSortItemCSS : inactiveSortItemCSS}
                 onClick={() => setSortedType("last-updated")}
+                data-testid="notes-sortby-lastupdated"
               >
                 <h3 className="cursor-pointer text-blackHeading font-light">
                   Last Updated 
