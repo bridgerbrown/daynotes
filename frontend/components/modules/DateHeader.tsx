@@ -25,7 +25,10 @@ export default function DateHeader(props: any) {
               className='scale-75 h-6 w-4 opacity-30 hover:opacity-50 transition-opacity '
             />
           </button>
-          <p className='w-max mt-2 text-gray-500 text-xs font-light'>
+          <p 
+            className='w-max mt-2 text-gray-500 text-xs font-light'
+            data-testid="daynote-dateheader-prevday"
+          >
             {format(( new Date(yesterday)), 'LLLL d')}
           </p>
         </div>
@@ -43,6 +46,7 @@ export default function DateHeader(props: any) {
               :
               <h1 className='cursor-pointer text-gray-400 font-light text-4xl'
                 onClick={() => setMonthView(!monthView)}
+                data-testid="daynote-dateheader-today"
               >
                   {format((new Date(selectedDay)), 'LLLL d')}
               </h1>
@@ -60,7 +64,10 @@ export default function DateHeader(props: any) {
               className='scale-75 h-6 w-4 opacity-30 hover:opacity-50 transition-opacity rotate-180'
             />
           </button>
-          <p className='mt-2 w-max text-gray-500 text-xs font-light'>
+          <p 
+            className='mt-2 w-max text-gray-500 text-xs font-light'
+            data-testid="daynote-dateheader-nextday"
+          >
             {format(( new Date(tomorrow)), 'LLLL d')}
           </p>
         </div>

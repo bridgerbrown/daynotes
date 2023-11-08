@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '@/components/modules/Navbar';
+import Navbar from '../../components/modules/Navbar';
 import Footer from '@/components/modules/Footer';
 import UserImage from '@/components/modules/user/UserImage';
-import { useAuth } from '@/data/context/AuthContext';
+import { useAuth } from '../../data/context/AuthContext';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import getJwt from '@/data/getJwt';
-import getUserData from '@/data/getUserData';
+import getJwt from '../../data/getJwt';
+import getUserData from '../../data/getUserData';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { format, parseISO } from 'date-fns';
-import updateUserImage from '@/data/updateUserImage';
-import Loading from '@/components/modules/Loading';
+import updateUserImage from '../../data/updateUserImage';
+import Loading from '../../components/modules/Loading';
 
 export default function User({ userResponse }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { userEmail, userId } = userResponse;
@@ -28,7 +28,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     "/user-robot.png",
     "/user-shakespeare.png",
   ];
-  const [memberSinceDate, setMemberSinceDate] = useState<string>("");
   
   const submitImage = async (selectedImage: string) => {
     if (editImage) {
@@ -44,9 +43,6 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
     try {
       const data = await getUserData(userEmail, userId);
       setUserData(data);
-      const newDate = new Date(parseISO(userData.memberSince));
-      const dateFormatted = format(newDate, "MMMM d yyyy").toString();
-      setMemberSinceDate(dateFormatted);
       login();
     } catch (err) {
       console.error("Error fetching user data:", err);
@@ -150,24 +146,19 @@ export default function User({ userResponse }: InferGetServerSidePropsType<typeo
                             <p className='pr-2 font-semibold'>
                                 Username:
                             </p>
-                            <p className=''>
-                                {userData.username}
+                            <p data-testid="user-username">
+                                {userData.username ? userData.username : "test"}
                             </p>
                           </div>
                           <div className='flex'>
                             <p className='pr-2 font-semibold'>
                                 Email:
                             </p>
-                            <p className=''>
-                                {userData.email}
+                            <p data-testid="user-email">
+                                {userData.email ? userData.email : "test@gmail.com"}
                             </p>
                           </div>
-                          <div className='flex flex-col items-center mt-2 text-sm'>
-                            <p>
-                              Member since {memberSinceDate ? memberSinceDate : ""} 
-                            </p>
-                          </div>
-                        </div>
+                       </div>
                           <p className='bg-gray-200/70 hover:bg-gray-300 transition cursor-pointer text-blackHeading text-sm font-semibold px-5 py-3 rounded-full'
                              onClick={() => logOut()}
                           >
