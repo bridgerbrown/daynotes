@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <NotesProvider>
         <Head>
           <title>DayNotes</title>
-          <meta name="description" content="gNotes" />
+          <meta name="description" content="DayNotes" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta property="og:title" content="DayNotes"/>
           <meta property="og:image" content={"/note-sample.png"}/>
